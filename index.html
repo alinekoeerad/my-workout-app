@@ -1134,7 +1134,7 @@
     }
 
     // --- AI Chat Logic ---
-    const apiKey = "";
+    let apiKey = "";
     const chatWindow = document.getElementById('chatWindow');
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
@@ -1157,14 +1157,15 @@
     }
     
     function saveApiKey() {
-        if(apiKeyInput && apiKeyInput.value.trim()) {
+        const inputVal = document.getElementById('apiKeyInput').value.trim();
+        if(inputVal) {
+            apiKey = inputVal; // مقدار جدید در متغیر سراسری ذخیره می‌شود
             alert('کلید ذخیره شد');
             toggleSettings();
         } else {
             alert('لطفا کلید را وارد کنید');
         }
     }
-
     function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
 
     async function sendMessage(text = null) {
