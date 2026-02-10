@@ -299,7 +299,6 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline Dumbbell Press tips')">✨</button></div>
                 </div>
             </div>
-            <!-- ... Rest of Day 1 exercises ... -->
              <div class="ex-card" data-code="3" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">3</div>
                 <span class="ex-name-en">Low Pulley Cable Fly</span>
@@ -934,12 +933,134 @@
         const allCards = Array.from(currentContainer.querySelectorAll('.ex-card'));
         const currentIndex = allCards.indexOf(card);
 
-        // Simple next logic
-        if (completed >= totalSets) {
+        // -- LOGIC BRANCHES --
+
+        // 1. Ignition Cycle (A1, A2, A3, A4)
+        if (code.startsWith('A')) {
+            // Logic: Jump to next 'A' card. If last 'A' card (A4), jump back to A1 unless all sets done.
+            if (completed < totalSets) {
+                // Not finished all sets yet.
+                // If it's A1..A3 -> Next sibling
+                // If it's A4 -> Loop back to A1
+                card.classList.add('locked');
+                card.classList.remove('active-move');
+                
+                if (code === 'A4') {
+                    // Loop back to start of container (A1)
+                    const a1 = allCards[0];
+                    a1.classList.remove('locked');
+                    a1.classList.add('active-move');
+                    a1.scrollIntoView({behavior: "smooth", block: "center"});
+                } else {
+                    // Next sibling
+                    const nextCard = allCards[currentIndex + 1];
+                    if(nextCard) {
+                        nextCard.classList.remove('locked');
+                        nextCard.classList.add('active-move');
+                        nextCard.scrollIntoView({behavior: "smooth", block: "center"});
+                    }
+                }
+            } else {
+                // Completed all sets for this card.
+                // Visual complete
+                card.classList.add('completed');
+                card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
+                
+                // If it was A4 and finished, move to Part 2 (Exercise 1)
+                if (code === 'A4') {
+                    card.classList.remove('active-move');
+                    // Find Part 2 container
+                    const part2Id = currentDayId + '-part2';
+                    const part2Container = document.getElementById(part2Id);
+                    if(part2Container) {
+                        const firstEx = part2Container.querySelector('.ex-card');
+                        if(firstEx) {
+                            firstEx.classList.remove('locked');
+                            firstEx.classList.add('active-move');
+                            // Also scroll to it
+                            firstEx.scrollIntoView({behavior: "smooth", block: "center"});
+                        }
+                    }
+                } else {
+                    // Just move to next A (unlikely unless sets misconfigured, but safe fallback)
+                    card.classList.add('locked');
+                    card.classList.remove('active-move');
+                    const nextCard = allCards[currentIndex + 1];
+                    if(nextCard) {
+                        nextCard.classList.remove('locked');
+                        nextCard.classList.add('active-move');
+                    }
+                }
+            }
+            return;
+        }
+
+        // 2. Supersets (e.g., 2a, 2b, 10a, 10b, 10c)
+        if (code.match(/[0-9][a-z]/)) {
+            const baseNum = parseInt(code); 
+            
+            if (completed >= totalSets) {
+                card.classList.add('completed');
+                card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
+                card.classList.remove('active-move');
+            } else {
+                card.classList.add('locked');
+                card.classList.remove('active-move');
+            }
+
+            // Logic to find next in loop
+            const groupCards = allCards.filter(c => {
+                const cCode = c.dataset.code;
+                return parseInt(cCode) === baseNum && cCode.match(/[0-9][a-z]/);
+            });
+            
+            const currentGroupIndex = groupCards.indexOf(card);
+            let nextCard = null;
+
+            // Check next cards in cycle
+            for (let i = 1; i <= groupCards.length; i++) {
+                const checkIndex = (currentGroupIndex + i) % groupCards.length;
+                const candidate = groupCards[checkIndex];
+                if (!candidate.classList.contains('completed')) {
+                    nextCard = candidate;
+                    break;
+                }
+            }
+
+            if (nextCard) {
+                 nextCard.classList.remove('locked');
+                 nextCard.classList.add('active-move');
+                 nextCard.scrollIntoView({behavior: "smooth", block: "center"});
+                 return;
+            }
+
+            // If group finished (all cards in group are completed), move to next
+            let nextIndex = currentIndex + 1;
+            while(nextIndex < allCards.length) {
+                const candidate = allCards[nextIndex];
+                // Skip if it's part of the same base number group (just in case)
+                if (parseInt(candidate.dataset.code) !== baseNum) {
+                    candidate.classList.remove('locked');
+                    candidate.classList.add('active-move');
+                    candidate.scrollIntoView({behavior: "smooth", block: "center"});
+                    break;
+                }
+                nextIndex++;
+            }
+            return;
+        }
+
+        // 3. Standard Straight Sets (Numeric codes like 1, 2, 3)
+        // Logic: Must finish ALL sets before moving next.
+        if (completed < totalSets) {
+            // Stay on this card.
+            return; 
+        } else {
+            // Finished.
             card.classList.add('completed');
             card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
             card.classList.remove('active-move');
-            
+            // Unlock next
             const nextCard = allCards[currentIndex + 1];
             if(nextCard) {
                 nextCard.classList.remove('locked');
