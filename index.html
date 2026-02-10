@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>برنامه تمرینی هوشمند - نسخه حرفه‌ای</title>
+<title>برنامه تمرینی هوشمند</title>
 <style>
     :root {
         --primary: #2c3e50;
@@ -148,7 +148,6 @@
         cursor: pointer; font-weight: bold; padding: 2px 10px; border-radius: 6px;
         pointer-events: auto;
     }
-    /* Disable AI button if card is locked */
     .ex-card.locked .ai-hint-btn { opacity: 0.5; pointer-events: none; }
 
     /* --- Chat & Settings --- */
@@ -1058,12 +1057,10 @@
             return;
         }
 
-        // 2. Supersets (e.g., 2a, 2b)
-        // Check if code contains letters (but not A from ignition)
+        // 2. Supersets (e.g., 2a, 2b, 10a, 10b, 10c)
         if (code.match(/[0-9][a-z]/)) {
-            const baseNum = parseInt(code); // e.g., 2 from 2a
-            const suffix = code.slice(-1); // 'a' or 'b' or 'c'
-
+            const baseNum = parseInt(code); 
+            
             if (completed >= totalSets) {
                 card.classList.add('completed');
                 card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
@@ -1073,67 +1070,44 @@
                 card.classList.remove('active-move');
             }
 
-            // Determine Target
-            let targetCard = null;
+            // Logic to find next in loop
+            const groupCards = allCards.filter(c => {
+                const cCode = c.dataset.code;
+                return parseInt(cCode) === baseNum && cCode.match(/[0-9][a-z]/);
+            });
+            
+            const currentGroupIndex = groupCards.indexOf(card);
+            let nextCard = null;
 
-            // Logic for a -> b
-            if (suffix === 'a') {
-                const b = allCards[currentIndex + 1];
-                if(b && !b.classList.contains('completed')) targetCard = b;
-                else {
-                    // If b is done, maybe c?
-                    const c = allCards[currentIndex + 2];
-                    if(c && c.dataset.code.startsWith(baseNum) && !c.classList.contains('completed')) targetCard = c;
-                }
-            } 
-            // Logic for b -> c or b -> a
-            else if (suffix === 'b') {
-                const c = allCards[currentIndex + 1];
-                // Check if c exists and is part of group
-                if (c && c.dataset.code.startsWith(baseNum) && !c.classList.contains('completed')) {
-                    targetCard = c;
-                } else {
-                    // Loop back to a
-                    const a = allCards.find(x => x.dataset.code === baseNum + 'a');
-                    if(a && !a.classList.contains('completed')) targetCard = a;
+            // Check next cards in cycle
+            for (let i = 1; i <= groupCards.length; i++) {
+                const checkIndex = (currentGroupIndex + i) % groupCards.length;
+                const candidate = groupCards[checkIndex];
+                if (!candidate.classList.contains('completed')) {
+                    nextCard = candidate;
+                    break;
                 }
             }
-            // Logic for c -> a
-            else if (suffix === 'c') {
-                 // Loop back to a
-                 const a = allCards.find(x => x.dataset.code === baseNum + 'a');
-                 if(a && !a.classList.contains('completed')) targetCard = a;
-                 else {
-                     // Check b? (Unlikely c->b)
-                     const b = allCards.find(x => x.dataset.code === baseNum + 'b');
-                     if(b && !b.classList.contains('completed')) targetCard = b;
-                 }
-            }
 
-            // If we found a target in the superset loop that needs work
-            if (targetCard) {
-                 targetCard.classList.remove('locked');
-                 targetCard.classList.add('active-move');
-                 targetCard.scrollIntoView({behavior: "smooth", block: "center"});
+            if (nextCard) {
+                 nextCard.classList.remove('locked');
+                 nextCard.classList.add('active-move');
+                 nextCard.scrollIntoView({behavior: "smooth", block: "center"});
                  return;
             }
 
-            // If no target in loop (everyone in loop is done, or we finished our set and no one else is waiting),
-            // And WE are finished, move to next Exercise group.
-            if (completed >= totalSets) {
-                // Find next card that is NOT part of this superset group
-                // We are at currentIndex.
-                let nextIndex = currentIndex + 1;
-                while(nextIndex < allCards.length) {
-                    const candidate = allCards[nextIndex];
-                    if (!candidate.dataset.code.startsWith(baseNum)) {
-                        candidate.classList.remove('locked');
-                        candidate.classList.add('active-move');
-                        candidate.scrollIntoView({behavior: "smooth", block: "center"});
-                        break;
-                    }
-                    nextIndex++;
+            // If group finished, move to next
+            let nextIndex = currentIndex + 1;
+            while(nextIndex < allCards.length) {
+                const candidate = allCards[nextIndex];
+                // Skip if it's part of the same base number group (just in case)
+                if (parseInt(candidate.dataset.code) !== baseNum) {
+                    candidate.classList.remove('locked');
+                    candidate.classList.add('active-move');
+                    candidate.scrollIntoView({behavior: "smooth", block: "center"});
+                    break;
                 }
+                nextIndex++;
             }
             return;
         }
@@ -1159,7 +1133,7 @@
     }
 
     // --- AI Chat Logic ---
-    const apiKey = "AIzaSyAtBWoLSsOCoIAuTmAvgZnDO4xwA9DMzz8";
+    const apiKey = "";
     const chatWindow = document.getElementById('chatWindow');
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
