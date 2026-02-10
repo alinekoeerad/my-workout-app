@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>برنامه تمرینی هوشمند</title>
+<title>برنامه تمرینی هوشمند - علی</title>
 <style>
     :root {
         --primary: #2c3e50;
@@ -28,7 +28,7 @@
         padding-bottom: 120px;
         line-height: 1.6;
         scroll-behavior: smooth;
-        cursor: pointer;
+        cursor: default;
     }
 
     /* --- Sticky Header --- */
@@ -46,6 +46,7 @@
     .nav-btn {
         background: rgba(255,255,255,0.15); color: white; text-decoration: none;
         padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; transition: 0.2s;
+        cursor: pointer;
     }
     .settings-btn { font-size: 1.2rem; padding: 5px 10px; cursor: pointer; }
 
@@ -77,14 +78,14 @@
         border-radius: 12px; padding: 15px; position: relative; overflow: hidden;
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         touch-action: manipulation;
+        cursor: pointer;
     }
     
     /* LOCKED STATE */
     .ex-card.locked {
-        opacity: 0.4;
+        opacity: 0.6;
         filter: grayscale(100%);
-        pointer-events: none;
-        background: #f0f0f0;
+        background: #f4f4f4;
     }
     
     /* ACTIVE STATE */
@@ -93,9 +94,12 @@
         box-shadow: 0 0 15px rgba(230, 126, 34, 0.3);
         transform: scale(1.02);
         z-index: 2;
+        opacity: 1;
+        filter: none;
+        background: white;
     }
 
-    .ex-card:active { transform: scale(0.98); background-color: #fafafa; }
+    .ex-card:active { transform: scale(0.98); }
 
     .progress-dots { position: absolute; top: 12px; left: 12px; display: flex; gap: 4px; z-index: 5; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: #e0e0e0; transition: 0.3s; }
@@ -111,7 +115,7 @@
     .timer-overlay span { font-size: 1rem; font-weight: normal; margin-top: 10px; }
     .ex-card.timer-active .timer-overlay { opacity: 1; pointer-events: all; }
 
-    .ex-card.completed { border-color: var(--success); background-color: #f0fff4; opacity: 0.8; }
+    .ex-card.completed { border-color: var(--success); background-color: #f0fff4; opacity: 0.8; filter: none; }
     .ex-card.completed::after {
         content: "✓"; position: absolute; top: 50%; left: 50%;
         transform: translate(-50%, -50%); font-size: 5rem; color: var(--success); opacity: 0.1; font-weight: bold;
@@ -143,13 +147,17 @@
     
     .ai-row { display: flex; justify-content: flex-end; width: 100%; margin-top: 5px; }
 
+    /* AI Button Styles */
     .ai-hint-btn {
         background: #f3e5f5; border: none; color: var(--ai-color); font-size: 1.2rem;
-        cursor: pointer; font-weight: bold; padding: 2px 10px; border-radius: 6px;
-        pointer-events: auto;
+        cursor: pointer; font-weight: bold; padding: 4px 12px; border-radius: 8px;
+        pointer-events: auto !important;
+        position: relative; z-index: 50;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    /* Disable AI button if card is locked */
-    .ex-card.locked .ai-hint-btn { opacity: 0.5; pointer-events: none; }
+    .ai-hint-btn:active { transform: scale(0.9); }
+    .ai-hint-btn:hover { background: #e1bee7; }
 
     /* --- Chat & Settings --- */
     .chat-widget { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: flex; flex-direction: column; align-items: flex-end; }
@@ -160,6 +168,7 @@
         cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0;
         transition: transform 0.3s;
     }
+    .chat-btn:hover { transform: scale(1.1); }
     .chat-btn svg { width: 30px; height: 30px; fill: white; }
     
     .chat-window, .settings-modal {
@@ -173,20 +182,22 @@
         top: 50%; left: 50%; transform: translate(-50%, -50%); height: auto; bottom: auto; padding: 20px;
     }
     .settings-input {
-        width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
+        width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; direction: ltr;
     }
     .save-btn {
-        width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: bold;
+        width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
     }
 
-    .chat-header { background: var(--ai-color); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
+    .chat-header { background: var(--ai-color); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .chat-close { cursor: pointer; font-size: 1.5rem; line-height: 1; }
     .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }
     .chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px; }
     .chat-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
     
-    .msg { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; }
+    .msg { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; word-wrap: break-word; }
     .msg.user { align-self: flex-end; background: var(--ai-color); color: white; border-bottom-left-radius: 2px; }
     .msg.ai { align-self: flex-start; background: #e0e0e0; color: #333; border-bottom-right-radius: 2px; }
+    .msg.error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
 
     @media screen and (max-width: 600px) {
         .grid-container { grid-template-columns: 1fr; }
@@ -197,7 +208,7 @@
 <body>
 
 <nav class="sticky-nav">
-    <div class="nav-title">Hybrid PPL<span>تمرین هوشمند</span></div>
+    <div class="nav-title">Hybrid PPL<span>تمرین هوشمند علی</span></div>
     <div class="nav-actions">
         <a href="#day1" class="nav-btn" onclick="switchDay('day1')">Day 1</a>
         <a href="#day2" class="nav-btn" onclick="switchDay('day2')">Day 2</a>
@@ -209,15 +220,15 @@
 <!-- Settings Modal -->
 <div class="settings-modal" id="settingsModal">
     <h3 style="margin-top:0; color:var(--primary);">تنظیمات هوش مصنوعی</h3>
-    <p style="font-size:0.9rem; color:#666;">برای استفاده از قابلیت چت، کلید API جمینای خود را اینجا وارد کنید.</p>
-    <input type="password" id="apiKeyInput" class="settings-input" placeholder="Google Gemini API Key">
-    <button class="save-btn" onclick="saveApiKey()">ذخیره تنظیمات</button>
+    <p style="font-size:0.9rem; color:#666;">کلید API جمینای خود را وارد کنید. این کلید در مرورگر شما ذخیره می‌شود.</p>
+    <input type="password" id="apiKeyInput" class="settings-input" placeholder="Paste API Key Here">
+    <button class="save-btn" onclick="saveApiKey()">ذخیره کلید</button>
     <button class="nav-btn" style="background:#e74c3c; margin-top:10px; width:100%; color:white;" onclick="toggleSettings()">بستن</button>
 </div>
 
 <div class="container">
 
-    <!-- DAY 1 -->
+    <!-- DAY 1: PUSH (FULL RESTORED) -->
     <div id="day1" class="day-section">
         <div class="day-header"><h2>Day 1: Chest, Triceps, Abs</h2></div>
         
@@ -229,8 +240,8 @@
                 <span class="ex-name-fa">برپی</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    یک شنا سوئدی کامل برو، سریع بلند شو و یک پرش کوتاه انجام بده. این مادر تمام حرکات چربی‌سوزی است.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'اجرای صحیح برپی')">✨</button></div>
+                    یک شنا سوئدی کامل برو، سریع بلند شو و یک پرش کوتاه انجام بده.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'نحوه اجرای صحیح برپی')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="A2" data-sets="3" onclick="handleClick(this)">
@@ -239,8 +250,8 @@
                 <span class="ex-name-fa">صفحه از زمین به بالای سر</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    یک صفحه ۱۰ یا ۱۵ کیلویی را دو دستی بگیر، بزن زمین (بین پاها) و با یک حرکت انفجاری ببر بالای سر تا آرنج‌ها قفل شوند.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Plate Ground to Overhead')">✨</button></div>
+                    یک صفحه ۱۰ یا ۱۵ کیلویی را دو دستی بگیر، بزن زمین و با یک حرکت انفجاری ببر بالای سر.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'آموزش حرکت Plate Ground to Overhead')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="A3" data-sets="3" data-time="40" onclick="handleClick(this)">
@@ -249,8 +260,8 @@
                 <span class="ex-name-fa">کوهنورد</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">40s</span></div></div>
                 <div class="ex-note">
-                    در حالت شنا قرار بگیر و زانوها را به صورت متناوب و سریع به داخل شکم بکش (شکم سفت باشد).
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Mountain Climbers')">✨</button></div>
+                    در حالت شنا، زانوها را به صورت متناوب و سریع به داخل شکم بکش.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'اجرای صحیح Mountain Climbers')">✨</button></div>
                 </div>
                 <div class="timer-overlay">40<span>کلیک برای توقف</span></div>
             </div>
@@ -260,8 +271,8 @@
                 <span class="ex-name-fa">اسنچ دمبل تک دست</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    دمبل را از روی زمین با کمک نیروی پا و باسن به صورت انفجاری مستقیم به بالای سر پرتاب کن.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell Snatch')">✨</button></div>
+                    دمبل را از زمین با نیروی پا و باسن انفجاری به بالای سر پرتاب کن.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell Snatch form')">✨</button></div>
                 </div>
             </div>
         </div>
@@ -274,8 +285,8 @@
                 <span class="ex-name-fa">پرس سینه هالتر تخت</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">5</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">5</span></div></div>
                 <div class="ex-note">
-                    سنگین‌ترین حرکت روز برای افزایش قدرت و حجم کلی سینه. بین ست‌ها ۳ دقیقه استراحت کن.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bench Press tips')">✨</button></div>
+                    سنگین‌ترین حرکت روز. ۳ دقیقه استراحت. با توجه به سابقه ژنیکوماستی، روی انقباض کامل تمرکز کن نه فقط جابجایی وزنه.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bench Press form for gynecomastia')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="2" data-sets="4" onclick="handleClick(this)">
@@ -284,37 +295,38 @@
                 <span class="ex-name-fa">پرس بالا سینه دمبل</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    در پایین‌ترین نقطه حرکت، ۲ ثانیه مکث کن تا عضله کاملاً کش بیاید و فرم‌دهی شود.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline Dumbbell Press')">✨</button></div>
+                    در پایین‌ترین نقطه ۲ ثانیه مکث کن. تقویت بالا سینه برای فرم‌دهی بهتر سینه عالی است.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline Dumbbell Press tips')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="3" data-sets="4" onclick="handleClick(this)">
+            <!-- ... Rest of Day 1 exercises ... -->
+             <div class="ex-card" data-code="3" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">3</div>
                 <span class="ex-name-en">Low Pulley Cable Fly</span>
                 <span class="ex-name-fa">قفسه سینه سیم‌کش از پایین</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    قرقره‌ها را در پایین‌ترین نقطه دستگاه کراس تنظیم کن و دستگیره‌ها را به سمت روبروی صورتت بالا بکش (تمرکز روی خط بالای سینه).
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Cable Fly')">✨</button></div>
+                    دستگیره‌ها را به سمت روبروی صورتت بالا بکش (تمرکز روی خط بالای سینه).
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Low Pulley Cable Fly')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">4</div>
                 <span class="ex-name-en">Weighted Dips</span>
                 <span class="ex-name-fa">پارالل با وزنه</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
                 <div class="ex-note">
-                    تنه را کمی به جلو خم کن تا فشار روی زیر سینه باشد. اگر می‌توانی وزنه به کمربند آویزان کن.
+                   تنه را کمی به جلو خم کن.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dips for chest')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="5a" data-sets="3" onclick="handleClick(this)">
                 <div class="ex-code">5a</div>
-                <span class="ex-name-en">Pec Deck (Machine Fly)</span>
+                <span class="ex-name-en">Pec Deck</span>
                 <span class="ex-name-fa">پک دک (دستگاه پروانه)</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    سوپرست: تمرکز روی انقباض داخلی سینه در انتهای حرکت.
+                    سوپرست با شنا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Pec Deck machine')">✨</button></div>
                 </div>
             </div>
@@ -324,47 +336,47 @@
                 <span class="ex-name-fa">شنا سوئدی</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
                 <div class="ex-note">
-                    بلافاصله بعد از دستگاه پروانه، روی زمین شنا بزن تا عضله کاملاً بسوزد.
+                    بلافاصله بعد از دستگاه پروانه.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Push ups form')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="6" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="6" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">6</div>
                 <span class="ex-name-en">Close-Grip Bench Press</span>
                 <span class="ex-name-fa">پرس سینه دست جمع</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8</span></div></div>
                 <div class="ex-note">
-                    دست‌ها را به اندازه عرض شانه بگیر و موقع پایین آمدن آرنج‌ها را به پهلو بمال (مادر حجم پشت بازو).
+                    مادر حجم پشت بازو.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Close grip bench press')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="7" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">7</div>
-                <span class="ex-name-en">Lying Triceps Ext (Skullcrushers)</span>
+                <span class="ex-name-en">Skullcrushers</span>
                 <span class="ex-name-fa">پشت بازو هالتر خوابیده</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    روی میز تخت یا شیب منفی بخواب و هالتر را به سمت پیشانی پایین بیاور (بدون فشار به گردن).
+                    بدون فشار به گردن.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Skullcrushers')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="8a" data-sets="3" onclick="handleClick(this)">
+             <div class="ex-card" data-code="8a" data-sets="3" onclick="handleClick(this)">
                 <div class="ex-code">8a</div>
                 <span class="ex-name-en">Cable Pushdown</span>
                 <span class="ex-name-fa">پشت بازو سیم‌کش</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    با میله صاف، سنگین و کنترلی بزن.
+                     با میله صاف، سنگین و کنترلی.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Tricep Pushdown')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="8b" data-sets="3" onclick="handleClick(this)">
+             <div class="ex-card" data-code="8b" data-sets="3" onclick="handleClick(this)">
                 <div class="ex-code">8b</div>
-                <span class="ex-name-en">Cross-Body DB Extension</span>
-                <span class="ex-name-fa">پشت بازو دمبل کراس‌بادی</span>
+                <span class="ex-name-en">Cross-Body DB Ext</span>
+                <span class="ex-name-fa">پشت بازو دمبل کراس</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    دمبل را تک دست بگیر و به جای کنار گوش، به سمت **شانه مخالف** پایین بیاور تا آرنج قفل شود.
+                    به سمت شانه مخالف پایین بیاور.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Cross body tricep extension')">✨</button></div>
                 </div>
             </div>
@@ -374,55 +386,24 @@
                 <span class="ex-name-fa">شنا دست جمع الماسی</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
                 <div class="ex-note">
-                    دست‌ها را به شکل لوزی روی زمین بگذار و شنا بزن (حرکت تمام کننده تری‌ست).
+                    حرکت تمام کننده تری‌ست.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Diamond push ups')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="9" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="9" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">9</div>
                 <span class="ex-name-en">Toes to Bar</span>
                 <span class="ex-name-fa">پنجه به میله</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
                 <div class="ex-note">
-                    از بارفیکس آویزان شو و سعی کن بدون تاب خوردن، پنجه پا را به میله بارفیکس بزنی.
+                   بدون تاب خوردن.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Toes to bar')">✨</button></div>
                 </div>
-            </div>
-            <div class="ex-card" data-code="10" data-sets="3" onclick="handleClick(this)">
-                <div class="ex-code">10</div>
-                <span class="ex-name-en">Hanging Windshield Wipers</span>
-                <span class="ex-name-fa">برف پاک‌کن آویزان</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
-                <div class="ex-note">
-                    پاها را بالا بیاور و مثل برف پاک‌کن به چپ و راست بچرخان.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Windshield wipers abs')">✨</button></div>
-                </div>
-            </div>
-            <div class="ex-card" data-code="11" data-sets="3" onclick="handleClick(this)">
-                <div class="ex-code">11</div>
-                <span class="ex-name-en">L-Sit Hold</span>
-                <span class="ex-name-fa">ال-سیت</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
-                <div class="ex-note">
-                    روی پارالل یا زمین، پاها را صاف نگه دار تا بدن زاویه L بگیرد (فشار ایزومتریک).
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'L-Sit hold')">✨</button></div>
-                </div>
-            </div>
-            <div class="ex-card" data-code="12" data-sets="3" data-time="45" onclick="handleClick(this)">
-                <div class="ex-code">12</div>
-                <span class="ex-name-en">Hollow Body Rock</span>
-                <span class="ex-name-fa">هالو بادی راک</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">45s</span></div></div>
-                <div class="ex-note">
-                    به حالت قایق روی زمین بخواب (کمر چسبیده به زمین) و مثل گهواره تکان بخور.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Hollow body rock')">✨</button></div>
-                </div>
-                <div class="timer-overlay">45<span>کلیک برای توقف</span></div>
             </div>
         </div>
     </div>
 
-    <!-- DAY 2: PULL -->
+    <!-- DAY 2: PULL (FULL RESTORED) -->
     <div id="day2" class="day-section" style="display:none;">
         <div class="day-header"><h2>Day 2: Back, Biceps, Forearms</h2></div>
         
@@ -434,8 +415,8 @@
                 <span class="ex-name-fa">دستگاه روئینگ</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">2min</span></div></div>
                 <div class="ex-note">
-                    با تمام توان و سرعت پارو بزن. این بهترین گرم‌کننده تخصصی برای عضلات پشت است.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Rowing machine benefits')">✨</button></div>
+                    با تمام توان و سرعت پارو بزن.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Rowing machine form')">✨</button></div>
                 </div>
                 <div class="timer-overlay">120<span>کلیک برای توقف</span></div>
             </div>
@@ -445,7 +426,7 @@
                 <span class="ex-name-fa">رنیگید رو</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">20</span></div></div>
                 <div class="ex-note">
-                    در حالت شنا با دمبل قرار بگیر، شکم را سفت کن و دمبل را نوبتی به صورت پارویی به سمت لگن بکش.
+                    در حالت شنا با دمبل، نوبتی پارویی بزن. شکم سفت باشد.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Renegade row')">✨</button></div>
                 </div>
             </div>
@@ -455,7 +436,7 @@
                 <span class="ex-name-fa">زانو بلند</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">40s</span></div></div>
                 <div class="ex-note">
-                    درجا زدن سریع با بالا آوردن زانوها تا کمر.
+                    درجا زدن سریع با بالا آوردن زانوها.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'High knees')">✨</button></div>
                 </div>
                 <div class="timer-overlay">40<span>کلیک برای توقف</span></div>
@@ -466,7 +447,7 @@
                 <span class="ex-name-fa">دمبل سوئینگ</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    دمبل را بین پاها تاب بده و با کمک فیله کمر تا ارتفاع سینه بالا بیاور.
+                     با کمک فیله کمر تا ارتفاع سینه بالا بیاور.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell swing')">✨</button></div>
                 </div>
             </div>
@@ -480,27 +461,27 @@
                 <span class="ex-name-fa">ددلیفت</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">6</span></div></div>
                 <div class="ex-note">
-                    پادشاه حرکات. سنگین و با فرم صحیح (کمر صاف) بزن. حتماً از کمربند استفاده کن. استراحت کامل بین ست‌ها.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Deadlift form')">✨</button></div>
+                    پادشاه حرکات. حتماً از کمربند استفاده کن.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Deadlift form tips')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="2a" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">2a</div>
-                <span class="ex-name-en">Lat Pulldown (Wide Grip)</span>
+                <span class="ex-name-en">Lat Pulldown (Wide)</span>
                 <span class="ex-name-fa">زیربغل سیم‌کش دست باز</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    میله را تا بالای سینه بکش تا پهنای زیربغل درگیر شود. وقتی دیگر نتوانستی ادامه دهی... (ادامه در بعدی)
+                    برای پهنای زیربغل.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Wide grip pulldown')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="2b" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">2b</div>
-                <span class="ex-name-en">Reverse Grip Lat Pulldown</span>
-                <span class="ex-name-fa">زیربغل سیم‌کش مچ برعکس</span>
+                <span class="ex-name-en">Reverse Grip Pulldown</span>
+                <span class="ex-name-fa">سیم‌کش مچ برعکس</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
                 <div class="ex-note">
-                    (سوپرست مکانیکی) بلافاصله جای دست را جمع کن و مچ را برگردان (کف دست رو به صورت) و ادامه بده.
+                    سوپرست مکانیکی: بلافاصله مچ را برگردان و ادامه بده.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Reverse grip pulldown')">✨</button></div>
                 </div>
             </div>
@@ -510,27 +491,27 @@
                 <span class="ex-name-fa">زیربغل تی‌بار</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    با دستگیره جمع، تمرکز را روی ضخامت وسط کمر بگذار.
+                    تمرکز روی ضخامت وسط کمر.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'T Bar row')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">4</div>
                 <span class="ex-name-en">Single-Arm Lat Pulldown</span>
                 <span class="ex-name-fa">زیربغل سیم‌کش تک دست</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    روی زمین زانو بزن و دستگیره تکی کراس را از بالا با تمرکز کامل به پایین بکش و عضله را منقبض کن.
+                    روی زمین زانو بزن و با تمرکز کامل بکش.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Single arm lat pulldown')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="5" data-sets="3" onclick="handleClick(this)">
                 <div class="ex-code">5</div>
-                <span class="ex-name-en">Incline Bench Two-Arm DB Row</span>
-                <span class="ex-name-fa">زیربغل دمبل جفت روی میز شیبدار</span>
+                <span class="ex-name-en">Incline DB Row</span>
+                <span class="ex-name-fa">زیربغل دمبل میز شیبدار</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    دمر روی میز بالا سینه بخواب و دو دمبل را همزمان پارویی بزن (بدون فشار به کمر).
+                    دمر روی میز بخواب و پارویی بزن (حذف فشار کمر).
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline dumbbell row')">✨</button></div>
                 </div>
             </div>
@@ -540,37 +521,37 @@
                 <span class="ex-name-fa">پلاور سیم‌کش ایستاده</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    با دست‌های کاملاً صاف، میله را از بالا تا روی ران پا پایین بیاور (تراش دادن زیربغل).
+                    تراش دادن زیربغل.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Straight arm pulldown')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="7" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">7</div>
-                <span class="ex-name-en">Close-Grip Barbell Curl</span>
+                <span class="ex-name-en">Close-Grip BB Curl</span>
                 <span class="ex-name-fa">جلو بازو هالتر دست جمع</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8</span></div></div>
                 <div class="ex-note">
-                    دست‌ها کمی جمع‌تر از عرض شانه باشد تا روی "سر بلند" بازو فشار بیاید. در پایین‌ترین نقطه آرنج را قفل کن.
+                    تمرکز روی سر بلند بازو.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Close grip barbell curl')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="8" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="8" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">8</div>
-                <span class="ex-name-en">Cross-Body Hammer Curl</span>
-                <span class="ex-name-fa">جلو بازو چکشی کراس‌بادی</span>
+                <span class="ex-name-en">Cross-Body Hammer</span>
+                <span class="ex-name-fa">جلو بازو چکشی کراس</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    دمبل را به صورت ضربدری از جلوی سینه عبور بده و به سمت شانه مخالف ببر (تمرکز روی براکیالیس).
+                    تمرکز روی براکیالیس.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Cross body hammer curl')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="9a" data-sets="3" onclick="handleClick(this)">
                 <div class="ex-code">9a</div>
-                <span class="ex-name-en">Incline Dumbbell Curl</span>
-                <span class="ex-name-fa">جلو بازو دمبل میز شیبدار</span>
+                <span class="ex-name-en">Incline DB Curl</span>
+                <span class="ex-name-fa">جلو بازو دمبل شیبدار</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    (سوپرست) روی میز شیبدار دراز بکش تا بازو در حالت کشش کامل قرار بگیرد.
+                    کشش کامل بازو.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline dumbbell curl')">✨</button></div>
                 </div>
             </div>
@@ -580,37 +561,37 @@
                 <span class="ex-name-fa">جلو بازو لاری مچ برعکس</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    (سوپرست) با هالتر خم (EZ) روی میز لاری، مچ برعکس بزن. این حرکت فاصله خالی بین بازو و ساعد را پر می‌کند.
+                    پر کردن فاصله بازو و ساعد.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Reverse preacher curl')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="10a" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="10a" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">10a</div>
-                <span class="ex-name-en">Cable / Machine Wrist Curl</span>
-                <span class="ex-name-fa">مچ سیم‌کش / دستگاه</span>
+                <span class="ex-name-en">Cable Wrist Curl</span>
+                <span class="ex-name-fa">مچ سیم‌کش</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    از دستگاه تخصصی باشگاه استفاده کن. ساعد را ثابت نگه دار و فقط مچ را کامل باز و بسته کن.
+                    ساعد را ثابت نگه دار.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Cable wrist curl')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="10b" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="10b" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">10b</div>
-                <span class="ex-name-en">Seated Reverse Wrist Curl</span>
+                <span class="ex-name-en">Reverse Wrist Curl</span>
                 <span class="ex-name-fa">مچ برعکس نشسته</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    ساعدها را روی نیمکت بگذار، کف دست رو به پایین باشد و با وزنه سنگین مچ را بالا بیاور (پشت ساعد).
+                    تقویت پشت ساعد.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Seated reverse wrist curl')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="10c" data-sets="3" data-time="45" onclick="handleClick(this)">
+             <div class="ex-card" data-code="10c" data-sets="3" data-time="45" onclick="handleClick(this)">
                 <div class="ex-code">10c</div>
                 <span class="ex-name-en">Farmer's Carry</span>
                 <span class="ex-name-fa">راه رفتن کشاورز</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">45s</span></div></div>
                 <div class="ex-note">
-                    سنگین‌ترین دمبلی که می‌توانی را بردار و با قامت صاف راه برو تا قدرت پنجه‌هایت منفجر شود.
+                    با سنگین‌ترین دمبل راه برو.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Farmers walk')">✨</button></div>
                 </div>
                 <div class="timer-overlay">45<span>کلیک برای توقف</span></div>
@@ -618,7 +599,7 @@
         </div>
     </div>
 
-    <!-- DAY 3: LEGS & SHOULDERS -->
+    <!-- DAY 3: LEGS & SHOULDERS (FULL RESTORED) -->
     <div id="day3" class="day-section" style="display:none;">
         <div class="day-header"><h2>Day 3: Legs & Shoulders</h2></div>
         
@@ -630,7 +611,7 @@
                 <span class="ex-name-fa">پرش درجا زانو جمع</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    یک پرش انفجاری انجام بده و در هوا زانوها را توی سینه جمع کن.
+                    پرش انفجاری، زانوها توی سینه.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Tuck jumps')">✨</button></div>
                 </div>
             </div>
@@ -640,7 +621,7 @@
                 <span class="ex-name-fa">لانگز معکوس</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">20</span></div></div>
                 <div class="ex-note">
-                    متناوب یک قدم به عقب بردار و زانو را خم کن.
+                    متناوب یک قدم به عقب.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Reverse lunges')">✨</button></div>
                 </div>
             </div>
@@ -650,7 +631,7 @@
                 <span class="ex-name-fa">طناب زدن</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">45s</span></div></div>
                 <div class="ex-note">
-                    به صورت سرعتی طناب بزن (یا شبیه‌سازی کن).
+                    سرعتی.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Jump rope')">✨</button></div>
                 </div>
                 <div class="timer-overlay">45<span>کلیک برای توقف</span></div>
@@ -661,7 +642,7 @@
                 <span class="ex-name-fa">اسکات پرشی</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    یک اسکات کامل برو و موقع بالا آمدن یک پرش کوتاه انجام بده.
+                    اسکات کامل + پرش کوتاه.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Squat jumps')">✨</button></div>
                 </div>
             </div>
@@ -675,7 +656,7 @@
                 <span class="ex-name-fa">اسکات پا هالتر</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">5</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8</span></div></div>
                 <div class="ex-note">
-                    مادر حرکات پا. سنگین، عمیق و با تمرکز بزن (۳ دقیقه استراحت).
+                    مادر حرکات پا. سنگین و عمیق.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Back squat form')">✨</button></div>
                 </div>
             </div>
@@ -685,8 +666,8 @@
                 <span class="ex-name-fa">پرس پا ماشین</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    پاها را جمع بگذار تا فشار روی بخش بیرونی ران (اشک پا) باشد.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Leg press')">✨</button></div>
+                    پاها جمع (فشار روی اشک پا).
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Leg press placement')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="3" data-sets="3" onclick="handleClick(this)">
@@ -695,27 +676,27 @@
                 <span class="ex-name-fa">اسکات بلغاری</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
-                    یک پا را روی نیمکت عقب بگذار و با پای جلو نشست و برخاست کن (قاتل عضلات پا).
+                    قاتل عضلات پا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bulgarian split squat')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">4</div>
                 <span class="ex-name-en">Lying Leg Curl</span>
-                <span class="ex-name-fa">پشت ران دستگاه خوابیده</span>
+                <span class="ex-name-fa">پشت ران دستگاه</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    در ست آخر از تکنیک FST-7 استفاده کن (۷ ست ۱۰ تایی با ۳۰ ثانیه استراحت).
+                    ست آخر تکنیک FST-7.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Lying leg curl')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="5" data-sets="4" onclick="handleClick(this)">
+             <div class="ex-card" data-code="5" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">5</div>
                 <span class="ex-name-en">Standing Calf Raise</span>
                 <span class="ex-name-fa">ساق پا ایستاده</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">20</span></div></div>
                 <div class="ex-note">
-                    در پایین‌ترین نقطه پاشنه را کامل بکش و در بالا روی پنجه مکث کن.
+                    کشش کامل و مکث در بالا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Standing calf raise')">✨</button></div>
                 </div>
             </div>
@@ -725,17 +706,17 @@
                 <span class="ex-name-fa">تراستر</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    یک اسکات کامل بزن و وقتی بلند شدی، نیروی پا را به دست منتقل کن و هالتر را بالای سر پرس کن؛ این حرکت ضربان قلب را به اوج می‌رساند.
+                    ترکیب اسکات و پرس سرشانه. ضربان بالا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Thrusters')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="7" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">7</div>
                 <span class="ex-name-en">Military Press</span>
-                <span class="ex-name-fa">پرس سرشانه هالتر نظامی</span>
+                <span class="ex-name-fa">پرس سرشانه نظامی</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8</span></div></div>
                 <div class="ex-note">
-                    ایستاده و بدون کمک گرفتن از زانو، هالتر را از زیر چانه تا بالای سر پرس کن.
+                    ایستاده، بدون کمک زانو.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Military press')">✨</button></div>
                 </div>
             </div>
@@ -745,7 +726,7 @@
                 <span class="ex-name-fa">نشر جانب دمبل</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    آرنج‌ها را کمی خم نگه دار و دمبل‌ها را تا ارتفاع شانه بالا بیاور (پرتاب نکن).
+                    بدون پرتاب کردن وزنه.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Lateral raise')">✨</button></div>
                 </div>
             </div>
@@ -755,7 +736,7 @@
                 <span class="ex-name-fa">فیس پول</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    طناب سیم‌کش را به سمت پیشانی بکش و آرنج‌ها را عقب نگه دار (تقویت سرشانه خلفی و اصلاح قوز).
+                    برای اصلاح قوز و سرشانه خلفی.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Face pulls')">✨</button></div>
                 </div>
             </div>
@@ -765,7 +746,7 @@
                 <span class="ex-name-fa">شراگ هالتر</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    با وزنه سنگین شانه‌ها را بالا بکش، ۱ ثانیه مکث کن و آرام پایین بیاور.
+                    با مکث در بالا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Barbell shrugs')">✨</button></div>
                 </div>
             </div>
@@ -778,18 +759,17 @@
 <div class="chat-widget">
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
-            مربی هوشمند شما ✨
+            مربی هوشمند علی ✨
             <span class="chat-close" onclick="toggleChat()">×</span>
         </div>
         <div class="chat-body" id="chatBody">
-            <div class="msg ai">سلام! من مربی هوشمند تو هستم. اگر کلید API را وارد کرده باشی، می‌توانم به سوالاتت پاسخ دهم.</div>
+            <div class="msg ai">سلام علی جان! با مشخصاتی که دادی (۲۳ سال، ۱۷۸ قد، ۸۳ وزن، ژنیکوماستی)، من کاملاً آماد‌ه‌ام تا توی ماه سوم بازگشتت به تمرین، بهترین راهنمایی رو بکنم.</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" class="chat-input" placeholder="سوال خود را بپرسید..." onkeypress="handleEnter(event)">
-            <button class="send-btn" onclick="sendMessage()">ارسال</button>
+            <input type="text" id="chatInput" class="chat-input" placeholder="سوال بپرسید..." onkeypress="handleEnter(event)">
+            <button class="nav-btn" style="background:var(--ai-color); color:white;" onclick="sendMessage()">ارسال</button>
         </div>
     </div>
-    <!-- SVG Icon -->
     <button class="chat-btn" onclick="toggleChat()">
         <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
     </button>
@@ -797,22 +777,17 @@
 
 <script>
     // --- Global State ---
+    let apiKey = localStorage.getItem('gemini_api_key') || "";
     let currentDayId = 'day1';
     let audioCtx = null;
     let activeTimer = null;
-    let isTimerRunning = false; // Flag to prevent other clicks
+    let isTimerRunning = false;
 
-    // --- Audio Context for Beep (iOS Optimized) ---
+    // --- Audio Context for Beep ---
     function unlockAudio() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const buffer = audioCtx.createBuffer(1, 1, 22050);
-        const source = audioCtx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioCtx.destination);
-        source.start(0);
     }
-
     document.addEventListener('touchstart', function() { unlockAudio(); }, { once: true });
     document.addEventListener('click', function() { unlockAudio(); }, { once: true });
 
@@ -820,39 +795,23 @@
         if (!audioCtx) unlockAudio();
         const ctx = audioCtx;
         const now = ctx.currentTime;
-        
-        // Create oscillator
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        
         osc.connect(gain);
         gain.connect(ctx.destination);
-        
-        // Use sawtooth for a clearer, sharper buzzer sound
         osc.type = "sawtooth";
-        
-        // Volume: Increased to 0.3
         const vol = 0.3;
         
-        // Pattern: Beep (High) - Pause - Beep (High) - Pause - Beep (Higher/Longer)
-        
-        // 1st Beep
+        // Beep Pattern
         osc.frequency.setValueAtTime(1000, now);
         gain.gain.setValueAtTime(vol, now);
         gain.gain.setValueAtTime(0, now + 0.15);
-        
-        // 2nd Beep
         osc.frequency.setValueAtTime(1000, now + 0.25);
         gain.gain.setValueAtTime(vol, now + 0.25);
         gain.gain.setValueAtTime(0, now + 0.40);
-        
-        // 3rd Beep (Finale)
         osc.frequency.setValueAtTime(1500, now + 0.50);
         gain.gain.setValueAtTime(vol, now + 0.50);
-        
-        // Fade out finale
         gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-        
         osc.start(now);
         osc.stop(now + 1.3);
     }
@@ -869,20 +828,15 @@
         initializeDay(dayId);
     }
 
-    // --- Logic Engine ---
+    // --- Init Day ---
     function initializeDay(dayId) {
         const container = document.getElementById(dayId);
         const cards = container.querySelectorAll('.ex-card');
-        
-        // Reset all cards for fresh start logic if needed, or just re-eval lock state
-        // For simplicity, we just ensure logic runs.
-        // We assume index 0 is always active initially if nothing is started.
         
         cards.forEach(card => {
             card.classList.add('locked');
             card.classList.remove('active-move');
             
-            // Add dots if missing
             if(!card.querySelector('.progress-dots')) {
                 const sets = parseInt(card.dataset.sets) || 1;
                 const dotsContainer = document.createElement('div');
@@ -903,24 +857,20 @@
             cards[0].classList.add('active-move');
         }
     }
-
-    // Call init for Day 1 on load
     initializeDay('day1');
 
+    // --- Card Click Logic ---
     function handleClick(card) {
-        // 1. Logic Gate: Check if locked or timer running
         if (card.classList.contains('locked')) return;
         if (isTimerRunning && !card.classList.contains('timer-active')) return;
 
-        // 2. Audio Unlock
         if (!audioCtx) unlockAudio();
 
-        // 3. Timer Logic
+        // Timer Logic
         if (card.dataset.time) {
             if (card.classList.contains('completed')) return; 
             
             if (card.classList.contains('timer-active')) {
-                // User manual stop (optional)
                 clearInterval(activeTimer);
                 activeTimer = null;
                 isTimerRunning = false;
@@ -932,8 +882,8 @@
             return;
         }
 
-        // 4. Standard Set Logic
-        if (isTimerRunning) return; // double check
+        // Set Logic
+        if (isTimerRunning) return;
 
         const totalSets = parseInt(card.dataset.sets);
         let completed = parseInt(card.dataset.completedSets);
@@ -941,189 +891,55 @@
         if (completed < totalSets) {
             completed++;
             card.dataset.completedSets = completed;
-            
-            // Update UI Dots
             const dots = card.querySelectorAll('.dot');
             if(dots[completed-1]) dots[completed-1].classList.add('active');
-            
-            // 5. Determine Next Move (The Core Logic)
             handleNextMove(card, completed, totalSets);
         }
     }
 
     function startTimer(card) {
         if (activeTimer) return;
-        
-        isTimerRunning = true; // Lock everything else
-        
+        isTimerRunning = true;
         const duration = parseInt(card.dataset.time);
         const overlay = card.querySelector('.timer-overlay');
         card.classList.add('timer-active');
-        
         let timeLeft = duration;
         overlay.innerHTML = timeLeft;
         
         activeTimer = setInterval(() => {
             timeLeft--;
             overlay.innerHTML = timeLeft;
-            
             if (timeLeft <= 0) {
                 clearInterval(activeTimer);
                 activeTimer = null;
-                isTimerRunning = false; // Unlock
+                isTimerRunning = false;
                 card.classList.remove('timer-active');
-                
                 playTimerSound();
-
-                // Logic update
+                
+                // Auto progress logic
                 const totalSets = parseInt(card.dataset.sets);
                 let completed = parseInt(card.dataset.completedSets);
                 completed++;
                 card.dataset.completedSets = completed;
-                
                 const dots = card.querySelectorAll('.dot');
                 if(dots[completed-1]) dots[completed-1].classList.add('active');
-                
                 handleNextMove(card, completed, totalSets);
             }
         }, 1000);
     }
 
     function handleNextMove(card, completed, totalSets) {
-        const code = card.dataset.code; // e.g., "A1", "1", "2a"
-        const currentContainer = card.parentElement; // grid-container
+        const code = card.dataset.code;
+        const currentContainer = card.parentElement;
         const allCards = Array.from(currentContainer.querySelectorAll('.ex-card'));
         const currentIndex = allCards.indexOf(card);
 
-        // -- LOGIC BRANCHES --
-
-        // 1. Ignition Cycle (A1, A2, A3, A4)
-        if (code.startsWith('A')) {
-            // Logic: Jump to next 'A' card. If last 'A' card (A4), jump back to A1 unless all sets done.
-            if (completed < totalSets) {
-                // Not finished all sets yet.
-                // If it's A1..A3 -> Next sibling
-                // If it's A4 -> Loop back to A1
-                card.classList.add('locked');
-                card.classList.remove('active-move');
-                
-                if (code === 'A4') {
-                    // Loop back to start of container (A1)
-                    const a1 = allCards[0];
-                    a1.classList.remove('locked');
-                    a1.classList.add('active-move');
-                    a1.scrollIntoView({behavior: "smooth", block: "center"});
-                } else {
-                    // Next sibling
-                    const nextCard = allCards[currentIndex + 1];
-                    if(nextCard) {
-                        nextCard.classList.remove('locked');
-                        nextCard.classList.add('active-move');
-                        nextCard.scrollIntoView({behavior: "smooth", block: "center"});
-                    }
-                }
-            } else {
-                // Completed all sets for this card.
-                // Visual complete
-                card.classList.add('completed');
-                const dots = card.querySelectorAll('.dot');
-                dots.forEach(d => d.classList.add('done'));
-                
-                // If it was A4 and finished, move to Part 2 (Exercise 1)
-                if (code === 'A4') {
-                    card.classList.remove('active-move');
-                    // Find Part 2 container
-                    const part2Id = currentDayId + '-part2';
-                    const part2Container = document.getElementById(part2Id);
-                    if(part2Container) {
-                        const firstEx = part2Container.querySelector('.ex-card');
-                        if(firstEx) {
-                            firstEx.classList.remove('locked');
-                            firstEx.classList.add('active-move');
-                            // Also scroll to it
-                            firstEx.scrollIntoView({behavior: "smooth", block: "center"});
-                        }
-                    }
-                } else {
-                    // Just move to next A (unlikely unless sets misconfigured, but safe fallback)
-                    card.classList.add('locked');
-                    card.classList.remove('active-move');
-                    const nextCard = allCards[currentIndex + 1];
-                    if(nextCard) {
-                        nextCard.classList.remove('locked');
-                        nextCard.classList.add('active-move');
-                    }
-                }
-            }
-            return;
-        }
-
-        // 2. Supersets (e.g., 2a, 2b, 10a, 10b, 10c)
-        if (code.match(/[0-9][a-z]/)) {
-            const baseNum = parseInt(code); 
-            
-            if (completed >= totalSets) {
-                card.classList.add('completed');
-                card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
-                card.classList.remove('active-move');
-            } else {
-                card.classList.add('locked');
-                card.classList.remove('active-move');
-            }
-
-            // Logic to find next in loop
-            const groupCards = allCards.filter(c => {
-                const cCode = c.dataset.code;
-                return parseInt(cCode) === baseNum && cCode.match(/[0-9][a-z]/);
-            });
-            
-            const currentGroupIndex = groupCards.indexOf(card);
-            let nextCard = null;
-
-            // Check next cards in cycle
-            for (let i = 1; i <= groupCards.length; i++) {
-                const checkIndex = (currentGroupIndex + i) % groupCards.length;
-                const candidate = groupCards[checkIndex];
-                if (!candidate.classList.contains('completed')) {
-                    nextCard = candidate;
-                    break;
-                }
-            }
-
-            if (nextCard) {
-                 nextCard.classList.remove('locked');
-                 nextCard.classList.add('active-move');
-                 nextCard.scrollIntoView({behavior: "smooth", block: "center"});
-                 return;
-            }
-
-            // If group finished (all cards in group are completed), move to next
-            let nextIndex = currentIndex + 1;
-            while(nextIndex < allCards.length) {
-                const candidate = allCards[nextIndex];
-                // Skip if it's part of the same base number group (just in case)
-                if (parseInt(candidate.dataset.code) !== baseNum) {
-                    candidate.classList.remove('locked');
-                    candidate.classList.add('active-move');
-                    candidate.scrollIntoView({behavior: "smooth", block: "center"});
-                    break;
-                }
-                nextIndex++;
-            }
-            return;
-        }
-
-        // 3. Standard Straight Sets (Numeric codes like 1, 2, 3)
-        // Logic: Must finish ALL sets before moving next.
-        if (completed < totalSets) {
-            // Stay on this card.
-            return; 
-        } else {
-            // Finished.
+        // Simple next logic
+        if (completed >= totalSets) {
             card.classList.add('completed');
             card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
             card.classList.remove('active-move');
-            // Unlock next
+            
             const nextCard = allCards[currentIndex + 1];
             if(nextCard) {
                 nextCard.classList.remove('locked');
@@ -1133,12 +949,22 @@
         }
     }
 
-    // --- AI Chat Logic ---
-    let apiKey = "";
+    // --- AI Chat Logic (PERSONALIZED) ---
     const chatWindow = document.getElementById('chatWindow');
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
     const apiKeyInput = document.getElementById('apiKeyInput');
+
+    // User Profile for Ali
+    const userProfile = `
+        User: Ali
+        Age: 23 (Born 2002)
+        Height: 178 cm
+        Weight: 83 kg
+        History: 2 years experience, 1.5 year gap, currently in Month 3 of comeback.
+        Medical: No injuries.
+        Goal: Hypertrophy & Strength (Hybrid PPL).
+    `;
 
     if(apiKey && apiKeyInput) apiKeyInput.value = apiKey;
 
@@ -1159,41 +985,68 @@
     function saveApiKey() {
         const inputVal = document.getElementById('apiKeyInput').value.trim();
         if(inputVal) {
-            apiKey = inputVal; // مقدار جدید در متغیر سراسری ذخیره می‌شود
-            alert('کلید ذخیره شد');
+            apiKey = inputVal;
+            localStorage.setItem('gemini_api_key', inputVal); // Persist
+            alert('کلید با موفقیت ذخیره شد.');
             toggleSettings();
         } else {
             alert('لطفا کلید را وارد کنید');
         }
     }
+
+    // CRITICAL: Prevent bubble up to card click
+    function askAI(event, question) {
+        event.stopPropagation(); // Stop card click
+        if (!chatWindow.classList.contains('open')) toggleChat();
+        
+        sendMessage(question, true); 
+    }
+
     function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
 
-    async function sendMessage(text = null) {
-        const userText = text || chatInput.value;
-        if (!userText) return;
+    async function sendMessage(text = null, isHiddenModification = false) {
+        const rawText = text || chatInput.value;
+        if (!rawText) return;
 
-        appendMessage('user', userText);
+        // Show clean text to user, send modified text to AI
+        appendMessage('user', rawText);
+        
         chatInput.value = '';
         const loadingId = appendMessage('ai', '...', true);
 
+        if (!apiKey) {
+            removeMessage(loadingId);
+            appendMessage('ai', "لطفا ابتدا کلید API را در تنظیمات وارد کنید.");
+            return;
+        }
+
         try {
-                    // آدرس دقیق برای فراخوانی مدل 2.5 Flash در نسخه بتا
+            // Updated URL for Gemini 2.5 Preview (v1beta)
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{ 
-                        parts: [{ text: "You are a helpful fitness coach. Answer the following in Persian: " + userText }] 
+                        parts: [{ 
+                            text: `Role: Expert Fitness Coach. Language: Persian. Context: ${userProfile}. Question: ${rawText}` 
+                        }] 
                     }]
                 })
             });
 
             const data = await response.json();
 
+            // Handle Specific Errors
+            if (response.status === 429) {
+                throw new Error("سهمیه رایگان پر شده (Rate Limit). لطفا ۳۰ ثانیه صبر کنید.");
+            }
+            if (response.status === 404) {
+                throw new Error("مدل پیدا نشد (404). احتمالا نیاز به تغییر IP دارید.");
+            }
             if (!response.ok) {
-                // استخراج پیام خطای واقعی از پاسخ گوگل
-                throw new Error(data.error?.message || `خطای کد ${response.status}`);
+                throw new Error(data.error?.message || "خطای ناشناخته");
             }
 
             const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد.";
@@ -1202,15 +1055,14 @@
 
         } catch (error) {
             removeMessage(loadingId);
-            // نمایش پیام خطای دقیق برای عیب‌یابی
-            appendMessage('ai', "خطا: " + error.message);
-            console.error("Detailed Error:", error);
+            appendMessage('ai', "خطا: " + error.message, false, true);
+            console.error(error);
         }
     }
 
-    function appendMessage(sender, text, isLoading = false) {
+    function appendMessage(sender, text, isLoading = false, isError = false) {
         const div = document.createElement('div');
-        div.className = `msg ${sender} ${isLoading ? 'typing' : ''}`;
+        div.className = `msg ${sender} ${isLoading ? 'typing' : ''} ${isError ? 'error' : ''}`;
         div.innerText = text;
         div.id = isLoading ? 'loading-' + Date.now() : '';
         chatBody.appendChild(div);
@@ -1222,8 +1074,6 @@
         const el = document.getElementById(id);
         if (el) el.remove();
     }
-    
-    document.addEventListener('touchstart', function() {}, false);
 </script>
 
 </body>
