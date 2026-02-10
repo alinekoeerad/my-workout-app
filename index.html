@@ -1177,9 +1177,8 @@
         const loadingId = appendMessage('ai', '...', true);
 
         try {
-            // استفاده از نسخه v1 و مدل 1.5-flash که عمومی و رایگان است
-            const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-            
+                    // آدرس دقیق برای فراخوانی مدل 2.5 Flash در نسخه بتا
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
