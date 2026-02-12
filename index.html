@@ -64,9 +64,9 @@
     
     .section-title {
         display: flex; align-items: center; gap: 10px; color: var(--accent);
-        font-weight: bold; margin: 25px 0 15px; font-size: 1rem; direction: ltr;
+        font-weight: bold; margin: 30px 0 15px; font-size: 1.1rem; direction: ltr;
+        background: #fff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent);
     }
-    .section-title::after { content: ""; flex: 1; height: 1px; background: #ddd; }
 
     .grid-container {
         display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;
@@ -151,7 +151,7 @@
     .ai-hint-btn {
         background: #f3e5f5; border: none; color: var(--ai-color); font-size: 1.2rem;
         cursor: pointer; font-weight: bold; padding: 4px 12px; border-radius: 8px;
-        pointer-events: auto !important; /* Force clickable even in locked cards */
+        pointer-events: auto !important;
         position: relative; z-index: 50;
         transition: transform 0.2s;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -277,7 +277,7 @@
             </div>
         </div>
 
-        <div class="section-title">🏋️‍♂️ Part 2: Heavy Lifting</div>
+        <div class="section-title">🏋️‍♂️ Part 2: Heavy Chest & Press</div>
         <div class="grid-container" id="day1-part2">
             <div class="ex-card" data-code="1" data-sets="5" onclick="handleClick(this)">
                 <div class="ex-code">1</div>
@@ -285,8 +285,8 @@
                 <span class="ex-name-fa">پرس سینه هالتر تخت</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">5</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">5</span></div></div>
                 <div class="ex-note">
-                    سنگین‌ترین حرکت روز. ۳ دقیقه استراحت. با توجه به سابقه ژنیکوماستی، روی انقباض کامل تمرکز کن نه فقط جابجایی وزنه.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bench Press form for gynecomastia')">✨</button></div>
+                    سنگین‌ترین حرکت روز. ۳ دقیقه استراحت. روی انقباض کامل تمرکز کن.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bench Press form')">✨</button></div>
                 </div>
             </div>
             <div class="ex-card" data-code="2" data-sets="4" onclick="handleClick(this)">
@@ -299,14 +299,18 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline Dumbbell Press tips')">✨</button></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-title">⚡ Part 3: Isolation & Pump</div>
+        <div class="grid-container" id="day1-part3">
              <div class="ex-card" data-code="3" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">3</div>
-                <span class="ex-name-en">Low Pulley Cable Fly</span>
-                <span class="ex-name-fa">قفسه سینه سیم‌کش از پایین</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
+                <span class="ex-name-en">Incline DB Squeeze Press</span>
+                <span class="ex-name-fa">پرس بالا سینه دمبل چسبیده</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
                 <div class="ex-note">
-                    دستگیره‌ها را به سمت روبروی صورتت بالا بکش (تمرکز روی خط بالای سینه).
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Low Pulley Cable Fly')">✨</button></div>
+                    دمبل‌ها را در تمام طول حرکت به هم فشار بده. فشار وحشتناک روی خط سینه و بالا سینه.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Incline dumbbell squeeze press')">✨</button></div>
                 </div>
             </div>
              <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
@@ -339,6 +343,10 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Push ups form')">✨</button></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-title">⛏️ Part 4: Triceps & Abs</div>
+        <div class="grid-container" id="day1-part4">
              <div class="ex-card" data-code="6" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">6</div>
                 <span class="ex-name-en">Close-Grip Bench Press</span>
@@ -483,7 +491,7 @@
             </div>
         </div>
 
-        <div class="section-title">🏋️‍♂️ Part 2: Heavy Lifting</div>
+        <div class="section-title">🏋️‍♂️ Part 2: Heavy Back</div>
         <div class="grid-container" id="day2-part2">
             <div class="ex-card" data-code="1" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">1</div>
@@ -525,6 +533,10 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'T Bar row')">✨</button></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-title">🦅 Part 3: Isolation & Biceps</div>
+        <div class="grid-container" id="day2-part3">
              <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">4</div>
                 <span class="ex-name-en">Single-Arm Lat Pulldown</span>
@@ -595,6 +607,10 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Reverse preacher curl')">✨</button></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-title">✊ Part 4: Forearms</div>
+        <div class="grid-container" id="day2-part4">
              <div class="ex-card" data-code="10a" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">10a</div>
                 <span class="ex-name-en">Cable Wrist Curl</span>
@@ -700,14 +716,28 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Leg press placement')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="3" data-sets="3" onclick="handleClick(this)">
-                <div class="ex-code">3</div>
+            <div class="ex-card" data-code="3a" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">3a</div>
                 <span class="ex-name-en">Bulgarian Split Squat</span>
                 <span class="ex-name-fa">اسکات بلغاری</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
                 <div class="ex-note">
                     قاتل عضلات پا.
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Bulgarian split squat')">✨</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">🍑 Part 3: Posterior Chain & Metabolic</div>
+        <div class="grid-container" id="day3-part3">
+            <div class="ex-card" data-code="3b" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">3b</div>
+                <span class="ex-name-en">Dumbbell RDL</span>
+                <span class="ex-name-fa">ددلیفت رومانیایی دمبل</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
+                <div class="ex-note">
+                    تمرکز کامل روی کشش پشت پا (همسترینگ). زانوها را کمی خم نگه‌دارید.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell Romanian Deadlift form')">✨</button></div>
                 </div>
             </div>
              <div class="ex-card" data-code="4" data-sets="4" onclick="handleClick(this)">
@@ -742,8 +772,8 @@
             </div>
         </div>
 
-        <div class="section-title">💣 Part 3: 3D Shoulders (Specialized)</div>
-        <div class="grid-container" id="day3-part3">
+        <div class="section-title">💣 Part 4: 3D Shoulders (Specialized)</div>
+        <div class="grid-container" id="day3-part4">
             <div class="ex-card" data-code="7" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">7</div>
                 <span class="ex-name-en">Military Press</span>
@@ -988,19 +1018,22 @@
     function handleNextMove(card, completed, totalSets) {
         const code = card.dataset.code;
         const currentContainer = card.parentElement;
-        const allCards = Array.from(currentContainer.querySelectorAll('.ex-card'));
+        // Get ALL cards for the current day to ensure cross-container jumping logic works
+        const dayContainer = document.getElementById(currentDayId);
+        const allCards = Array.from(dayContainer.querySelectorAll('.ex-card'));
         const currentIndex = allCards.indexOf(card);
 
         // -- LOGIC BRANCHES --
 
-        // 1. Ignition Cycle (A1, A2, A3, A4)
+        // 1. Ignition Cycle (A1, A2, A3, A4) - Special Logic
         if (code.startsWith('A')) {
             if (completed < totalSets) {
                 card.classList.add('locked');
                 card.classList.remove('active-move');
                 
                 if (code === 'A4') {
-                    // Loop back to start of container (A1)
+                    // Loop back to A1
+                    // A1 is always the first card in the allCards array for that day
                     const a1 = allCards[0];
                     a1.classList.remove('locked');
                     a1.classList.add('active-move');
@@ -1015,23 +1048,21 @@
                     }
                 }
             } else {
+                // Completed set
                 card.classList.add('completed');
                 card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
                 
-                // If A4 finished, move to Part 2
+                // If A4 finished, move to Part 2 (Exercise 1)
                 if (code === 'A4') {
                     card.classList.remove('active-move');
-                    const part2Id = currentDayId + '-part2';
-                    const part2Container = document.getElementById(part2Id);
-                    if(part2Container) {
-                        const firstEx = part2Container.querySelector('.ex-card');
-                        if(firstEx) {
-                            firstEx.classList.remove('locked');
-                            firstEx.classList.add('active-move');
-                            firstEx.scrollIntoView({behavior: "smooth", block: "center"});
-                        }
+                    const nextCard = allCards[currentIndex + 1]; // This should be Exercise 1 in Part 2
+                    if(nextCard) {
+                        nextCard.classList.remove('locked');
+                        nextCard.classList.add('active-move');
+                        nextCard.scrollIntoView({behavior: "smooth", block: "center"});
                     }
                 } else {
+                    // Just move to next A
                     card.classList.add('locked');
                     card.classList.remove('active-move');
                     const nextCard = allCards[currentIndex + 1];
@@ -1045,27 +1076,26 @@
         }
 
         // 2. Supersets & Standard
-        // Special Handling for Day 3 Transition (Part 2 -> Part 3)
-        // If code is "6" (Thrusters) on Day 3, jump to "7" (Military Press) in part3
         if (completed >= totalSets) {
             card.classList.add('completed');
             card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
             card.classList.remove('active-move');
 
-            // Handle Superset Logic
+            // Handle Superset Logic (e.g. 8a -> 8b)
             if (code.match(/[0-9][a-z]/)) {
                 const baseNum = parseInt(code); 
-                // Check siblings for next in group
+                // Find cards in the same superset group
                 const groupCards = allCards.filter(c => parseInt(c.dataset.code) === baseNum && c.dataset.code.match(/[0-9][a-z]/));
-                const currentGroupIndex = groupCards.indexOf(card);
                 
-                // Find incomplete sibling
+                // Check if any in group is incomplete
                 let nextInGroup = null;
-                for (let i = 1; i <= groupCards.length; i++) {
-                    const checkIndex = (currentGroupIndex + i) % groupCards.length;
-                    const candidate = groupCards[checkIndex];
-                    if (!candidate.classList.contains('completed')) {
-                        nextInGroup = candidate;
+                // Simple logic: find next one in list that isn't completed
+                // We cycle through groupCards
+                const myGroupIndex = groupCards.indexOf(card);
+                for(let i=1; i<groupCards.length; i++) {
+                    const nextIdx = (myGroupIndex + i) % groupCards.length;
+                    if(!groupCards[nextIdx].classList.contains('completed')) {
+                        nextInGroup = groupCards[nextIdx];
                         break;
                     }
                 }
@@ -1078,38 +1108,12 @@
                 }
             }
 
-            // Normal Flow / End of Group
+            // Normal Flow / End of Group -> Go to very next card in DOM
             let nextCard = allCards[currentIndex + 1];
             
-            // BRIDGE: Day 3 Part 2 -> Part 3
-            if (!nextCard && currentDayId === 'day3' && currentContainer.id === 'day3-part2') {
-                const part3Container = document.getElementById('day3-part3');
-                if(part3Container) {
-                    const firstPart3 = part3Container.querySelector('.ex-card');
-                    if(firstPart3) {
-                        firstPart3.classList.remove('locked');
-                        firstPart3.classList.add('active-move');
-                        firstPart3.scrollIntoView({behavior: "smooth", block: "center"});
-                        return;
-                    }
-                }
-            }
-
             if(nextCard) {
-                // Skip siblings if we just finished a group
-                if (code.match(/[0-9][a-z]/)) {
-                    const baseNum = parseInt(code);
-                    let scanIndex = currentIndex + 1;
-                    while(scanIndex < allCards.length) {
-                        if (parseInt(allCards[scanIndex].dataset.code) !== baseNum) {
-                            nextCard = allCards[scanIndex];
-                            break;
-                        }
-                        scanIndex++;
-                    }
-                }
-                
-                if (nextCard && !nextCard.classList.contains('completed')) { // Safety check
+                // If the next card is part of a DIFFERENT superset or number, or just next linear
+                if (nextCard && !nextCard.classList.contains('completed')) { 
                     nextCard.classList.remove('locked');
                     nextCard.classList.add('active-move');
                     nextCard.scrollIntoView({behavior: "smooth", block: "center"});
@@ -1124,7 +1128,7 @@
     const chatInput = document.getElementById('chatInput');
     const apiKeyInput = document.getElementById('apiKeyInput');
 
-     // User Profile for Ali
+    // User Profile for Ali
     const userProfile = "User: Ali, Age: 23, Height: 178cm, Weight: 83kg, Experience: 2 years (prior), History: Returned to gym in Dec 2025 after 1.5 years gap.";
 
     if(apiKey && apiKeyInput) apiKeyInput.value = apiKey;
