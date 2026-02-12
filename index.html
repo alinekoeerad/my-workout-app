@@ -151,7 +151,7 @@
     .ai-hint-btn {
         background: #f3e5f5; border: none; color: var(--ai-color); font-size: 1.2rem;
         cursor: pointer; font-weight: bold; padding: 4px 12px; border-radius: 8px;
-        pointer-events: auto !important;
+        pointer-events: auto !important; /* Force clickable even in locked cards */
         position: relative; z-index: 50;
         transition: transform 0.2s;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -228,7 +228,7 @@
 
 <div class="container">
 
-    <!-- DAY 1: PUSH (FULL RESTORED) -->
+    <!-- DAY 1: CHEST, TRICEPS, ABS -->
     <div id="day1" class="day-section">
         <div class="day-header"><h2>Day 1: Chest, Triceps, Abs</h2></div>
         
@@ -399,10 +399,41 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Toes to bar')">✨</button></div>
                 </div>
             </div>
+            <div class="ex-card" data-code="10" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">10</div>
+                <span class="ex-name-en">Hanging Windshield Wipers</span>
+                <span class="ex-name-fa">برف پاک‌کن آویزان</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">10</span></div></div>
+                <div class="ex-note">
+                    پاها را بالا بیاور و مثل برف پاک‌کن به چپ و راست بچرخان.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Windshield wipers abs')">✨</button></div>
+                </div>
+            </div>
+            <div class="ex-card" data-code="11" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">11</div>
+                <span class="ex-name-en">L-Sit Hold</span>
+                <span class="ex-name-fa">ال-سیت</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">Fail</span></div></div>
+                <div class="ex-note">
+                    روی پارالل یا زمین، پاها را صاف نگه دار تا بدن زاویه L بگیرد (فشار ایزومتریک).
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'L-Sit hold')">✨</button></div>
+                </div>
+            </div>
+            <div class="ex-card" data-code="12" data-sets="3" data-time="45" onclick="handleClick(this)">
+                <div class="ex-code">12</div>
+                <span class="ex-name-en">Hollow Body Rock</span>
+                <span class="ex-name-fa">هالو بادی راک</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Time</span><span class="stat-val">45s</span></div></div>
+                <div class="ex-note">
+                    به حالت قایق روی زمین بخواب (کمر چسبیده به زمین) و مثل گهواره تکان بخور.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Hollow body rock')">✨</button></div>
+                </div>
+                <div class="timer-overlay">45<span>کلیک برای توقف</span></div>
+            </div>
         </div>
     </div>
 
-    <!-- DAY 2: PULL (FULL RESTORED) -->
+    <!-- DAY 2: BACK, BICEPS, FOREARMS -->
     <div id="day2" class="day-section" style="display:none;">
         <div class="day-header"><h2>Day 2: Back, Biceps, Forearms</h2></div>
         
@@ -598,7 +629,7 @@
         </div>
     </div>
 
-    <!-- DAY 3: LEGS & SHOULDERS (FULL RESTORED) -->
+    <!-- DAY 3: LEGS & SHOULDERS -->
     <div id="day3" class="day-section" style="display:none;">
         <div class="day-header"><h2>Day 3: Legs & Shoulders</h2></div>
         
@@ -1083,7 +1114,7 @@
         Height: 178 cm
         Weight: 83 kg
         History: 2 years experience, 1.5 year gap, currently in Month 3 of comeback.
-        Medical: No injuries.
+        Medical: No injuries, HAS GYNECOMASTIA.
         Goal: Hypertrophy & Strength (Hybrid PPL).
     `;
 
