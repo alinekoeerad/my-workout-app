@@ -629,9 +629,9 @@
         </div>
     </div>
 
-    <!-- DAY 3: LEGS & SHOULDERS -->
+    <!-- DAY 3: LEGS & SHOULDERS (PRO EDITION) -->
     <div id="day3" class="day-section" style="display:none;">
-        <div class="day-header"><h2>Day 3: Legs & Shoulders</h2></div>
+        <div class="day-header"><h2>Day 3: Legs & Shoulders (Pro)</h2></div>
         
         <div class="section-title">🔥 Part 1: Ignition Cycle</div>
         <div class="grid-container" id="day3-part1">
@@ -678,7 +678,7 @@
             </div>
         </div>
 
-        <div class="section-title">🏋️‍♂️ Part 2: Heavy Lifting</div>
+        <div class="section-title">🏋️‍♂️ Part 2: Heavy Legs</div>
         <div class="grid-container" id="day3-part2">
             <div class="ex-card" data-code="1" data-sets="5" onclick="handleClick(this)">
                 <div class="ex-code">1</div>
@@ -740,44 +740,71 @@
                     <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Thrusters')">✨</button></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-title">💣 Part 3: 3D Shoulders (Specialized)</div>
+        <div class="grid-container" id="day3-part3">
             <div class="ex-card" data-code="7" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">7</div>
                 <span class="ex-name-en">Military Press</span>
                 <span class="ex-name-fa">پرس سرشانه نظامی</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8</span></div></div>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">8-10</span></div></div>
                 <div class="ex-note">
-                    ایستاده، بدون کمک زانو.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Military press')">✨</button></div>
+                    ایستاده، هالتر یا دمبل. در بالا قفل کنید. اگر کمردرد دارید از Landmine Press استفاده کنید.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Military press form')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="8" data-sets="4" onclick="handleClick(this)">
-                <div class="ex-code">8</div>
-                <span class="ex-name-en">Lateral Raise</span>
-                <span class="ex-name-fa">نشر جانب دمبل</span>
+            <!-- SUPERSET: MIDDLE DELTS -->
+            <div class="ex-card" data-code="8a" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">8a</div>
+                <span class="ex-name-en">Dumbbell Hip Huggers</span>
+                <span class="ex-name-fa">هیپ هاگرز (دمبل سنگین)</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
+                <div class="ex-note">
+                    دمبل سنگین بردارید و مماس با ران تا کنار پهلو بالا بکشید (انگار شلوار را بالا میکشید).
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell Hip Huggers form')">✨</button></div>
+                </div>
+            </div>
+            <div class="ex-card" data-code="8b" data-sets="3" onclick="handleClick(this)">
+                <div class="ex-code">8b</div>
+                <span class="ex-name-en">Dumbbell Y-Raise</span>
+                <span class="ex-name-fa">نشر Y (دست‌ها به شکل V)</span>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">3</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">12</span></div></div>
+                <div class="ex-note">
+                    بلافاصله با دمبل سبک، دست‌ها را به شکل V بالا ببرید. انقباض عالی برای پهنای شانه.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Dumbbell Y-Raise form')">✨</button></div>
+                </div>
+            </div>
+            <!-- SUPERSET: REAR DELTS -->
+            <div class="ex-card" data-code="9a" data-sets="4" onclick="handleClick(this)">
+                <div class="ex-code">9a</div>
+                <span class="ex-name-en">Seated Bent-Over Fly</span>
+                <span class="ex-name-fa">نشر خم نشسته (سینه روی زانو)</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    بدون پرتاب کردن وزنه.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Lateral raise')">✨</button></div>
+                    سینه را کامل روی زانو بگذارید تا کمر درگیر نشود. تمرکز ۱۰۰٪ روی پشت شانه.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Seated Bent-Over Rear Delt Fly')">✨</button></div>
                 </div>
             </div>
-            <div class="ex-card" data-code="9" data-sets="4" onclick="handleClick(this)">
-                <div class="ex-code">9</div>
+            <div class="ex-card" data-code="9b" data-sets="4" onclick="handleClick(this)">
+                <div class="ex-code">9b</div>
                 <span class="ex-name-en">Face Pulls</span>
                 <span class="ex-name-fa">فیس پول</span>
-                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
+                <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">20</span></div></div>
                 <div class="ex-note">
-                    برای اصلاح قوز و سرشانه خلفی.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Face pulls')">✨</button></div>
+                    طناب را به سمت گوش بکشید و کتف‌ها را به هم فشار دهید. عالی برای ژنیکوماستی و پاسچر.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Face pulls form')">✨</button></div>
                 </div>
             </div>
+            <!-- FINISHER -->
             <div class="ex-card" data-code="10" data-sets="4" onclick="handleClick(this)">
                 <div class="ex-code">10</div>
                 <span class="ex-name-en">Barbell Shrugs</span>
                 <span class="ex-name-fa">شراگ هالتر</span>
                 <div class="ex-stats"><div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">4</span></div><div class="stat-item"><span class="stat-label">Reps</span><span class="stat-val">15</span></div></div>
                 <div class="ex-note">
-                    با مکث در بالا.
-                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Barbell shrugs')">✨</button></div>
+                    تمام کننده. شانه را بالا بکشید، ۱ ثانیه مکث کنید و آرام پایین بیاورید.
+                    <div class="ai-row"><button class="ai-hint-btn" onclick="askAI(event, 'Barbell shrugs form')">✨</button></div>
                 </div>
             </div>
         </div>
@@ -968,11 +995,7 @@
 
         // 1. Ignition Cycle (A1, A2, A3, A4)
         if (code.startsWith('A')) {
-            // Logic: Jump to next 'A' card. If last 'A' card (A4), jump back to A1 unless all sets done.
             if (completed < totalSets) {
-                // Not finished all sets yet.
-                // If it's A1..A3 -> Next sibling
-                // If it's A4 -> Loop back to A1
                 card.classList.add('locked');
                 card.classList.remove('active-move');
                 
@@ -992,15 +1015,12 @@
                     }
                 }
             } else {
-                // Completed all sets for this card.
-                // Visual complete
                 card.classList.add('completed');
                 card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
                 
-                // If it was A4 and finished, move to Part 2 (Exercise 1)
+                // If A4 finished, move to Part 2
                 if (code === 'A4') {
                     card.classList.remove('active-move');
-                    // Find Part 2 container
                     const part2Id = currentDayId + '-part2';
                     const part2Container = document.getElementById(part2Id);
                     if(part2Container) {
@@ -1008,12 +1028,10 @@
                         if(firstEx) {
                             firstEx.classList.remove('locked');
                             firstEx.classList.add('active-move');
-                            // Also scroll to it
                             firstEx.scrollIntoView({behavior: "smooth", block: "center"});
                         }
                     }
                 } else {
-                    // Just move to next A (unlikely unless sets misconfigured, but safe fallback)
                     card.classList.add('locked');
                     card.classList.remove('active-move');
                     const nextCard = allCards[currentIndex + 1];
@@ -1026,97 +1044,88 @@
             return;
         }
 
-        // 2. Supersets (e.g., 2a, 2b, 10a, 10b, 10c)
-        if (code.match(/[0-9][a-z]/)) {
-            const baseNum = parseInt(code); 
-            
-            if (completed >= totalSets) {
-                card.classList.add('completed');
-                card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
-                card.classList.remove('active-move');
-            } else {
-                card.classList.add('locked');
-                card.classList.remove('active-move');
-            }
-
-            // Logic to find next in loop
-            const groupCards = allCards.filter(c => {
-                const cCode = c.dataset.code;
-                return parseInt(cCode) === baseNum && cCode.match(/[0-9][a-z]/);
-            });
-            
-            const currentGroupIndex = groupCards.indexOf(card);
-            let nextCard = null;
-
-            // Check next cards in cycle
-            for (let i = 1; i <= groupCards.length; i++) {
-                const checkIndex = (currentGroupIndex + i) % groupCards.length;
-                const candidate = groupCards[checkIndex];
-                if (!candidate.classList.contains('completed')) {
-                    nextCard = candidate;
-                    break;
-                }
-            }
-
-            if (nextCard) {
-                 nextCard.classList.remove('locked');
-                 nextCard.classList.add('active-move');
-                 nextCard.scrollIntoView({behavior: "smooth", block: "center"});
-                 return;
-            }
-
-            // If group finished (all cards in group are completed), move to next
-            let nextIndex = currentIndex + 1;
-            while(nextIndex < allCards.length) {
-                const candidate = allCards[nextIndex];
-                // Skip if it's part of the same base number group (just in case)
-                if (parseInt(candidate.dataset.code) !== baseNum) {
-                    candidate.classList.remove('locked');
-                    candidate.classList.add('active-move');
-                    candidate.scrollIntoView({behavior: "smooth", block: "center"});
-                    break;
-                }
-                nextIndex++;
-            }
-            return;
-        }
-
-        // 3. Standard Straight Sets (Numeric codes like 1, 2, 3)
-        // Logic: Must finish ALL sets before moving next.
-        if (completed < totalSets) {
-            // Stay on this card.
-            return; 
-        } else {
-            // Finished.
+        // 2. Supersets & Standard
+        // Special Handling for Day 3 Transition (Part 2 -> Part 3)
+        // If code is "6" (Thrusters) on Day 3, jump to "7" (Military Press) in part3
+        if (completed >= totalSets) {
             card.classList.add('completed');
             card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
             card.classList.remove('active-move');
-            // Unlock next
-            const nextCard = allCards[currentIndex + 1];
+
+            // Handle Superset Logic
+            if (code.match(/[0-9][a-z]/)) {
+                const baseNum = parseInt(code); 
+                // Check siblings for next in group
+                const groupCards = allCards.filter(c => parseInt(c.dataset.code) === baseNum && c.dataset.code.match(/[0-9][a-z]/));
+                const currentGroupIndex = groupCards.indexOf(card);
+                
+                // Find incomplete sibling
+                let nextInGroup = null;
+                for (let i = 1; i <= groupCards.length; i++) {
+                    const checkIndex = (currentGroupIndex + i) % groupCards.length;
+                    const candidate = groupCards[checkIndex];
+                    if (!candidate.classList.contains('completed')) {
+                        nextInGroup = candidate;
+                        break;
+                    }
+                }
+
+                if (nextInGroup) {
+                     nextInGroup.classList.remove('locked');
+                     nextInGroup.classList.add('active-move');
+                     nextInGroup.scrollIntoView({behavior: "smooth", block: "center"});
+                     return;
+                }
+            }
+
+            // Normal Flow / End of Group
+            let nextCard = allCards[currentIndex + 1];
+            
+            // BRIDGE: Day 3 Part 2 -> Part 3
+            if (!nextCard && currentDayId === 'day3' && currentContainer.id === 'day3-part2') {
+                const part3Container = document.getElementById('day3-part3');
+                if(part3Container) {
+                    const firstPart3 = part3Container.querySelector('.ex-card');
+                    if(firstPart3) {
+                        firstPart3.classList.remove('locked');
+                        firstPart3.classList.add('active-move');
+                        firstPart3.scrollIntoView({behavior: "smooth", block: "center"});
+                        return;
+                    }
+                }
+            }
+
             if(nextCard) {
-                nextCard.classList.remove('locked');
-                nextCard.classList.add('active-move');
-                nextCard.scrollIntoView({behavior: "smooth", block: "center"});
+                // Skip siblings if we just finished a group
+                if (code.match(/[0-9][a-z]/)) {
+                    const baseNum = parseInt(code);
+                    let scanIndex = currentIndex + 1;
+                    while(scanIndex < allCards.length) {
+                        if (parseInt(allCards[scanIndex].dataset.code) !== baseNum) {
+                            nextCard = allCards[scanIndex];
+                            break;
+                        }
+                        scanIndex++;
+                    }
+                }
+                
+                if (nextCard && !nextCard.classList.contains('completed')) { // Safety check
+                    nextCard.classList.remove('locked');
+                    nextCard.classList.add('active-move');
+                    nextCard.scrollIntoView({behavior: "smooth", block: "center"});
+                }
             }
         }
     }
 
-    // --- AI Chat Logic (PERSONALIZED) ---
+    // --- AI Chat Logic ---
     const chatWindow = document.getElementById('chatWindow');
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
     const apiKeyInput = document.getElementById('apiKeyInput');
 
     // User Profile for Ali
-    const userProfile = `
-        User: Ali
-        Age: 23 (Born 2002)
-        Height: 178 cm
-        Weight: 83 kg
-        History: 2 years experience, 1.5 year gap, currently in Month 3 of comeback.
-        Medical: No injuries, HAS GYNECOMASTIA.
-        Goal: Hypertrophy & Strength (Hybrid PPL).
-    `;
+    const userProfile = "User: Ali, Age: 23, Height: 178cm, Weight: 83kg, Condition: Gynecomastia, History: Returning after 1.5 years gap.";
 
     if(apiKey && apiKeyInput) apiKeyInput.value = apiKey;
 
