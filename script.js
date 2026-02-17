@@ -1,9 +1,6 @@
 /**
- * Smart Workout Application - V3.0 (Pro Logic)
- * Features:
- * - Dynamic Superset/Giant Set Logic with Uneven Sets (Skip finished cards)
- * - Strict Click Enforcement (Only active card is clickable)
- * - Gemini AI Integration
+ * Smart Workout Application - V3.2
+ * Features: Dark Mode Island, Dynamic Supersets, AI Integration
  */
 
 // --- 1. GLOBAL STATE ---
@@ -18,6 +15,7 @@ const state = {
 
 // --- 2. INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
+    app.initTheme(); // Initialize Theme Preference first
     await loadDatabase();
     if (state.workouts) renderDay(state.currentDay);
 });
@@ -88,7 +86,7 @@ function renderDay(dayId) {
     if(firstCard) activateCard(firstCard);
 }
 
-// --- 4. LOGIC ENGINE (The Brain) ---
+// --- 4. LOGIC ENGINE ---
 
 function getGroupId(code) {
     if (/^[a-zA-Z]/.test(code)) return code.charAt(0).toUpperCase();
@@ -96,25 +94,17 @@ function getGroupId(code) {
     return match ? parseInt(match[0]) : code;
 }
 
-/**
- * Finds the next card in the sequence that is NOT finished yet.
- * Handles wrapping around (Looping) for Supersets.
- */
 function findNextUnfinishedInGroup(groupCards, startIndex) {
     const len = groupCards.length;
-    // Check from current+1 to end, then from 0 to current
     for (let i = 1; i <= len; i++) {
         const checkIndex = (startIndex + i) % len;
         const card = groupCards[checkIndex];
         const completed = parseInt(card.dataset.completed);
         const total = parseInt(card.dataset.sets);
         
-        // If this card still has sets remaining, return it
-        if (completed < total) {
-            return card;
-        }
+        if (completed < total) return card;
     }
-    return null; // All cards in group are finished
+    return null; 
 }
 
 function handleSetCompletion(currentCard) {
@@ -122,11 +112,9 @@ function handleSetCompletion(currentCard) {
     const currentCode = currentCard.dataset.code;
     const currentGroupId = getGroupId(currentCode);
     
-    // Find Group
     const groupCards = allCards.filter(c => getGroupId(c.dataset.code) === currentGroupId);
     const currentIndexInGroup = groupCards.indexOf(currentCard);
 
-    // Check if current card is totally done
     const completed = parseInt(currentCard.dataset.completed);
     const total = parseInt(currentCard.dataset.sets);
     const isCurrentTotallyDone = completed >= total;
@@ -134,28 +122,17 @@ function handleSetCompletion(currentCard) {
     if (isCurrentTotallyDone) {
         markCardAsDone(currentCard);
     } else {
-        deactivateCard(currentCard); // Dim it while waiting
+        deactivateCard(currentCard);
     }
 
-    // --- PRO LOGIC: Find next valid move ---
-    // Instead of just looking at the neighbor, we look for the next UNFINISHED card.
     const nextCard = findNextUnfinishedInGroup(groupCards, currentIndexInGroup);
 
     if (nextCard) {
-        // We found a card in this group that needs work (could be next sibling, or loop back)
         activateCard(nextCard);
     } else {
-        // No cards left in this group! The whole group is done.
-        // Move to the next Global Group.
-        const globalIndex = allCards.indexOf(currentCard); // Index of the card just finished
-        
-        // Look ahead in the DOM for the next unlocked/incomplete card
-        // Note: We scan from the LAST card of the group to be safe, or just scan forward
-        // A safer bet is to scan from the current position forward
+        const globalIndex = allCards.indexOf(currentCard);
         for (let i = globalIndex + 1; i < allCards.length; i++) {
             const potentialNext = allCards[i];
-            // Must belong to a different group (implicitly true as we cycle linear)
-            // and must not be done
             if (!potentialNext.classList.contains('completed')) {
                 activateCard(potentialNext);
                 return;
@@ -168,24 +145,23 @@ function handleSetCompletion(currentCard) {
 
 function activateCard(card) {
     card.classList.remove('locked');
-    card.classList.add('active-move'); // This class allows clicking
+    card.classList.add('active-move');
     card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function deactivateCard(card) {
     card.classList.remove('active-move');
-    card.classList.add('locked'); // Prevent clicking
-    // Visuals handled by CSS for .locked
+    card.classList.add('locked');
 }
 
 function markCardAsDone(card) {
     card.classList.remove('active-move');
     card.classList.add('completed');
-    card.classList.remove('locked'); // Keep it visible but green
+    card.classList.remove('locked');
     card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
 }
 
-// --- 6. INTERACTION ---
+// --- 6. INTERACTION & THEME ---
 
 const app = {
     switchDay: (dayId) => {
@@ -205,12 +181,43 @@ const app = {
         }
     },
 
+    // --- Theme Logic ---
+    toggleTheme: () => {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        
+        app.updateMetaColor(next);
+        app.updateThemeIcon(next);
+    },
+
+    updateMetaColor: (theme) => {
+        const color = theme === 'dark' ? '#1e1e1e' : '#2c3e50';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if(meta) meta.setAttribute('content', color);
+    },
+
+    updateThemeIcon: (theme) => {
+        const icon = document.getElementById('themeIcon');
+        if(icon) {
+            // If dark, show Sun (to switch to light). If light, show Moon.
+            icon.innerText = theme === 'dark' ? '☀️' : '🌙';
+        }
+    },
+
+    initTheme: () => {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        app.updateMetaColor(savedTheme);
+        app.updateThemeIcon(savedTheme);
+    },
+    // -------------------
+
     handleClick: (card) => {
-        // --- STRICT CLICK ENFORCEMENT ---
-        // Only allow if card is 'active-move' OR completed (to un-complete? maybe later)
-        // For now: strictly active-move
         if (!card.classList.contains('active-move')) {
-            // Optional: Shake effect or console log
             console.log("Not your turn!");
             return; 
         }
@@ -218,7 +225,6 @@ const app = {
         if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
 
-        // Timer Logic
         if (card.dataset.time) {
             if (card.classList.contains('timer-active')) {
                 stopTimer(card, false);
@@ -229,7 +235,6 @@ const app = {
             return;
         }
 
-        // Reps Logic
         if (state.isTimerRunning) return;
         
         let sets = parseInt(card.dataset.sets);
@@ -243,7 +248,6 @@ const app = {
         }
     },
 
-    // Chat Logic
     toggleChat: () => document.getElementById('chatWindow').classList.toggle('open'),
     askAI: (e, query) => { e.stopPropagation(); app.toggleChat(); app.sendMessage(query); },
     sendMessage: async (txt) => {

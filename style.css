@@ -1,146 +1,309 @@
 :root {
+    /* --- Light Theme Glass Variables --- */
     --primary: #2c3e50;
     --accent: #e67e22;
     --success: #27ae60;
-    --bg: #f0f2f5;
-    --card-bg: #ffffff;
-    --text: #333;
-    --header-height: 70px;
+    
+    /* پس‌زمینه روشن */
+    --body-bg: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    
+    /* شیشه روشن */
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --glass-blur: blur(12px);
+    
+    --text: #333333;
+    --text-secondary: #555;
+    --header-height: 80px;
     --ai-color: #8e44ad;
+    --border-radius: 20px;
 }
 
+/* --- Dark Theme Glass Variables --- */
+[data-theme="dark"] {
+    --primary: #ecf0f1;
+    --accent: #e67e22;
+    --success: #2ecc71;
+    
+    /* پس‌زمینه تیره */
+    --body-bg: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    
+    /* شیشه تیره */
+    --glass-bg: rgba(20, 20, 20, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    
+    --text: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --ai-color: #a569bd;
+}
+
+/* --- Global Reset --- */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
+    background: var(--body-bg);
+    background-attachment: fixed;
     color: var(--text);
     margin: 0;
     padding-top: var(--header-height);
     padding-bottom: 120px;
     line-height: 1.6;
+    transition: color 0.3s ease;
 }
 
-/* --- Navigation --- */
+/* --- Navigation (Floating Island) --- */
 .sticky-nav {
-    position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
-    background: rgba(44, 62, 80, 0.98); backdrop-filter: blur(10px);
-    color: white; z-index: 1000;
+    position: fixed; 
+    top: 15px; left: 15px; right: 15px;
+    height: 60px;
+    z-index: 1000;
+    
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 50px;
+    
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 0 20px;
+    transition: all 0.3s ease;
 }
-.nav-title { font-weight: bold; font-size: 1rem; }
-.nav-actions { display: flex; gap: 8px; align-items: center; }
+
+.nav-title { font-weight: bold; font-size: 1.1rem; color: var(--text); }
+
+.nav-actions {
+    display: flex; justify-content: flex-end; align-items: center; gap: 10px;
+}
+
+.days-group { display: flex; gap: 5px; }
+
 .nav-btn {
-    background: rgba(255,255,255,0.15); color: white; text-decoration: none;
-    padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;
+    background: rgba(var(--primary), 0.1); 
+    color: var(--text); 
+    text-decoration: none;
+    padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; 
+    cursor: pointer; transition: 0.2s; font-weight: 600;
 }
+.nav-btn:hover { background: var(--accent); color: white; }
+
+/* --- Nav Island Buttons --- */
+.nav-island {
+    display: flex; align-items: center;
+    background: rgba(0,0,0,0.05); padding: 4px; border-radius: 30px;
+    gap: 8px; margin-left: 5px;
+}
+[data-theme="dark"] .nav-island { background: rgba(255,255,255,0.1); }
+
+.icon-btn {
+    cursor: pointer; font-size: 1.2rem; width: 35px; height: 35px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, background 0.2s; user-select: none;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.2); }
+.icon-btn:active { transform: scale(0.9); }
 
 /* --- Layout --- */
-.container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+.container { max-width: 1000px; margin: 30px auto; padding: 0 15px; }
 .day-section { display: none; }
 .day-section.active { display: block; animation: fadeIn 0.5s; }
+
 .day-header {
-    background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;
-    border-right: 6px solid var(--primary); direction: ltr; text-align: left;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--border-radius);
+    padding: 20px; margin-bottom: 25px;
+    text-align: center; color: var(--text);
 }
+
 .section-title {
-    display: flex; align-items: center; gap: 10px; color: var(--accent);
-    font-weight: bold; margin: 30px 0 15px; font-size: 1.1rem; direction: ltr;
-    background: #fff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--accent);
+    display: inline-flex; align-items: center; gap: 10px; 
+    color: var(--accent); font-weight: bold; margin: 30px 0 15px; 
+    font-size: 1.1rem; direction: ltr;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 8px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
+
 .grid-container {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
 }
 
-/* --- Cards --- */
+/* --- Cards (Glass Islands) --- */
 .ex-card {
-    background: var(--card-bg); border-radius: 12px; padding: 15px; position: relative;
-    overflow: hidden; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    cursor: pointer;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--border-radius);
+    padding: 20px; position: relative;
+    overflow: hidden; /* حیاتی برای اینکه ثانیه‌شمار بیرون نزند */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer; color: var(--text);
 }
-.ex-card.locked { opacity: 0.6; filter: grayscale(100%); background: #f4f4f4; }
-.ex-card.active-move {
-    border: 2px solid var(--accent); transform: scale(1.02);
-    z-index: 2; opacity: 1; filter: none; background: white;
-}
-.ex-card.completed { border-color: var(--success); background-color: #f0fff4; opacity: 0.8; }
-.progress-dots { position: absolute; top: 12px; left: 12px; display: flex; gap: 4px; z-index: 5; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: #e0e0e0; }
-.dot.active { background: var(--accent); }
-.dot.done { background: var(--success); }
 
-.timer-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); color: white; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; font-size: 3rem; font-weight: bold;
-    opacity: 0; pointer-events: none; transition: 0.3s; z-index: 10;
+.ex-card.locked { 
+    opacity: 0.8; filter: grayscale(80%); 
+    background: rgba(200, 200, 200, 0.2); box-shadow: none;
 }
+
+.ex-card.active-move {
+    border: 2px solid var(--accent); 
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(230, 126, 34, 0.2);
+    opacity: 1; filter: none; background: var(--glass-bg);
+}
+
+.ex-card.completed { 
+    border-color: var(--success); background: rgba(39, 174, 96, 0.15);
+}
+
+/* --- Elements inside Card --- */
+.progress-dots { position: absolute; top: 15px; left: 15px; display: flex; gap: 5px; z-index: 5; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,0.1); border: 1px solid var(--glass-border); }
+[data-theme="dark"] .dot { background: rgba(255,255,255,0.2); }
+.dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.dot.done { background: var(--success); border-color: var(--success); }
+
+/* --- اصلاح شماره حرکت (A1, A2...) --- */
+.ex-code {
+    position: absolute; top: 0; right: 0; 
+    background: var(--primary); 
+    color: white; /* در حالت روشن سفید */
+    font-size: 0.8rem; padding: 6px 15px; 
+    border-bottom-left-radius: 20px; font-weight: bold;
+    box-shadow: -2px 2px 10px rgba(0,0,0,0.1);
+    z-index: 6;
+}
+
+/* --- فیکس دارک مود برای شماره حرکت --- */
+[data-theme="dark"] .ex-code {
+    background: #ffffff; /* پس زمینه سفید */
+    color: #000000;      /* متن مشکی */
+    box-shadow: -2px 2px 10px rgba(255,255,255,0.1);
+}
+
+.ex-name-en { display: block; font-weight: 800; font-size: 1.2rem; margin-top: 25px; color: var(--primary); direction: ltr; text-align: right; }
+.ex-name-fa { display: block; font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 20px; }
+
+.ex-stats { 
+    display: flex; background: rgba(0,0,0,0.03); 
+    border-radius: 12px; padding: 10px; 
+    justify-content: space-around; margin-bottom: 15px; 
+}
+[data-theme="dark"] .ex-stats { background: rgba(255,255,255,0.05); }
+
+.stat-item { text-align: center; flex: 1; }
+.stat-val { font-weight: 800; color: var(--accent); font-size: 1.1rem; }
+.stat-label { font-size: 0.75rem; color: var(--text-secondary); }
+
+.ex-note { font-size: 0.9rem; color: var(--text-secondary); border-top: 1px dashed rgba(150,150,150,0.3); padding-top: 12px; }
+
+.ai-hint-btn { 
+    background: transparent; border: 1px solid var(--ai-color); 
+    color: var(--ai-color); font-size: 1.2rem; cursor: pointer; 
+    border-radius: 10px; padding: 4px 10px; transition: 0.2s;
+}
+.ai-hint-btn:hover { background: var(--ai-color); color: white; }
+
+/* --- اصلاح ثانیه شمار (Timer Overlay) --- */
+.timer-overlay {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; /* پوشش کامل ارتفاع */
+    
+    background: rgba(0,0,0,0.9); /* سیاه یکدست و شفافیت کم */
+    color: white; 
+    
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    
+    font-size: 3rem; 
+    font-weight: bold;
+    
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.3s ease; 
+    z-index: 20; /* بالاتر از همه چیز حتی بج شماره */
+    border-radius: var(--border-radius); /* هماهنگ با گردی کارت */
+}
+
 .ex-card.timer-active .timer-overlay { opacity: 1; pointer-events: all; }
 
-.ex-code {
-    position: absolute; top: 0; right: 0; background: var(--primary); color: white;
-    font-size: 0.8rem; padding: 4px 12px; border-bottom-left-radius: 12px; font-weight: bold;
+/* --- Modals & Chat --- */
+.settings-modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border-radius: 25px; color: var(--text); padding: 25px; 
+    display: none; z-index: 2001; width: 320px;
 }
-.ex-name-en { display: block; font-weight: 800; font-size: 1.15rem; margin-top: 20px; color: var(--primary); direction: ltr; text-align: right; }
-.ex-name-fa { display: block; font-size: 0.9rem; color: #666; margin-bottom: 15px; }
-.ex-stats { display: flex; background: #f8f9fa; border-radius: 8px; padding: 8px; justify-content: space-around; margin-bottom: 12px; }
-.stat-item { text-align: center; flex: 1; }
-.stat-val { font-weight: 800; color: var(--accent); font-size: 1rem; }
-.ex-note { font-size: 0.9rem; color: #444; border-top: 1px dashed #eee; padding-top: 10px; }
-.ai-row { display: flex; justify-content: flex-end; width: 100%; margin-top: 5px; }
-.ai-hint-btn { background: #f3e5f5; border: none; color: var(--ai-color); font-size: 1.2rem; cursor: pointer; border-radius: 8px; }
-
-/* --- Chat & Settings (Simplified) --- */
-.chat-widget { position: fixed; bottom: 20px; left: 20px; z-index: 2000; }
-.chat-window { position: fixed; bottom: 90px; left: 20px; width: 340px; height: 500px; background: white; border-radius: 15px; display: none; flex-direction: column; box-shadow: 0 5px 30px rgba(0,0,0,0.3); }
-.chat-window.open { display: flex; }
-.chat-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--ai-color); border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(142,68,173,0.4); }
-.settings-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: white; padding: 20px; border-radius: 15px; display: none; box-shadow: 0 5px 30px rgba(0,0,0,0.3); z-index: 2001; width: 300px; }
-.settings-modal.open { display: block; }
-.msg { padding: 8px 12px; margin: 5px; border-radius: 12px; max-width: 85%; }
-.msg.user { background: var(--ai-color); color: white; align-self: flex-end; }
-.msg.ai { background: #e0e0e0; align-self: flex-start; }
-.chat-body { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; }
-.chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; }
-.chat-input { flex: 1; padding: 8px; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.settings-modal.open { display: block; animation: zoomIn 0.3s; }
+.settings-modal input {
+    width: 100%; padding: 12px; margin: 15px 0; 
+    background: rgba(0,0,0,0.05); color: var(--text); 
+    border: none; border-radius: 10px; outline: none;
+}
+[data-theme="dark"] .settings-modal input { background: rgba(255,255,255,0.1); }
+.save-btn { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 10px; cursor: pointer; }
+.close-btn { width: 100%; margin-top: 10px; background: #e74c3c; color: white; border: none; border-radius: 10px; padding: 8px; cursor: pointer; }
 
 
-/* --- Mobile Fixes (iPhone 7/SE/Small Android) --- */
-@media screen and (max-width: 400px) {
-    
-    /* ۱. حذف تایتل برنامه در گوشی‌های کوچک برای باز شدن جا */
-    .nav-title {
-        display: none;
-    }
+.chat-window {
+    position: fixed; bottom: 100px; left: 20px; width: 350px; height: 550px;
+    background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border); box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    border-radius: 25px; display: none; flex-direction: column; overflow: hidden;
+}
+.chat-window.open { display: flex; animation: slideUp 0.3s; }
 
-    /* ۲. وسط‌چین کردن دکمه‌ها */
-    .sticky-nav {
-        justify-content: center;
-        padding: 0 10px;
-    }
+.chat-header { 
+    background: linear-gradient(90deg, var(--ai-color), #9b59b6); 
+    color: white; padding: 20px; display: flex; justify-content: space-between; font-weight: bold;
+}
 
-    /* ۳. تنظیم فاصله دکمه‌ها */
-    .nav-actions {
-        width: 100%;
-        justify-content: space-between; /* پخش کردن دکمه‌ها در کل عرض */
-        gap: 4px; /* کم کردن فاصله بین دکمه‌ها */
-    }
+.chat-input-area { padding: 15px; border-top: 1px solid var(--glass-border); display: flex; background: rgba(255,255,255,0.1); }
+.chat-input { flex: 1; padding: 10px; background: rgba(255,255,255,0.2); border: none; color: var(--text); border-radius: 12px; outline: none; }
+.send-btn { background: var(--ai-color); color: white; border: none; padding: 0 18px; margin-left: 8px; border-radius: 12px; cursor: pointer; }
 
-    /* ۴. کوچک‌تر کردن فونت و پدینگ دکمه‌ها */
-    .nav-btn {
-        font-size: 0.75rem; /* فونت کمی ریزتر */
-        padding: 6px 8px;   /* دکمه جمع‌وجورتر */
-        white-space: nowrap; /* جلوگیری از شکستن متن به خط بعد */
-        flex: 1; /* هم‌اندازه کردن دکمه‌ها */
-        text-align: center;
-    }
+.chat-widget { position: fixed; bottom: 30px; left: 30px; z-index: 2000; }
+.chat-btn { 
+    width: 65px; height: 65px; border-radius: 50%; 
+    background: linear-gradient(135deg, var(--ai-color), #8e44ad); 
+    border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(142,68,173,0.5); 
+    transition: transform 0.2s; display: flex; justify-content: center; align-items: center;
+}
+.chat-btn:hover { transform: scale(1.1); }
 
-    /* ۵. دکمه تنظیمات کمی کوچک‌تر */
-    .settings-btn {
-        flex: 0 0 auto; /* دکمه تنظیمات کش نیاید */
-        width: auto;
-    }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zoomIn { from { opacity: 0; transform: translate(-50%, -45%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- Mobile Fixes --- */
+@media screen and (max-width: 450px) {
+    .nav-title { display: none; }
+    .sticky-nav { top: 10px; left: 10px; right: 10px; height: 55px; padding: 0 10px; }
+    .nav-actions { width: 100%; justify-content: space-between; gap: 0; }
+    .days-group { gap: 4px; flex: 1; justify-content: space-evenly; }
+    .nav-btn { font-size: 0.75rem; padding: 6px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); }
+    .nav-btn.active { background: var(--accent); color: white; }
+    .nav-island { margin-left: 5px; padding: 2px 6px; }
+    .icon-btn { font-size: 1rem; width: 30px; height: 30px; }
+    .container { margin-top: 80px; }
+    .chat-window { width: 90%; left: 5%; bottom: 90px; height: 60vh; }
 }
