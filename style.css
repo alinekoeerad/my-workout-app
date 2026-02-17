@@ -106,3 +106,41 @@ body {
 .chat-input { flex: 1; padding: 8px; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+/* --- Mobile Fixes (iPhone 7/SE/Small Android) --- */
+@media screen and (max-width: 400px) {
+    
+    /* ۱. حذف تایتل برنامه در گوشی‌های کوچک برای باز شدن جا */
+    .nav-title {
+        display: none;
+    }
+
+    /* ۲. وسط‌چین کردن دکمه‌ها */
+    .sticky-nav {
+        justify-content: center;
+        padding: 0 10px;
+    }
+
+    /* ۳. تنظیم فاصله دکمه‌ها */
+    .nav-actions {
+        width: 100%;
+        justify-content: space-between; /* پخش کردن دکمه‌ها در کل عرض */
+        gap: 4px; /* کم کردن فاصله بین دکمه‌ها */
+    }
+
+    /* ۴. کوچک‌تر کردن فونت و پدینگ دکمه‌ها */
+    .nav-btn {
+        font-size: 0.75rem; /* فونت کمی ریزتر */
+        padding: 6px 8px;   /* دکمه جمع‌وجورتر */
+        white-space: nowrap; /* جلوگیری از شکستن متن به خط بعد */
+        flex: 1; /* هم‌اندازه کردن دکمه‌ها */
+        text-align: center;
+    }
+
+    /* ۵. دکمه تنظیمات کمی کوچک‌تر */
+    .settings-btn {
+        flex: 0 0 auto; /* دکمه تنظیمات کش نیاید */
+        width: auto;
+    }
+}
