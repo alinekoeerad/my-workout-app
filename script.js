@@ -1,6 +1,6 @@
 /**
- * Smart Workout Application - V3.2
- * Features: Dark Mode Island, Dynamic Supersets, AI Integration
+ * Smart Workout Application - V3.3 (Final Polish)
+ * Features: Dark Mode Island, Dynamic Supersets, AI Integration, Iconic UI
  */
 
 // --- 1. GLOBAL STATE ---
@@ -32,7 +32,7 @@ async function loadDatabase() {
     }
 }
 
-// --- 3. RENDERING ---
+// --- 3. RENDERING (Updated with Icons) ---
 function renderDay(dayId) {
     const container = document.getElementById('app-container');
     const dayData = state.workouts[dayId];
@@ -48,7 +48,12 @@ function renderDay(dayId) {
         part.exercises.forEach(ex => {
             const isTime = ex.time !== undefined;
             const targetVal = isTime ? `${ex.time}s` : ex.reps;
-            const targetLabel = isTime ? 'Time' : 'Reps';
+            
+            // Icons selection
+            // 🔢 = Sets
+            // ⏱️ = Time
+            // 🔁 = Reps
+            const targetIcon = isTime ? '⏱️' : '🔁'; 
             
             let dotsHtml = '<div class="progress-dots">';
             for(let i=0; i<ex.sets; i++) dotsHtml += '<div class="dot"></div>';
@@ -65,10 +70,18 @@ function renderDay(dayId) {
                 <div class="ex-code">${ex.code}</div>
                 <span class="ex-name-en">${ex.name_en}</span>
                 <span class="ex-name-fa">${ex.name_fa}</span>
+                
                 <div class="ex-stats">
-                    <div class="stat-item"><span class="stat-label">Sets</span><span class="stat-val">${ex.sets}</span></div>
-                    <div class="stat-item"><span class="stat-label">${targetLabel}</span><span class="stat-val">${targetVal}</span></div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🔢</span>
+                        <span class="stat-val">${ex.sets}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">${targetIcon}</span>
+                        <span class="stat-val">${targetVal}</span>
+                    </div>
                 </div>
+                
                 <div class="ex-note">
                     ${ex.note}
                     <div class="ai-row"><button class="ai-hint-btn" onclick="app.askAI(event, '${ex.ai_query}')">✨</button></div>

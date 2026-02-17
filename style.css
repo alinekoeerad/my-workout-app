@@ -1,13 +1,16 @@
+/* --- Import Persian Font (Vazirmatn) --- */
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css');
+
 :root {
     /* --- Light Theme Glass Variables --- */
     --primary: #2c3e50;
     --accent: #e67e22;
     --success: #27ae60;
     
-    /* پس‌زمینه روشن */
+    /* پس‌زمینه گرادینت روشن */
     --body-bg: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
     
-    /* شیشه روشن */
+    /* تنظیمات شیشه (Glass) */
     --glass-bg: rgba(255, 255, 255, 0.65);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
@@ -26,10 +29,10 @@
     --accent: #e67e22;
     --success: #2ecc71;
     
-    /* پس‌زمینه تیره */
+    /* پس‌زمینه گرادینت تیره */
     --body-bg: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     
-    /* شیشه تیره */
+    /* شیشه دودی */
     --glass-bg: rgba(20, 20, 20, 0.65);
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -43,15 +46,30 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
     background: var(--body-bg);
-    background-attachment: fixed;
+    background-attachment: fixed; /* گرادینت ثابت بماند */
     color: var(--text);
     margin: 0;
     padding-top: var(--header-height);
     padding-bottom: 120px;
     line-height: 1.6;
     transition: color 0.3s ease;
+}
+
+/* --- 2. Custom Scrollbar (اسکرول بار سفارشی) --- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(44, 62, 80, 0.5);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 /* --- Navigation (Floating Island) --- */
@@ -122,31 +140,24 @@ body {
     text-align: center; color: var(--text);
 }
 
+/* --- Section Title Fix --- */
 .section-title {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    
-    width: 100%; 
-    box-sizing: border-box; 
-    
-    color: var(--accent);
-    font-weight: bold; 
-    margin: 30px 0 15px 0; 
-    font-size: 1.1rem; 
-    direction: ltr; 
+    display: flex; align-items: center; gap: 10px; 
+    width: 100%; box-sizing: border-box;
+    color: var(--accent); font-weight: bold; margin: 30px 0 15px 0; 
+    font-size: 1.1rem; direction: ltr;
     
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    
+    border-radius: 15px;
     border-left: 5px solid var(--accent);
     
-    padding: 15px 20px; 
+    padding: 15px 20px;
     box-shadow: var(--glass-shadow);
 }
+
 .grid-container {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
 }
@@ -160,7 +171,7 @@ body {
     box-shadow: var(--glass-shadow);
     border-radius: var(--border-radius);
     padding: 20px; position: relative;
-    overflow: hidden; /* حیاتی برای اینکه ثانیه‌شمار بیرون نزند */
+    overflow: hidden; /* حیاتی برای افکت برق زدن */
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer; color: var(--text);
 }
@@ -170,15 +181,43 @@ body {
     background: rgba(200, 200, 200, 0.2); box-shadow: none;
 }
 
+/* --- 3. Pulse Effect for Active Card --- */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.4); border-color: var(--accent); }
+    70% { box-shadow: 0 0 0 10px rgba(230, 126, 34, 0); border-color: var(--accent); }
+    100% { box-shadow: 0 0 0 0 rgba(230, 126, 34, 0); border-color: var(--accent); }
+}
+
 .ex-card.active-move {
     border: 2px solid var(--accent); 
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(230, 126, 34, 0.2);
+    animation: pulse-glow 2s infinite;
     opacity: 1; filter: none; background: var(--glass-bg);
+    z-index: 10;
 }
 
 .ex-card.completed { 
     border-color: var(--success); background: rgba(39, 174, 96, 0.15);
+}
+
+/* --- 5. Glass Sheen Effect (برق زدن) --- */
+.ex-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -150%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    transform: skewX(-25deg);
+    transition: none; pointer-events: none; z-index: 2;
+}
+
+.ex-card:hover::before {
+    animation: sheen 0.75s;
+}
+
+@keyframes sheen {
+    0% { left: -150%; }
+    100% { left: 150%; }
 }
 
 /* --- Elements inside Card --- */
@@ -188,21 +227,16 @@ body {
 .dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .dot.done { background: var(--success); border-color: var(--success); }
 
-/* --- اصلاح شماره حرکت (A1, A2...) --- */
+/* --- Badge Fix --- */
 .ex-code {
     position: absolute; top: 0; right: 0; 
-    background: var(--primary); 
-    color: white; /* در حالت روشن سفید */
+    background: var(--primary); color: white;
     font-size: 0.8rem; padding: 6px 15px; 
     border-bottom-left-radius: 20px; font-weight: bold;
-    box-shadow: -2px 2px 10px rgba(0,0,0,0.1);
-    z-index: 6;
+    box-shadow: -2px 2px 10px rgba(0,0,0,0.1); z-index: 6;
 }
-
-/* --- فیکس دارک مود برای شماره حرکت --- */
 [data-theme="dark"] .ex-code {
-    background: #ffffff; /* پس زمینه سفید */
-    color: #000000;      /* متن مشکی */
+    background: #ffffff; color: #000000;
     box-shadow: -2px 2px 10px rgba(255,255,255,0.1);
 }
 
@@ -216,9 +250,10 @@ body {
 }
 [data-theme="dark"] .ex-stats { background: rgba(255,255,255,0.05); }
 
+/* --- Icon Styles --- */
 .stat-item { text-align: center; flex: 1; }
 .stat-val { font-weight: 800; color: var(--accent); font-size: 1.1rem; }
-.stat-label { font-size: 0.75rem; color: var(--text-secondary); }
+.stat-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
 
 .ex-note { font-size: 0.9rem; color: var(--text-secondary); border-top: 1px dashed rgba(150,150,150,0.3); padding-top: 12px; }
 
@@ -229,32 +264,14 @@ body {
 }
 .ai-hint-btn:hover { background: var(--ai-color); color: white; }
 
-/* --- اصلاح ثانیه شمار (Timer Overlay) --- */
+/* --- Timer Overlay Fix --- */
 .timer-overlay {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; /* پوشش کامل ارتفاع */
-    
-    background: rgba(0,0,0,0.9); /* سیاه یکدست و شفافیت کم */
-    color: white; 
-    
-    display: flex; 
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    
-    font-size: 3rem; 
-    font-weight: bold;
-    
-    opacity: 0; 
-    pointer-events: none; 
-    transition: opacity 0.3s ease; 
-    z-index: 20; /* بالاتر از همه چیز حتی بج شماره */
-    border-radius: var(--border-radius); /* هماهنگ با گردی کارت */
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); color: white; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; font-size: 3rem; font-weight: bold;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
+    z-index: 20; border-radius: var(--border-radius);
 }
-
 .ex-card.timer-active .timer-overlay { opacity: 1; pointer-events: all; }
 
 /* --- Modals & Chat --- */
@@ -274,7 +291,6 @@ body {
 [data-theme="dark"] .settings-modal input { background: rgba(255,255,255,0.1); }
 .save-btn { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 10px; cursor: pointer; }
 .close-btn { width: 100%; margin-top: 10px; background: #e74c3c; color: white; border: none; border-radius: 10px; padding: 8px; cursor: pointer; }
-
 
 .chat-window {
     position: fixed; bottom: 100px; left: 20px; width: 350px; height: 550px;
