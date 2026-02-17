@@ -56,9 +56,9 @@
         {
             "title": "🔥 Part 1: Ignition Cycle",
             "exercises": [
-                { "code": "A1", "name_en": "Rowing Machine", "name_fa": "دستگاه روئینگ", "sets": 3, "time": 120, "note": "با تمام توان.", "ai_query": "Rowing machine form" },
+                { "code": "A1", "name_en": "Rowing Machine", "name_fa": "دستگاه روئینگ", "sets": 3, "time": 1, "note": "با تمام توان.", "ai_query": "Rowing machine form" },
                 { "code": "A2", "name_en": "Renegade Row", "name_fa": "رنیگید رو", "sets": 3, "reps": "20", "note": "شکم سفت باشد.", "ai_query": "Renegade row" },
-                { "code": "A3", "name_en": "High Knees", "name_fa": "زانو بلند", "sets": 3, "time": 40, "note": "درجا زدن سریع.", "ai_query": "High knees" },
+                { "code": "A3", "name_en": "High Knees", "name_fa": "زانو بلند", "sets": 3, "time": 1, "note": "درجا زدن سریع.", "ai_query": "High knees" },
                 { "code": "A4", "name_en": "Dumbbell Swing", "name_fa": "دمبل سوئینگ", "sets": 3, "reps": "15", "note": "با کمک فیله کمر.", "ai_query": "Dumbbell swing" }
             ]
         },
@@ -88,7 +88,7 @@
             "exercises": [
                  { "code": "10a", "name_en": "Cable Wrist Curl", "name_fa": "مچ سیم‌کش", "sets": 4, "reps": "15", "note": "ساعد ثابت.", "ai_query": "Cable wrist curl" },
                  { "code": "10b", "name_en": "Reverse Wrist Curl", "name_fa": "مچ برعکس", "sets": 4, "reps": "12", "note": "پشت ساعد.", "ai_query": "Seated reverse wrist curl" },
-                 { "code": "10c", "name_en": "Farmer's Carry", "name_fa": "راه رفتن کشاورز", "sets": 3, "time": 45, "note": "سنگین‌ترین دمبل.", "ai_query": "Farmers walk" }
+                 { "code": "10c", "name_en": "Farmer's Carry", "name_fa": "راه رفتن کشاورز", "sets": 3, "time": 1, "note": "سنگین‌ترین دمبل.", "ai_query": "Farmers walk" }
             ]
         }
       ]
