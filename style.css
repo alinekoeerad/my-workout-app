@@ -419,8 +419,15 @@ body {
 }
 
 .glass-input option {
-    background: var(--primary);
-    color: white;
+    background: #eef2f5;
+    color: #2c3e50;
+    font-weight: 500; 
+}
+
+[data-theme="dark"] .glass-input option {
+    background: #11222c; 
+    color: #ecf0f1;
+    font-weight: 500;
 }
 
 textarea.glass-input {

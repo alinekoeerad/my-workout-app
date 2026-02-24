@@ -442,11 +442,22 @@ sendMessage: async (txt) => {
         body.innerHTML += `<div class="msg ai" id="${id}" dir="auto"><span style="color:var(--text-secondary);font-size:0.85rem;">... در حال تحلیل ...</span></div>`;
         setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
 
+       // --- خواندن پروفایل بدنی فوق‌حرفه‌ای ---
         const userProfileRaw = localStorage.getItem('user_assessment');
-        let profileContext = "User has not completed the assessment yet.";
+        let profileContext = "کاربر هنوز فرم ارزیابی را پر نکرده است.";
         if(userProfileRaw) {
             const p = JSON.parse(userProfileRaw);
-            profileContext = `User Physical Profile => Pullups: ${p.pullups}, Pushups: ${p.pushups}, Plank: ${p.plank}sec, Sleep: ${p.sleep}h/night, Injuries: ${p.injury}, Shoulder Mobility: ${p.shoulder_mob}, Hamstring Mobility: ${p.hamstring_mob}. Use this context to personalize your advice.`;
+            profileContext = `
+            اطلاعات فیزیکی و بیومکانیک کاربر:
+            - فیزیک: سن ${p.age || '?'} سال | وزن ${p.weight || '?'} کیلوگرم | قد ${p.height || '?'} سانتی‌متر
+            - وضعیت تغذیه: ${p.diet_status || 'نامشخص'} | خواب: ${p.avg_sleep || '?'} ساعت
+            - رکوردهای وزن بدن: بارفیکس ${p.max_pullups || 0} | شنا ${p.max_pushups || 0} | پارالل ${p.max_dips || 0} | پلانک ${p.max_plank_time || 0} ثانیه
+            - رکوردهای وزنه‌برداری: اسکات ${p.record_squat || 0}kg | ددلیفت ${p.record_deadlift || 0}kg | پرس سینه ${p.record_bench || 0}kg
+            - موبیلیتی: شانه (${p.wall_slide_test || '?'}) | همسترینگ (${p.hamstring_toe_touch || '?'}) | اسکات عمیق (${p.deep_squat_test || '?'})
+            - آسیب‌ها و دردها: ${p.injury_history || 'ندارد'}
+            - عضله دیررشد: ${p.stubborn_muscle || 'ندارد'}
+            - سطح: پیشرفته (Advanced). در حال اجرای برنامه PPL هیبریدی پرحجم.
+            `;
         }
 
         try {
