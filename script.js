@@ -270,26 +270,68 @@ const app = {
             activateCard(allCards[0], false);
         }
     },
-    setupProfileView: () => {
-        const savedData = JSON.parse(localStorage.getItem('user_assessment') || 'null');
-        
-        // Append Logout Button to the view
+    // --- Setup Profile View with Cloud Sync (Pull) ---
+    setupProfileView: async () => {
+        // 1. Try to load data from local storage first
+        let savedData = JSON.parse(localStorage.getItem('user_assessment') || 'null');
+        const emptyState = document.getElementById('profile-empty-state');
         const profileContainer = document.getElementById('profile-content');
+        
+        // Hide both containers initially to prevent flickering
+        if (emptyState) emptyState.style.display = 'none';
+        if (profileContainer) profileContainer.style.display = 'none';
+
+        // 2. If no local data is found (e.g., logging in from a new phone), fetch from Cloud
+        if (!savedData || Object.keys(savedData).length === 0) {
+            
+            // Show a temporary loading message
+            if (emptyState) {
+                emptyState.innerHTML = `<h3 style="color:var(--accent); text-align:center; padding-top:40px;">⏳ Syncing with Cloud Database...</h3>`;
+                emptyState.style.display = 'block';
+            }
+
+            try {
+                // Fetch user data using a GET request to Google Apps Script
+                const res = await fetch(`${state.gasUrl}?action=getAssessment&phone=${state.currentUser.phone}`);
+                const result = await res.json();
+                
+                if (result.status === "success" && result.data) {
+                    savedData = result.data;
+                    // Save to local storage for fast loading in the future
+                    localStorage.setItem('user_assessment', JSON.stringify(savedData));
+                    if (emptyState) emptyState.style.display = 'none';
+                } else {
+                    // Truly empty state: User has never filled the assessment form
+                    if (emptyState) {
+                        emptyState.innerHTML = `
+                            <h2 style="color:var(--accent);">پروفایل شما هنوز تکمیل نشده!</h2>
+                            <p style="color:var(--text-secondary);">برای مشاهده اطلاعات بدنی، ابتدا فرم ارزیابی را پر کنید.</p>
+                            <button onclick="app.loadView('assessment')" class="btn-primary">📋 رفتن به فرم ارزیابی</button>
+                        `;
+                    }
+                    return; // Stop execution here
+                }
+            } catch (err) {
+                console.error("Cloud Sync Error:", err);
+                if (emptyState) emptyState.innerHTML = `<h3 style="color:red; text-align:center;">❌ Network Error during sync.</h3>`;
+                return;
+            }
+        }
+
+        // 3. Data is ready, display the main profile container
+        if (profileContainer) profileContainer.style.display = 'block';
+
+        // 4. Inject Logout Button dynamically if it doesn't exist
         if (profileContainer && !document.getElementById('logout-btn')) {
             const logoutBtn = document.createElement('button');
             logoutBtn.id = 'logout-btn';
-            logoutBtn.className = 'btn-logout'; // Change this class
+            logoutBtn.className = 'btn-logout';
             logoutBtn.innerHTML = '🚪 خروج از حساب کاربری';
             logoutBtn.onclick = app.logout;
             profileContainer.appendChild(logoutBtn);
         }
 
-        if (!savedData || Object.keys(savedData).length === 0) {
-            if(document.getElementById('profile-content')) document.getElementById('profile-content').style.display = 'none';
-            if(document.getElementById('profile-empty-state')) document.getElementById('profile-empty-state').style.display = 'block';
-            return;
-        }
-
+        // 5. English to Persian translation dictionary for database values
         const dict = {
             "surplus": "حجم", "maintenance": "تثبیت", "deficit": "کات",
             "chest": "سینه", "back": "پشت", "legs": "پاها", "arms": "دست‌ها", "shoulders": "سرشانه", "calves": "ساق", "none": "هیچکدام",
@@ -297,6 +339,7 @@ const app = {
         };
         const t = (val) => dict[val] || val || '-';
 
+        // 6. Map JSON data to DOM Element IDs
         const elements = {
             'val-age': `${savedData.age || '-'} سال`,
             'val-weight': `${savedData.weight || '-'} kg`,
@@ -314,6 +357,7 @@ const app = {
             'val-injury': savedData.injury_history || 'ندارد'
         };
 
+        // 7. Render values into the HTML
         for (const [id, value] of Object.entries(elements)) {
             const el = document.getElementById(id);
             if (el) el.innerText = value;
