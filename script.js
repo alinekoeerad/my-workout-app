@@ -1,38 +1,65 @@
 /**
- * Smart Workout Application - V3.3 (Final Polish)
- * Features: Dark Mode Island, Dynamic Supersets, AI Integration, Iconic UI
+ * Smart Workout Application - V5.1 (Fixed Execution Order + Smart Rest & Audio)
  */
 
 // --- 1. GLOBAL STATE ---
 const state = {
     workouts: null,
+    assessmentSchema: null,
     currentDay: 'day1',
     apiKey: localStorage.getItem('gemini_api_key') || "",
     audioCtx: null,
     timer: null,
-    isTimerRunning: false
+    isTimerRunning: false,
+    restTimer: null,
+    restTimeRemaining: 0
 };
 
 // --- 2. INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
-    app.initTheme(); // Initialize Theme Preference first
+    app.initTheme(); 
+    createRestWidgetDOM(); // اضافه کردن ویجت استراحت به صفحه
     await loadDatabase();
     if (state.workouts) renderDay(state.currentDay);
 });
 
+function createRestWidgetDOM() {
+    const widget = document.createElement('div');
+    widget.id = 'restWidget';
+    widget.className = 'rest-widget';
+    widget.innerHTML = `
+        <div style="text-align:center;">
+            <div style="font-size:0.8rem; color:#ccc;">استراحت (Rest)</div>
+            <div id="restTimeDisplay" class="rest-time-display">00:00</div>
+        </div>
+        <button class="rest-skip-btn" onclick="app.skipRest()">رد کردن ⏭</button>
+    `;
+    document.body.appendChild(widget);
+}
+
 async function loadDatabase() {
     try {
-        const response = await fetch('./data/workouts.json');
-        if (!response.ok) throw new Error('HTTP Error');
-        const data = await response.json();
-        state.workouts = data.days;
-        console.log("✅ Database Loaded");
+        const [workoutsRes, assessmentRes] = await Promise.all([
+            fetch('./data/workouts.json'),
+            fetch('./data/assessment.json').catch(() => ({ ok: false }))
+        ]);
+
+        if (workoutsRes.ok) {
+            const data = await workoutsRes.json();
+            state.workouts = data.days;
+            console.log("✅ Workouts Loaded");
+        }
+        if (assessmentRes.ok) {
+            const data = await assessmentRes.json();
+            state.assessmentSchema = data.assessment_flow;
+            console.log("✅ Assessment Schema Loaded");
+        }
     } catch (error) {
-        document.getElementById('app-container').innerHTML = `<h3 style="color:red;text-align:center">Error loading database. Check console.</h3>`;
+        document.getElementById('app-container').innerHTML = `<h3 style="color:red;text-align:center">خطا در بارگذاری اطلاعات.</h3>`;
     }
 }
 
-// --- 3. RENDERING (Updated with Icons) ---
+// --- 3. RENDERING ---
 function renderDay(dayId) {
     const container = document.getElementById('app-container');
     const dayData = state.workouts[dayId];
@@ -48,12 +75,8 @@ function renderDay(dayId) {
         part.exercises.forEach(ex => {
             const isTime = ex.time !== undefined;
             const targetVal = isTime ? `${ex.time}s` : ex.reps;
-            
-            // Icons selection
-            // 🔢 = Sets
-            // ⏱️ = Time
-            // 🔁 = Reps
             const targetIcon = isTime ? '⏱️' : '🔁'; 
+            const defaultRest = ex.rest || 90; // زمان استراحت پیش‌فرض
             
             let dotsHtml = '<div class="progress-dots">';
             for(let i=0; i<ex.sets; i++) dotsHtml += '<div class="dot"></div>';
@@ -64,6 +87,7 @@ function renderDay(dayId) {
                  data-code="${ex.code}" 
                  data-sets="${ex.sets}" 
                  data-completed="0"
+                 data-rest="${defaultRest}"
                  ${isTime ? `data-time="${ex.time}"` : ''}
                  onclick="app.handleClick(this)">
                 ${dotsHtml}
@@ -94,13 +118,11 @@ function renderDay(dayId) {
     html += `</div>`;
     container.innerHTML = html;
     
-    // Unlock first card
     const firstCard = container.querySelector('.ex-card');
     if(firstCard) activateCard(firstCard);
 }
 
-// --- 4. LOGIC ENGINE ---
-
+// --- 4. LOGIC ENGINE (Restored exactly to your working logic) ---
 function getGroupId(code) {
     if (/^[a-zA-Z]/.test(code)) return code.charAt(0).toUpperCase();
     const match = code.match(/^\d+/);
@@ -138,47 +160,122 @@ function handleSetCompletion(currentCard) {
         deactivateCard(currentCard);
     }
 
-    const nextCard = findNextUnfinishedInGroup(groupCards, currentIndexInGroup);
+    let nextCard = findNextUnfinishedInGroup(groupCards, currentIndexInGroup);
+    let isSupersetTransition = false;
 
     if (nextCard) {
-        activateCard(nextCard);
+        // تشخیص هوشمند سوپرست: اگر کارت بعدی در لیست پایین‌تر از کارت فعلی است
+        const currGlobalIdx = allCards.indexOf(currentCard);
+        const nextGlobalIdx = allCards.indexOf(nextCard);
+        
+        if (nextGlobalIdx > currGlobalIdx) {
+            isSupersetTransition = true;
+        }
+        activateCard(nextCard, isSupersetTransition);
     } else {
         const globalIndex = allCards.indexOf(currentCard);
         for (let i = globalIndex + 1; i < allCards.length; i++) {
             const potentialNext = allCards[i];
             if (!potentialNext.classList.contains('completed')) {
-                activateCard(potentialNext);
-                return;
+                nextCard = potentialNext;
+                activateCard(nextCard, false);
+                break;
             }
         }
+    }
+
+    // کنترل استراحت بر اساس اینکه حرکت بعدی سوپرست است یا خیر
+    if (isSupersetTransition) {
+        app.skipRest(); 
+    } else {
+        const restTime = parseInt(currentCard.dataset.rest) || 90;
+        startRestTimer(restTime);
     }
 }
 
 // --- 5. UI HELPERS ---
-
-function activateCard(card) {
-    card.classList.remove('locked');
-    card.classList.add('active-move');
+function activateCard(card, isSupersetAlert = false) {
+    card.classList.remove('locked', 'superset-next', 'active-move');
+    if (isSupersetAlert) {
+        card.classList.add('superset-next');
+        playAudioCue('superset');
+    } else {
+        card.classList.add('active-move');
+    }
     card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function deactivateCard(card) {
-    card.classList.remove('active-move');
+    card.classList.remove('active-move', 'superset-next');
     card.classList.add('locked');
 }
 
 function markCardAsDone(card) {
-    card.classList.remove('active-move');
+    card.classList.remove('active-move', 'superset-next', 'locked');
     card.classList.add('completed');
-    card.classList.remove('locked');
     card.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
 }
 
-// --- 6. INTERACTION & THEME ---
+// --- 6. REST TIMER & AUDIO ENGINE ---
+function startRestTimer(seconds) {
+    app.skipRest(); 
+    state.restTimeRemaining = seconds;
+    const widget = document.getElementById('restWidget');
+    const display = document.getElementById('restTimeDisplay');
+    
+    widget.classList.add('show');
+    
+    state.restTimer = setInterval(() => {
+        state.restTimeRemaining--;
+        const m = Math.floor(state.restTimeRemaining / 60).toString().padStart(2, '0');
+        const s = (state.restTimeRemaining % 60).toString().padStart(2, '0');
+        display.innerText = `${m}:${s}`;
 
+        if (state.restTimeRemaining === 3 || state.restTimeRemaining === 2 || state.restTimeRemaining === 1) {
+            playAudioCue('tick');
+        } else if (state.restTimeRemaining <= 0) {
+            playAudioCue('go');
+            app.skipRest();
+        }
+    }, 1000);
+}
+
+function initAudio() {
+    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
+}
+
+function playAudioCue(type) {
+    if (!state.audioCtx) return;
+    const o = state.audioCtx.createOscillator();
+    const g = state.audioCtx.createGain();
+    o.connect(g); g.connect(state.audioCtx.destination);
+    
+    const now = state.audioCtx.currentTime;
+    if (type === 'tick') {
+        o.type = 'sine'; o.frequency.setValueAtTime(600, now);
+        g.gain.setValueAtTime(0.1, now); o.start(now); o.stop(now + 0.1);
+    } else if (type === 'go') {
+        o.type = 'square'; o.frequency.setValueAtTime(880, now);
+        g.gain.setValueAtTime(0.15, now); o.start(now); o.stop(now + 0.4);
+    } else if (type === 'superset') {
+        o.type = 'triangle'; o.frequency.setValueAtTime(400, now);
+        o.frequency.setValueAtTime(600, now + 0.1);
+        g.gain.setValueAtTime(0.1, now); o.start(now); o.stop(now + 0.2);
+    }
+}
+
+// --- 7. INTERACTION, THEME & ASSESSMENT ---
 const app = {
+    skipRest: () => {
+        clearInterval(state.restTimer);
+        const w = document.getElementById('restWidget');
+        if(w) w.classList.remove('show');
+    },
+
     switchDay: (dayId) => {
-        if(state.isTimerRunning) return alert('Stop timer first!');
+        if(state.isTimerRunning) return alert('ابتدا تایمر را متوقف کنید!');
+        app.skipRest();
         state.currentDay = dayId;
         renderDay(dayId);
     },
@@ -194,7 +291,6 @@ const app = {
         }
     },
 
-    // --- Theme Logic ---
     toggleTheme: () => {
         const html = document.documentElement;
         const current = html.getAttribute('data-theme');
@@ -216,7 +312,6 @@ const app = {
     updateThemeIcon: (theme) => {
         const icon = document.getElementById('themeIcon');
         if(icon) {
-            // If dark, show Sun (to switch to light). If light, show Moon.
             icon.innerText = theme === 'dark' ? '☀️' : '🌙';
         }
     },
@@ -227,16 +322,81 @@ const app = {
         app.updateMetaColor(savedTheme);
         app.updateThemeIcon(savedTheme);
     },
-    // -------------------
+
+    showAssessment: () => {
+        if(state.isTimerRunning) return alert('ابتدا تایمر را متوقف کنید!');
+        app.skipRest();
+        if(!state.assessmentSchema) return alert('فرم ارزیابی هنوز لود نشده است!');
+        
+        state.currentDay = 'assessment';
+        const container = document.getElementById('app-container');
+        const schema = state.assessmentSchema;
+        const savedData = JSON.parse(localStorage.getItem('user_assessment') || '{}');
+
+        let html = `<div class="day-section active">
+            <div class="day-header"><h2>${schema.title}</h2></div>
+            <form id="assessmentForm" onsubmit="app.submitAssessment(event)">`;
+
+        schema.sections.forEach(sec => {
+            html += `<div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; opacity:1; filter:none; animation:none; border-color:var(--glass-border);">
+                        <h3 style="color:var(--accent); margin-top:0;">${sec.title}</h3>
+                        ${sec.description ? `<p style="font-size:0.85rem; color:var(--text-secondary)">${sec.description}</p>` : ''}`;
+            
+            sec.questions.forEach(q => {
+                const val = savedData[q.id] || '';
+                html += `<div style="margin-top:15px; text-align:right;">
+                            <label style="font-weight:bold; font-size:0.95rem; display:block;">${q.text}</label>`;
+                
+                if (q.type === 'textarea' || q.input_type === 'textarea') {
+                    html += `<textarea name="${q.id}" class="glass-input" placeholder="${q.placeholder || ''}">${val}</textarea>`;
+                } else if (q.type === 'number' || q.input_type === 'number') {
+                    html += `<input type="number" name="${q.id}" class="glass-input" placeholder="${q.placeholder || ''}" value="${val}">`;
+                } else if (q.type === 'select' || q.input_type === 'select' || q.type === 'boolean' || q.input_type === 'boolean') {
+                    html += `<select name="${q.id}" class="glass-input">
+                                <option value="">انتخاب کنید...</option>`;
+                    q.options.forEach(opt => {
+                        const optValue = typeof opt === 'object' ? opt.value : opt;
+                        const optLabel = typeof opt === 'object' ? opt.label : opt;
+                        const selected = (val === optValue) ? 'selected' : '';
+                        html += `<option value="${optValue}" ${selected}>${optLabel}</option>`;
+                    });
+                    html += `</select>`;
+                }
+                html += `</div>`;
+            });
+            html += `</div>`;
+        });
+
+        html += `<button type="submit" class="save-btn" style="margin-top:10px; padding:15px; font-size:1.1rem; border-radius:15px; background:var(--accent);">
+                    💾 ثبت و ذخیره پروفایل بدنی
+                 </button>
+                 </form></div>`;
+        
+        container.innerHTML = html;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    submitAssessment: (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const answers = Object.fromEntries(formData.entries());
+        localStorage.setItem('user_assessment', JSON.stringify(answers));
+        
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "✅ با موفقیت ذخیره شد!";
+        btn.style.background = "var(--success)";
+        
+        setTimeout(() => {
+            app.switchDay('day1'); 
+        }, 1500);
+    },
 
     handleClick: (card) => {
-        if (!card.classList.contains('active-move')) {
-            console.log("Not your turn!");
-            return; 
-        }
+        app.skipRest(); // با کلیک کاربر، استراحت قطع می‌شود
+        
+        if (!card.classList.contains('active-move') && !card.classList.contains('superset-next')) return; 
 
-        if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
+        initAudio();
 
         if (card.dataset.time) {
             if (card.classList.contains('timer-active')) {
@@ -272,23 +432,38 @@ const app = {
         body.innerHTML += `<div class="msg user">${text}</div>`;
         input.value = '';
         const id = Date.now();
-        body.innerHTML += `<div class="msg ai" id="${id}">...</div>`;
+        body.innerHTML += `<div class="msg ai" id="${id}">... در حال تحلیل ...</div>`;
         body.scrollTop = body.scrollHeight;
 
+        const userProfileRaw = localStorage.getItem('user_assessment');
+        let profileContext = "User has not completed the assessment yet.";
+        if(userProfileRaw) {
+            const p = JSON.parse(userProfileRaw);
+            profileContext = `User Physical Profile => Pullups: ${p.pullups}, Pushups: ${p.pushups}, Plank: ${p.plank}sec, Sleep: ${p.sleep}h/night, Injuries: ${p.injury}, Shoulder Mobility: ${p.shoulder_mob}, Hamstring Mobility: ${p.hamstring_mob}. Use this context to personalize your advice.`;
+        }
+
         try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${state.apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
             const res = await fetch(url, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Fitness Coach Context. User: Ali. Q: ${text}` }] }] })
+                body: JSON.stringify({ 
+                    contents: [{ 
+                        parts: [{ 
+                            text: `Act as an Elite Fitness Coach. ${profileContext} User Question: ${text}` 
+                        }] 
+                    }] 
+                })
             });
             const d = await res.json();
-            document.getElementById(id).innerText = d.candidates?.[0]?.content?.parts?.[0]?.text || "Error";
-        } catch(e) { document.getElementById(id).innerText = "Error: " + e.message; }
+            document.getElementById(id).innerHTML = d.candidates?.[0]?.content?.parts?.[0]?.text.replace(/\n/g, '<br>') || "خطا در دریافت پاسخ.";
+        } catch(e) { 
+            document.getElementById(id).innerText = "Error: لطفا بررسی کنید API Key ذخیره شده باشد."; 
+        }
     }
 };
 
-// --- 7. TIMER ---
+// --- 8. EXERCISE TIMER ---
 function startTimer(card) {
     state.isTimerRunning = true;
     card.classList.add('timer-active');
@@ -308,26 +483,14 @@ function stopTimer(card, finished) {
     card.classList.remove('timer-active');
     card.querySelector('.timer-overlay').innerHTML = `${card.dataset.time} <span>Stop</span>`;
     if (finished) {
-        playSound();
-        let s = parseInt(card.dataset.sets);
+        playAudioCue('go');
         let c = parseInt(card.dataset.completed);
-        if (c < s) {
-            c++;
-            card.dataset.completed = c;
+        if (c < parseInt(card.dataset.sets)) {
+            card.dataset.completed = ++c;
             card.querySelectorAll('.dot')[c-1]?.classList.add('active');
             handleSetCompletion(card);
         }
     }
-}
-
-function playSound() {
-    if (!state.audioCtx) return;
-    const o = state.audioCtx.createOscillator();
-    const g = state.audioCtx.createGain();
-    o.connect(g); g.connect(state.audioCtx.destination);
-    o.frequency.setValueAtTime(880, state.audioCtx.currentTime);
-    g.gain.setValueAtTime(0.1, state.audioCtx.currentTime);
-    o.start(); o.stop(state.audioCtx.currentTime + 0.3);
 }
 
 window.app = app;

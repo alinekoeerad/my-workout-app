@@ -1,9 +1,9 @@
 {
   "program_info": {
-    "name": "Hybrid PPL - Ali's Pro Edition",
-    "version": "3.0",
-    "author": "AI Coach",
-    "description": "Customized Hybrid Athlete program with uneven superset logic."
+    "name": "Hybrid PPL - Ali's Pro Edition (Balanced 3D)",
+    "version": "3.1",
+    "author": "Smart Coach",
+    "description": "Updated Hybrid Athlete program fixing quad dominance, adding 3D shoulder width, balancing lower chest, and protecting shins."
   },
   "days": {
     "day1": {
@@ -26,10 +26,10 @@
           ]
         },
         {
-          "title": "⚡ Part 3: Isolation & Pump",
+          "title": "⚡ Part 3: Isolation & Balanced Pump",
           "exercises": [
             { "code": "3a", "name_en": "Low Pulley Cable Fly", "name_fa": "قفسه بالا سینه سیم‌کش", "sets": 4, "reps": "15", "note": "تمرکز روی بالا سینه.", "ai_query": "Low Pulley Cable Fly form" },
-            { "code": "3b", "name_en": "Incline DB Squeeze Press", "name_fa": "پرس بالا سینه دمبل چسبیده", "sets": 4, "reps": "12", "note": "دمبل‌ها را بهم فشار دهید.", "ai_query": "Hex press form" },
+            { "code": "3b", "name_en": "High Pulley Cable Crossover", "name_fa": "کراس‌اور سیم‌کش از بالا", "sets": 4, "reps": "15", "note": "تمرکز روی زیرسینه و فرم‌دهی بیرونی.", "ai_query": "High pulley cable crossover lower chest" },
             { "code": "4", "name_en": "Weighted Dips", "name_fa": "پارالل با وزنه", "sets": 4, "reps": "Fail", "note": "خم شدن به جلو.", "ai_query": "Chest dips form" },
             { "code": "5a", "name_en": "Pec Deck", "name_fa": "پک دک (دستگاه پروانه)", "sets": 3, "reps": "15", "note": "کشش کامل.", "ai_query": "Pec Deck machine" },
             { "code": "5b", "name_en": "Push-ups", "name_fa": "شنا سوئدی", "sets": 3, "reps": "Fail", "note": "بلافاصله بعد از پک دک.", "ai_query": "Perfect pushup form" }
@@ -95,7 +95,7 @@
       ]
     },
     "day3": {
-      "title": "Day 3: Legs & Shoulders (Pro)",
+      "title": "Day 3: Legs & Shoulders (Balanced Pro)",
       "parts": [
          {
             "title": "🔥 Part 1: Ignition Cycle",
@@ -107,20 +107,22 @@
             ]
          },
          {
-             "title": "🏋️‍♂️ Part 2: Heavy Legs",
+             "title": "🏋️‍♂️ Part 2: Heavy Quads",
              "exercises": [
                  { "code": "1", "name_en": "Barbell Back Squat", "name_fa": "اسکات پا هالتر", "sets": 5, "reps": "8", "note": "سنگین. کمربند ببندید.", "ai_query": "Barbell back squat form" },
                  { "code": "2", "name_en": "Leg Press", "name_fa": "پرس پا ماشین", "sets": 4, "reps": "15", "note": "فاصله پاها معمولی.", "ai_query": "Leg press foot placement" },
-                 { "code": "3a", "name_en": "Bulgarian Split Squat", "name_fa": "اسکات بلغاری", "sets": 3, "reps": "10", "note": "تمرکز روی پای جلو.", "ai_query": "Bulgarian split squat form" }
+                 { "code": "3", "name_en": "Bulgarian Split Squat", "name_fa": "اسکات بلغاری", "sets": 3, "reps": "10", "note": "تمرکز روی پای جلو.", "ai_query": "Bulgarian split squat form" }
              ]
          },
          {
-             "title": "🍑 Part 3: Posterior Chain",
+             "title": "🍑 Part 3: Hamstrings & Calves Balance",
              "exercises": [
-                 { "code": "3b", "name_en": "Dumbbell RDL", "name_fa": "ددلیفت رومانیایی دمبل", "sets": 3, "reps": "12", "note": "کشش همسترینگ.", "ai_query": "Dumbbell RDL form" },
-                 { "code": "4", "name_en": "Lying Leg Curl", "name_fa": "پشت ران دستگاه خوابیده", "sets": 4, "reps": "12", "note": "کنترل در برگشت.", "ai_query": "Lying leg curl machine" },
-                 { "code": "5", "name_en": "Standing Calf Raise", "name_fa": "ساق پا ایستاده", "sets": 4, "reps": "20", "note": "مکث در بالا و پایین.", "ai_query": "Standing calf raise form" },
-                 { "code": "6", "name_en": "Thrusters", "name_fa": "تراستر", "sets": 4, "reps": "12", "note": "متابولیک کاندیشنینگ.", "ai_query": "Thrusters crossfit form" }
+                 { "code": "4a", "name_en": "Dumbbell RDL", "name_fa": "ددلیفت رومانیایی دمبل", "sets": 4, "reps": "12", "note": "کشش عمیق همسترینگ.", "ai_query": "Dumbbell RDL form" },
+                 { "code": "4b", "name_en": "Lying Leg Curl", "name_fa": "پشت ران دستگاه خوابیده", "sets": 4, "reps": "12", "note": "کنترل در برگشت.", "ai_query": "Lying leg curl machine" },
+                 { "code": "5", "name_en": "Seated Leg Curl", "name_fa": "پشت ران دستگاه نشسته", "sets": 3, "reps": "15", "note": "ایزوله کردن کامل پشت پا.", "ai_query": "Seated leg curl machine" },
+                 { "code": "6a", "name_en": "Standing Calf Raise", "name_fa": "ساق پا ایستاده", "sets": 4, "reps": "20", "note": "درگیری عضله دوقلو.", "ai_query": "Standing calf raise form" },
+                 { "code": "6b", "name_en": "Seated Calf Raise", "name_fa": "ساق پا نشسته", "sets": 3, "reps": "15", "note": "درگیری عضله نعلی (عمقی).", "ai_query": "Seated calf raise soleus" },
+                 { "code": "6c", "name_en": "Wall Tibialis Raise", "name_fa": "تیبیالیس دیواری", "sets": 3, "reps": "25", "note": "جلوگیری از درد استخوان ساق.", "ai_query": "Tibialis raise exercise" }
              ]
          },
          {
@@ -128,7 +130,7 @@
              "exercises": [
                  { "code": "7", "name_en": "Military Press", "name_fa": "پرس سرشانه نظامی (ایستاده)", "sets": 4, "reps": "8-10", "note": "هالتر از جلو.", "ai_query": "Military press form" },
                  { "code": "8a", "name_en": "Dumbbell Hip Huggers", "name_fa": "هیپ هاگرز", "sets": 3, "reps": "12", "note": "دمبل سنگین، بالا کشیدن تا پهلو.", "ai_query": "Dumbbell Hip Huggers exercise" },
-                 { "code": "8b", "name_en": "Dumbbell Y-Raise", "name_fa": "نشر Y", "sets": 3, "reps": "12", "note": "دست‌ها با زاویه ۴۵ درجه بالا.", "ai_query": "Dumbbell Y-Raise form" },
+                 { "code": "8b", "name_en": "Behind-the-Back Cable Lateral Raise", "name_fa": "نشر جانب سیم‌کش از پشت", "sets": 4, "reps": "15", "note": "کابل از پشت بدن. سازنده عرض شانه.", "ai_query": "Behind the back cable lateral raise" },
                  { "code": "9a", "name_en": "Seated Bent-Over Fly", "name_fa": "نشر خم نشسته", "sets": 4, "reps": "15", "note": "سینه چسبیده به زانو.", "ai_query": "Seated bent over fly" },
                  { "code": "9b", "name_en": "Face Pulls", "name_fa": "فیس پول", "sets": 4, "reps": "20", "note": "کشیدن طناب به سمت پیشانی.", "ai_query": "Face pulls correct form" },
                  { "code": "10", "name_en": "Barbell Shrugs", "name_fa": "شراگ هالتر", "sets": 4, "reps": "15", "note": "فقط بالا و پایین (بدون چرخش).", "ai_query": "Barbell shrugs form" }

@@ -335,3 +335,97 @@ body {
     .container { margin-top: 80px; }
     .chat-window { width: 90%; left: 5%; bottom: 90px; height: 60vh; }
 }
+
+/* --- Assessment Form Styles --- */
+.glass-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 5px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .glass-input {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.glass-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(230, 126, 34, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.glass-input option {
+    background: var(--primary);
+    color: white;
+}
+
+textarea.glass-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* --- Smart Rest Timer Widget --- */
+.rest-widget {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(44, 62, 80, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--accent);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(230, 126, 34, 0.4);
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 3000;
+}
+
+.rest-widget.show {
+    bottom: 30px;
+}
+
+.rest-time-display {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+}
+
+.rest-skip-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.rest-skip-btn:hover {
+    background: var(--accent);
+}
+
+/* --- Superset "NO REST" Alert --- */
+@keyframes superset-alert {
+    0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); border-color: #e74c3c; }
+    70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); border-color: #e74c3c; }
+    100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); border-color: #e74c3c; }
+}
+
+.ex-card.superset-next {
+    animation: superset-alert 1s infinite !important;
+    background: rgba(231, 76, 60, 0.05) !important;
+}
