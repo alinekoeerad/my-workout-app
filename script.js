@@ -423,17 +423,24 @@ const app = {
 
     toggleChat: () => document.getElementById('chatWindow').classList.toggle('open'),
     askAI: (e, query) => { e.stopPropagation(); app.toggleChat(); app.sendMessage(query); },
-    sendMessage: async (txt) => {
+sendMessage: async (txt) => {
         const input = document.getElementById('chatInput');
         const text = txt || input.value;
         if(!text) return;
         
         const body = document.getElementById('chatBody');
-        body.innerHTML += `<div class="msg user">${text}</div>`;
+        
+        // 1. نمایش پیام کاربر (با قابلیت تشخیص خودکار جهت زبان)
+        body.innerHTML += `<div class="msg user" dir="auto">${text}</div>`;
         input.value = '';
+        
+        // اسکرول نرم به پایین
+        setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
+
         const id = Date.now();
-        body.innerHTML += `<div class="msg ai" id="${id}">... در حال تحلیل ...</div>`;
-        body.scrollTop = body.scrollHeight;
+        // 2. نمایش انیمیشن در حال تایپ
+        body.innerHTML += `<div class="msg ai" id="${id}" dir="auto"><span style="color:var(--text-secondary);font-size:0.85rem;">... در حال تحلیل ...</span></div>`;
+        setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
 
         const userProfileRaw = localStorage.getItem('user_assessment');
         let profileContext = "User has not completed the assessment yet.";
@@ -456,9 +463,23 @@ const app = {
                 })
             });
             const d = await res.json();
-            document.getElementById(id).innerHTML = d.candidates?.[0]?.content?.parts?.[0]?.text.replace(/\n/g, '<br>') || "خطا در دریافت پاسخ.";
+            let rawText = d.candidates?.[0]?.content?.parts?.[0]?.text || "خطا در دریافت پاسخ.";
+            
+            // --- مفسر Markdown ساده ---
+            // تبدیل **متن** به <strong>متن</strong>
+            let formattedText = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // تبدیل *متن* به <em>متن</em>
+            formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            // تبدیل اینترها به تگ <br>
+            formattedText = formattedText.replace(/\n/g, '<br>');
+
+            document.getElementById(id).innerHTML = formattedText;
+            
+            // اسکرول نهایی بعد از لود شدن جواب کامل
+            setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
+
         } catch(e) { 
-            document.getElementById(id).innerText = "Error: لطفا بررسی کنید API Key ذخیره شده باشد."; 
+            document.getElementById(id).innerHTML = "<strong style='color:#e74c3c;'>Error:</strong> لطفا بررسی کنید API Key ذخیره شده باشد و اینترنت وصل باشد."; 
         }
     }
 };
