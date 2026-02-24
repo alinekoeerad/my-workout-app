@@ -391,19 +391,6 @@ body {
 @keyframes zoomIn { from { opacity: 0; transform: translate(-50%, -45%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- Mobile Fixes --- */
-@media screen and (max-width: 450px) {
-    .nav-title { display: none; }
-    .sticky-nav { top: 10px; left: 10px; right: 10px; height: 55px; padding: 0 10px; }
-    .nav-actions { width: 100%; justify-content: space-between; gap: 0; }
-    .days-group { gap: 4px; flex: 1; justify-content: space-evenly; }
-    .nav-btn { font-size: 0.75rem; padding: 6px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); }
-    .nav-btn.active { background: var(--accent); color: white; }
-    .nav-island { margin-left: 5px; padding: 2px 6px; }
-    .icon-btn { font-size: 1rem; width: 30px; height: 30px; }
-    .container { margin-top: 80px; }
-    .chat-window { width: 90%; left: 5%; bottom: 90px; height: 60vh; }
-}
 
 /* --- Assessment Form Styles --- */
 .glass-input {
@@ -497,4 +484,38 @@ textarea.glass-input {
 .ex-card.superset-next {
     animation: superset-alert 1s infinite !important;
     background: rgba(231, 76, 60, 0.05) !important;
+}
+
+
+/* --- Mobile Fixes --- */
+@media screen and (max-width: 450px) {
+    .nav-title { display: none; }
+    .sticky-nav { top: 10px; left: 10px; right: 10px; height: 55px; padding: 0 10px; }
+    .nav-actions { width: 100%; justify-content: space-between; gap: 0; }
+    
+    /* تبدیل گروه دکمه‌ها به یک منوی اسکرولی نرم */
+    .days-group { 
+        gap: 6px; 
+        flex: 1; 
+        justify-content: flex-start; 
+        overflow-x: auto; /* فعال کردن اسکرول افقی */
+        white-space: nowrap; /* جلوگیری از شکستن متن به خط بعد */
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch; /* اسکرول نرم در iOS */
+    }
+    .days-group::-webkit-scrollbar { display: none; } /* مخفی کردن اسکرول‌بار زشت */
+    
+    .nav-btn { 
+        font-size: 0.8rem; 
+        padding: 6px 14px; 
+        background: transparent; 
+        border: 1px solid rgba(255,255,255,0.2);
+        flex-shrink: 0; /* کلید اصلی: جلوگیری از مچاله شدن دکمه‌ها */
+    }
+    .nav-btn.active { background: var(--accent); color: white; }
+    
+    .nav-island { margin-left: 5px; padding: 2px 6px; flex-shrink: 0; }
+    .icon-btn { font-size: 1rem; width: 30px; height: 30px; }
+    .container { margin-top: 80px; }
+    .chat-window { width: 90%; left: 5%; bottom: 90px; height: 60vh; }
 }
