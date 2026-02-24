@@ -1,0 +1,40 @@
+<div class="auth-container">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="margin: 0; font-size: 2.5rem;">🦍</h1>
+        <h2 style="color: var(--text); margin-top: 10px;">Smart Coach</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">ورود به سیستم مدیریت تمرینات</p>
+    </div>
+
+    <div class="auth-tabs">
+        <button id="tab-login" class="tab-btn active" onclick="app.toggleAuth('login')">ورود</button>
+        <button id="tab-signup" class="tab-btn" onclick="app.toggleAuth('signup')">ثبت‌نام</button>
+    </div>
+
+    <form id="form-login" onsubmit="app.login(event)" style="display: block;">
+        <div style="text-align: right; margin-bottom: 15px;">
+            <label class="ex-name-fa" style="margin-bottom: 5px;">شماره موبایل:</label>
+            <input type="tel" class="glass-input" placeholder="09123456789" required>
+        </div>
+        <div style="text-align: right; margin-bottom: 25px;">
+            <label class="ex-name-fa" style="margin-bottom: 5px;">رمز عبور:</label>
+            <input type="password" class="glass-input" placeholder="********" required>
+        </div>
+        <button type="submit" class="save-btn">🚀 ورود به حساب</button>
+    </form>
+
+    <form id="form-signup" onsubmit="app.signup(event)" style="display: none;">
+        <div style="text-align: right; margin-bottom: 15px;">
+            <label class="ex-name-fa" style="margin-bottom: 5px;">نام و نام خانوادگی:</label>
+            <input type="text" class="glass-input" placeholder="مثال: علی نکویی" required>
+        </div>
+        <div style="text-align: right; margin-bottom: 15px;">
+            <label class="ex-name-fa" style="margin-bottom: 5px;">شماره موبایل:</label>
+            <input type="tel" class="glass-input" placeholder="09123456789" required>
+        </div>
+        <div style="text-align: right; margin-bottom: 25px;">
+            <label class="ex-name-fa" style="margin-bottom: 5px;">رمز عبور:</label>
+            <input type="password" class="glass-input" placeholder="حداقل ۶ کاراکتر" required>
+        </div>
+        <button type="submit" class="save-btn" style="background: var(--accent);">📝 ایجاد حساب کاربری</button>
+    </form>
+</div>

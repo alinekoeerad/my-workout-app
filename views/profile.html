@@ -1,0 +1,56 @@
+<div class="day-section active">
+    
+    <div id="profile-empty-state" class="auth-container" style="display: none;">
+        <h2 style="color:var(--accent);">پروفایل شما هنوز تکمیل نشده!</h2>
+        <p style="color:var(--text-secondary);">برای مشاهده اطلاعات بدنی و رکوردهایتان، ابتدا فرم ارزیابی را پر کنید.</p>
+        <button onclick="app.loadView('assessment')" class="btn-primary">📋 رفتن به فرم ارزیابی</button>
+    </div>
+
+    <div id="profile-content">
+        <div class="day-header"><h2>👤 پروفایل فیزیکی من</h2></div>
+        
+        <div class="grid-container">
+            
+            <div class="ex-card" style="cursor:default; transform:none; filter:none; opacity:1;">
+                <h3 class="profile-card-header">📊 اطلاعات پایه</h3>
+                <div style="margin-top:10px;">
+                    <div class="profile-row"><span style="color:var(--text-secondary);">سن:</span> <strong id="val-age">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">وزن:</span> <strong id="val-weight">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">قد:</span> <strong id="val-height">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">وضعیت تغذیه:</span> <strong id="val-diet">-</strong></div>
+                </div>
+            </div>
+
+            <div class="ex-card" style="cursor:default; transform:none; filter:none; opacity:1;">
+                <h3 class="profile-card-header">💪 رکوردهای قدرت</h3>
+                <div style="margin-top:10px;">
+                    <div class="profile-row"><span style="color:var(--text-secondary);">اسکات:</span> <strong id="val-squat">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">ددلیفت:</span> <strong id="val-deadlift">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">پرس سینه:</span> <strong id="val-bench">-</strong></div>
+                    <hr style="border: 0; border-top: 1px dashed var(--glass-border); margin: 10px 0;">
+                    <div class="profile-row"><span style="color:var(--text-secondary);">بارفیکس:</span> <strong id="val-pullups">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">شنا سوئدی:</span> <strong id="val-pushups">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">پلانک:</span> <strong id="val-plank">-</strong></div>
+                </div>
+            </div>
+
+            <div class="ex-card" style="cursor:default; transform:none; filter:none; opacity:1;">
+                <h3 class="profile-card-header">🩺 ریکاوری و مفاصل</h3>
+                <div style="margin-top:10px;">
+                    <div class="profile-row"><span style="color:var(--text-secondary);">خواب مفید:</span> <strong id="val-sleep">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">عضله دیررشد:</span> <strong id="val-stubborn">-</strong></div>
+                    <div class="profile-row"><span style="color:var(--text-secondary);">موبیلیتی همسترینگ:</span> <strong id="val-hamstring">-</strong></div>
+                    <div style="display:flex; flex-direction:column; margin-top:8px;">
+                        <span style="color:var(--text-secondary);">سابقه آسیب یا درد:</span> 
+                        <strong id="val-injury" style="color:#e74c3c; font-size:0.9rem;">ندارد</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <button onclick="app.loadView('assessment')" class="btn-primary">
+            ✏️ ویرایش و آپدیت رکوردها
+        </button>
+    </div>
+</div>

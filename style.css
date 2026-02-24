@@ -526,3 +526,97 @@ textarea.glass-input {
     .container { margin-top: 80px; }
     .chat-window { width: 90%; left: 5%; bottom: 90px; height: 60vh; }
 }
+
+/* --- 10. Authentication & Profile Custom Styles --- */
+
+/* Container for Auth and Profile forms */
+.auth-container {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 30px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 25px;
+    text-align: center;
+}
+
+/* Auth Tabs (Login/Signup toggle) */
+.auth-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    margin-bottom: 25px;
+    padding: 5px;
+}
+[data-theme="dark"] .auth-tabs { background: rgba(255, 255, 255, 0.05); }
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+/* Profile specific adjustments */
+.profile-card-header {
+    color: var(--accent);
+    margin-top: 0;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 2.2;
+}
+
+/* Logout Button */
+.btn-logout {
+    margin-top: 15px;
+    background: #e74c3c !important;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+.btn-logout:hover {
+    background: #c0392b !important;
+    transform: translateY(-2px);
+}
+
+/* Primary Action Button (Update/Edit) */
+.btn-primary {
+    background: var(--accent) !important;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    margin-top: 20px;
+}

@@ -1,0 +1,139 @@
+<div class="day-section active">
+    
+    <div class="day-header">
+        <h2>📋 فرم ارزیابی فیزیکی</h2>
+        <p style="color:var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">
+            این اطلاعات به مربی هوش مصنوعی کمک می‌کند تا برنامه‌ها و مشاوره‌ها را دقیقاً بر اساس بیومکانیک بدن شما شخصی‌سازی کند.
+        </p>
+    </div>
+
+    <form id="assessmentForm" onsubmit="app.submitAssessment(event)">
+        
+        <div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; filter:none; opacity:1;">
+            <h3 style="color:var(--accent); margin-top:0; border-bottom:1px solid var(--glass-border); padding-bottom:10px;">👤 اطلاعات فیزیکی پایه</h3>
+            
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">سن شما چقدر است؟ (سال)</label>
+                <input type="number" name="age" class="glass-input" placeholder="مثال: 25" required>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">وزن فعلی شما؟ (کیلوگرم)</label>
+                <input type="number" name="weight" class="glass-input" placeholder="مثال: 83" required>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">قد شما؟ (سانتی‌متر)</label>
+                <input type="number" name="height" class="glass-input" placeholder="مثال: 178" required>
+            </div>
+        </div>
+
+        <div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; filter:none; opacity:1;">
+            <h3 style="color:var(--accent); margin-top:0; border-bottom:1px solid var(--glass-border); padding-bottom:10px;">🏋️‍♂️ قدرت بنیادی (وزن بدن)</h3>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom: 10px;">رکوردهای خود را تا مرز ناتوانی و با فرم کاملاً صحیح وارد کنید.</p>
+            
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">حداکثر تعداد بارفیکس استاندارد؟</label>
+                <input type="number" name="max_pullups" class="glass-input" placeholder="تکرار">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">حداکثر تعداد شنا سوئدی؟</label>
+                <input type="number" name="max_pushups" class="glass-input" placeholder="تکرار">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">حداکثر تعداد پارالل (Dips)؟</label>
+                <input type="number" name="max_dips" class="glass-input" placeholder="تکرار">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">حداکثر زمان نگه داشتن پلانک؟ (ثانیه)</label>
+                <input type="number" name="max_plank_time" class="glass-input" placeholder="مثال: 60">
+            </div>
+        </div>
+
+        <div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; filter:none; opacity:1;">
+            <h3 style="color:var(--accent); margin-top:0; border-bottom:1px solid var(--glass-border); padding-bottom:10px;">🔥 رکوردهای قدرت مطلق</h3>
+            
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">رکورد اسکات هالتر؟ (kg)</label>
+                <input type="number" name="record_squat" class="glass-input" placeholder="کیلوگرم">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">رکورد ددلیفت؟ (kg)</label>
+                <input type="number" name="record_deadlift" class="glass-input" placeholder="کیلوگرم">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">رکورد پرس سینه هالتر؟ (kg)</label>
+                <input type="number" name="record_bench" class="glass-input" placeholder="کیلوگرم">
+            </div>
+        </div>
+
+        <div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; filter:none; opacity:1;">
+            <h3 style="color:var(--accent); margin-top:0; border-bottom:1px solid var(--glass-border); padding-bottom:10px;">🤸‍♂️ موبیلیتی و مفاصل</h3>
+            
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">تست شانه (Wall Slide): آیا دست‌ها کامل صاف می‌شوند؟</label>
+                <select name="wall_slide_test" class="glass-input">
+                    <option value="">انتخاب کنید...</option>
+                    <option value="بله، به راحتی">بله، به راحتی</option>
+                    <option value="خیر، محدودیت دارم">خیر، محدودیت دارم</option>
+                </select>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">تست همسترینگ (Toe Touch): دستتان تا کجا به زمین می‌رسد؟</label>
+                <select name="hamstring_toe_touch" class="glass-input">
+                    <option value="">انتخاب کنید...</option>
+                    <option value="palm">لمس زمین با کف دست</option>
+                    <option value="fingers">لمس زمین با نوک انگشتان</option>
+                    <option value="ankle">تا مچ پا</option>
+                    <option value="shin">فقط تا وسط ساق</option>
+                </select>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">تست اسکات عمیق: آیا پاشنه‌ها روی زمین می‌ماند؟</label>
+                <select name="deep_squat_test" class="glass-input">
+                    <option value="">انتخاب کنید...</option>
+                    <option value="بله، تعادل کامل دارم">بله، تعادل کامل دارم</option>
+                    <option value="خیر، پاشنه‌ام بلند می‌شود">خیر، پاشنه‌ام بلند می‌شود</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="ex-card" style="margin-bottom:20px; cursor:default; transform:none; filter:none; opacity:1;">
+            <h3 style="color:var(--accent); margin-top:0; border-bottom:1px solid var(--glass-border); padding-bottom:10px;">🩺 ریکاوری و سبک زندگی</h3>
+            
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">آسیب‌دیدگی یا درد مزمن (شانه، زانو، کمر)؟</label>
+                <textarea name="injury_history" class="glass-input" placeholder="اگر موردی هست، دقیق توضیح دهید..."></textarea>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">کدام عضله دیرتر رشد می‌کند یا پمپاژ می‌شود؟</label>
+                <select name="stubborn_muscle" class="glass-input">
+                    <option value="">انتخاب کنید...</option>
+                    <option value="chest">سینه</option>
+                    <option value="back">زیربغل/پشت</option>
+                    <option value="legs">پاها</option>
+                    <option value="arms">دست‌ها</option>
+                    <option value="shoulders">سرشانه</option>
+                    <option value="calves">ساق پا</option>
+                    <option value="none">هیچکدام</option>
+                </select>
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">میانگین خواب مفید در شبانه‌روز؟ (ساعت)</label>
+                <input type="number" name="avg_sleep" class="glass-input" placeholder="مثال: 7">
+            </div>
+            <div style="margin-top:15px; text-align:right;">
+                <label style="font-weight:bold; font-size:0.95rem; display:block;">وضعیت فعلی تغذیه شما چیست؟</label>
+                <select name="diet_status" class="glass-input">
+                    <option value="">انتخاب کنید...</option>
+                    <option value="surplus">کالری مازاد (دوره حجم)</option>
+                    <option value="maintenance">تثبیت وزن (نگهداری)</option>
+                    <option value="deficit">کالری نقصان (دوره کات/چربی‌سوزی)</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" id="assessment-submit-btn" class="save-btn" style="margin-top:10px; padding:15px; font-size:1.1rem; border-radius:15px; background:var(--accent); width: 100%;">
+            💾 ثبت و ذخیره پروفایل بدنی
+        </button>
+        
+    </form>
+</div>
