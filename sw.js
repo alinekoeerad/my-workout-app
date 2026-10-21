@@ -3,7 +3,7 @@
  * Enables 100% offline functionality on GitHub Pages and smartphones
  */
 
-const CACHE_NAME = 'smart-coach-v2.1';
+const CACHE_NAME = 'smart-coach-v3.1';
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -11,10 +11,15 @@ const STATIC_ASSETS = [
     './script.js',
     './manifest.json',
     './data/workouts.json',
+    './data/arnold_hybrid.json',
+    './data/pro_bodypart_split.json',
+    './data/sabaei_academy.json',
+    './data/programs.json',
     './views/login.html',
     './views/workout.html',
     './views/profile.html',
     './views/assessment.html',
+    './views/programs.html',
     './icons/icon-192.png',
     './icons/icon-512.png',
     './icons/apple-touch-icon.png'

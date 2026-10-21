@@ -1,0 +1,121 @@
+{
+  "program_info": {
+    "name": "Arnold Hybrid Pro - Shoulder & Back Specialization",
+    "version": "5.1 (Option 3)",
+    "author": "Master Coach",
+    "description": "Tailored for Ali (83kg, 38kg Muscle). High priority on Lats, 3D Delts & Forearms. Squat-free & Left-Shoulder friendly."
+  },
+  "days": {
+    "day1": {
+      "title": "Day 1: Chest & Back (Antagonist Mass)",
+      "parts": [
+        {
+          "title": "🏋️‍♂️ Part 1: Favorite Chest & Lat Activation",
+          "exercises": [
+            { "code": "1", "name_en": "Barbell Flat Bench Press", "name_fa": "پرس سینه هالتر تخت", "sets": 4, "reps": "6-8", "rest": 180, "note": "حرکت محبوبت! سنگین و قدرتی؛ آرنجها زاویه ۴۵ درجه برای سلامت شانه چپ.", "ai_query": "Barbell bench press form" },
+            { "code": "2", "name_en": "Single-Arm Cable Lat Prayer", "name_fa": "پلاور سیمکش تکدست (ایزوله لت)", "sets": 3, "reps": "12-15", "rest": 60, "note": "قبل از حرکات سنگین زیربغل، برای فعالسازی و ارتباط ذهنی با لت.", "ai_query": "Single arm cable lat prayer" },
+            { "code": "3", "name_en": "Neutral-Grip Lat Pulldown", "name_fa": "زیربغل سیمکش دست جمع (مچ موازی)", "sets": 4, "reps": "8-10", "rest": 120, "note": "با بند لیفت بزنید؛ آرنج را به سمت پایین و لگن بکشید نه عقب.", "ai_query": "Neutral grip lat pulldown" }
+          ]
+        },
+        {
+          "title": "🦅 Part 2: Back Thickness & Upper Chest",
+          "exercises": [
+            { "code": "4", "name_en": "Chest-Supported DB Row", "name_fa": "زیربغل دمبل جفت روی میز شیبدار", "sets": 4, "reps": "10-12", "rest": 90, "note": "سینه چسبیده به میز؛ تمرکز ۱۰۰٪ روی عقب کشیدن کتفها.", "ai_query": "Chest supported dumbbell row" },
+            { "code": "5", "name_en": "Incline Dumbbell Press (Neutral/45°)", "name_fa": "پرس بالا سینه دمبل (زاویه ۳۰ درجه)", "sets": 3, "reps": "8-10", "rest": 120, "note": "مچ دست کمی چرخیده به داخل تا هیچ فشاری به شانه چپ نیاید.", "ai_query": "Incline dumbbell press shoulder friendly" },
+            { "code": "6", "name_en": "Seated Cable Row (Wide Grip)", "name_fa": "زیربغل قایقی دسته باز", "sets": 3, "reps": "10-12", "rest": 90, "note": "مکث ۱ ثانیهای در انقباض برای پر کردن بالای پشت.", "ai_query": "Wide grip seated cable row" },
+            { "code": "7", "name_en": "Pec Deck Machine", "name_fa": "پروانه دستگاه (پک دک)", "sets": 3, "reps": "12-15", "rest": 60, "note": "دامنه حرکتی کنترلشده؛ بیش از حد دستها را عقب نبرید.", "ai_query": "Pec deck machine" }
+          ]
+        }
+      ]
+    },
+    "day2": {
+      "title": "Day 2: Shoulders, Arms & Forearms (Weak Point Smash)",
+      "parts": [
+        {
+          "title": "💣 Part 1: 3D Delts (Joint-Friendly)",
+          "exercises": [
+            { "code": "1", "name_en": "High-Incline Seated DB Press", "name_fa": "پرس سرشانه دمبل نشسته (زاویه ۷۵ درجه)", "sets": 4, "reps": "8-10", "rest": 120, "note": "تکیهگاه کاملاً عمود نباشد (کمی شیبدار) تا شانه چپ در امنترین حالت باشد.", "ai_query": "High incline dumbbell shoulder press" },
+            { "code": "2", "name_en": "Behind-the-Back Cable Lateral Raise", "name_fa": "نشر جانب سیمکش از پشت (تک دست)", "sets": 4, "reps": "12-15", "rest": 60, "note": "مهمترین حرکت برای عرض شانه؛ قرقره در ارتفاع مچ دست.", "ai_query": "Behind the back cable lateral raise" },
+            { "code": "3", "name_en": "Chest-Supported DB Lateral Raise", "name_fa": "نشر جانب دمبل روی میز شیبدار", "sets": 3, "reps": "12-15", "rest": 60, "note": "سینه را به میز شیبدار تکیه دهید و نشر بزنید؛ تقلب صفر و فشار خالص!", "ai_query": "Chest supported lateral raise" },
+            { "code": "4", "name_en": "Reverse Pec Deck", "name_fa": "فلای معکوس دستگاه (پشت شانه)", "sets": 4, "reps": "15", "rest": 60, "note": "اصلاح فرم شانه ناشی از کار با کامپیوتر و گرد کردن شانه از نمای بغل.", "ai_query": "Reverse pec deck form" }
+          ]
+        },
+        {
+          "title": "💪 Part 2: Biceps, Triceps & Heavy Forearms",
+          "exercises": [
+            { "code": "5a", "name_en": "EZ-Bar Preacher Curl", "name_fa": "جلو بازو لاری هالتر خم", "sets": 3, "reps": "8-10", "rest": 0, "note": "سوپرست با حرکت بعد.", "ai_query": "EZ bar preacher curl" },
+            { "code": "5b", "name_en": "Rope Tricep Pushdown", "name_fa": "پشت بازو سیمکش طنابی", "sets": 3, "reps": "10-12", "rest": 90, "note": "پشت بازویت خوب رشد میکند، همین ۳ ست باکیفیت کافیست.", "ai_query": "Rope tricep pushdown" },
+            { "code": "6a", "name_en": "Reverse EZ-Bar Curl", "name_fa": "جلو بازو هالتر مچ برعکس (ایستاده)", "sets": 4, "reps": "10-12", "rest": 0, "note": "حرکت طلایی برای بخش بیرونی ساعد (Brachioradialis).", "ai_query": "Reverse barbell curl" },
+            { "code": "6b", "name_en": "Cable Wrist Curl (Seated)", "name_fa": "مچ سیمکش نشسته روی ران", "sets": 4, "reps": "15-20", "rest": 60, "note": "سیمکش تنش دائمی روی ساعد ایجاد میکند؛ تا سوزش کامل ادامه دهید.", "ai_query": "Seated cable wrist curl" }
+          ]
+        }
+      ]
+    },
+    "day3": {
+      "title": "Day 3: Legs (Squat-Free) & Core",
+      "parts": [
+        {
+          "title": "🦵 Part 1: Pain-Free Heavy Legs",
+          "exercises": [
+            { "code": "1", "name_en": "Seated Leg Curl", "name_fa": "پشت ران دستگاه نشسته", "sets": 4, "reps": "10-12", "rest": 90, "note": "گرم کردن زانو و حجم همسترینگ در ابتدای تمرین.", "ai_query": "Seated leg curl" },
+            { "code": "2", "name_en": "Leg Press (Deep & Heavy)", "name_fa": "پرس پا ماشین سنگین", "sets": 4, "reps": "8-10", "rest": 150, "note": "جایگزین اسکات؛ بدون فشار به کمر، پاها را تا جای ممکن جمع کنید.", "ai_query": "Heavy leg press form" },
+            { "code": "3", "name_en": "Hack Squat Machine", "name_fa": "هاک اسکات دستگاه", "sets": 3, "reps": "10-12", "rest": 120, "note": "تکیه کامل کمر به تشک؛ تمرکز روی چهارسر ران.", "ai_query": "Hack squat machine" },
+            { "code": "4", "name_en": "Dumbbell Romanian Deadlift", "name_fa": "ددلیفت رومانیایی با دمبل", "sets": 3, "reps": "10-12", "rest": 120, "note": "کشش عمیق همسترینگ و باسن.", "ai_query": "Dumbbell RDL" }
+          ]
+        },
+        {
+          "title": "⛏️ Part 2: Isolation, Calves & Abs",
+          "exercises": [
+            { "code": "5", "name_en": "Leg Extension", "name_fa": "جلو ران دستگاه", "sets": 3, "reps": "12-15", "rest": 60, "note": "مکث ۱ ثانیهای در بالا.", "ai_query": "Leg extension" },
+            { "code": "6", "name_en": "Standing Calf Raise", "name_fa": "ساق پا ایستاده", "sets": 4, "reps": "12-15", "rest": 60, "note": "۲ ثانیه مکث در پایینترین نقطه.", "ai_query": "Standing calf raise" },
+            { "code": "7", "name_en": "Kneeling Cable Crunch", "name_fa": "کرانچ سیمکش", "sets": 4, "reps": "15", "rest": 60, "note": "برای تفکیک بیشتر سیکسپک در درصد چربی پایین تو.", "ai_query": "Kneeling cable crunch" }
+          ]
+        }
+      ]
+    },
+    "day4": {
+      "title": "Day 4: Upper Body (Back & Shoulder Focus)",
+      "parts": [
+        {
+          "title": "🦅 Part 1: Lats & Upper Back Priority",
+          "exercises": [
+            { "code": "1", "name_en": "Single-Arm Kneeling Lat Pulldown", "name_fa": "زیربغل سیمکش تکدست (روی زانو)", "sets": 4, "reps": "10-12", "rest": 90, "note": "بهترین حرکت دنیا برای حس کردن عضله زیربغل؛ آرنج را به پهلو بدوزید.", "ai_query": "Single arm kneeling lat pulldown" },
+            { "code": "2", "name_en": "T-Bar Row (Chest Supported)", "name_fa": "زیربغل تیبار (سینه تکیهدار)", "sets": 4, "reps": "8-10", "rest": 120, "note": "وزنه سنگین با استفاده از بند لیفت.", "ai_query": "Chest supported T bar row" },
+            { "code": "3", "name_en": "Incline Machine Chest Press", "name_fa": "پرس بالا سینه دستگاه", "sets": 3, "reps": "10-12", "rest": 90, "note": "حفظ حجم سینه با دستگاه در مسیر حرکتی ایمن.", "ai_query": "Incline machine chest press" }
+          ]
+        },
+        {
+          "title": "💣 Part 2: Delts & Traps",
+          "exercises": [
+            { "code": "4", "name_en": "Seated DB Lateral Raise", "name_fa": "نشر جانب دمبل نشسته", "sets": 4, "reps": "12-15", "rest": 60, "note": "ست آخر را به صورت دراپست (کم کردن وزنه در ۳ مرحله) بزنید.", "ai_query": "Seated lateral raise drop set" },
+            { "code": "5", "name_en": "Face Pulls (Kneeling or Seated)", "name_fa": "فیس پول سیمکش نشسته", "sets": 4, "reps": "15-20", "rest": 60, "note": "چرخش خارجی شانه در انتهای حرکت برای تقویت روتاتور کاف شانه چپ.", "ai_query": "Seated face pulls form" },
+            { "code": "6", "name_en": "Dumbbell Shrugs", "name_fa": "شراگ دمبل", "sets": 3, "reps": "12-15", "rest": 60, "note": "۲ ثانیه مکث در بالای حرکت.", "ai_query": "Dumbbell shrugs" }
+          ]
+        }
+      ]
+    },
+    "day5": {
+      "title": "Day 5: Legs (Light), Forearms & Arms",
+      "parts": [
+        {
+          "title": "✊ Part 1: Forearms & Biceps (Fresh Energy)",
+          "exercises": [
+            { "code": "1a", "name_en": "Cross-Body Hammer Curl", "name_fa": "جلو بازو چکشی کراس", "sets": 4, "reps": "10-12", "rest": 0, "note": "شروع تمرین با بازو و ساعد در اوج انرژی!", "ai_query": "Cross body hammer curl" },
+            { "code": "1b", "name_en": "Behind-the-Back BB Wrist Curl", "name_fa": "مچ هالتر ایستاده از پشت", "sets": 4, "reps": "15-20", "rest": 60, "note": "اجازه دهید هالتر تا نوک انگشتان پایین برود و سپس جمع کنید.", "ai_query": "Behind the back wrist curl" },
+            { "code": "2", "name_en": "Incline Dumbbell Curl", "name_fa": "جلو بازو دمبل میز شیبدار", "sets": 3, "reps": "10-12", "rest": 60, "note": "کشش کامل جلوبازو.", "ai_query": "Incline dumbbell curl" },
+            { "code": "3", "name_en": "Overhead Cable Tricep Extension", "name_fa": "پشت بازو سیمکش از پشت سر", "sets": 3, "reps": "12-15", "rest": 60, "note": "کشش سر بلند پشت بازو.", "ai_query": "Overhead cable tricep extension" }
+          ]
+        },
+        {
+          "title": "🍑 Part 2: Legs Detail & Core",
+          "exercises": [
+            { "code": "4", "name_en": "Bulgarian Split Squat / Lunges", "name_fa": "اسکات بلغاری یا لانگز دمبل", "sets": 3, "reps": "10-12", "rest": 90, "note": "برای تقارن پاها و فرم باسن.", "ai_query": "Bulgarian split squat" },
+            { "code": "5", "name_en": "Lying Leg Curl", "name_fa": "پشت ران دستگاه خوابیده", "sets": 3, "reps": "12-15", "rest": 60, "note": "کنترل کامل در برگشت.", "ai_query": "Lying leg curl" },
+            { "code": "6", "name_en": "Seated Calf Raise", "name_fa": "ساق پا نشسته", "sets": 4, "reps": "15-20", "rest": 60, "note": "درگیری عضله نعلی ساق.", "ai_query": "Seated calf raise" },
+            { "code": "7", "name_en": "Hanging Leg Raise", "name_fa": "زیرشکم خلبانی", "sets": 3, "reps": "15", "rest": 60, "note": "کنترل شده و بدون تاب خوردن.", "ai_query": "Hanging leg raise" }
+          ]
+        }
+      ]
+    }
+  }
+}

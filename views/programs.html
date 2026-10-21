@@ -1,0 +1,33 @@
+<div class="day-section active">
+    <div class="day-headline">
+        <div>
+            <h1 style="display:flex; align-items:center; gap:8px;">
+                <span style="color:var(--accent);">🏋️</span> انتخاب برنامه تمرینی
+            </h1>
+            <p style="color:var(--text-secondary); font-size:0.86rem; margin:6px 0 0 0;">
+                برنامه متناسب با اولویت‌های بدنی، نقاط ضعف و شرایط مفاصل خود را انتخاب کنید.
+            </p>
+        </div>
+    </div>
+
+    <!-- Active Program Quick Indicator -->
+    <div id="active-program-banner" class="active-program-banner">
+        <div class="banner-content">
+            <span class="banner-badge">برنامه فعال شما</span>
+            <h2 id="active-program-banner-name" class="banner-title">—</h2>
+            <p id="active-program-banner-desc" class="banner-subtitle">—</p>
+        </div>
+        <button type="button" class="btn-goto-workout" onclick="app.navigateTo('workout')">
+            ورود به تمرین امروز ↵
+        </button>
+    </div>
+
+    <div class="programs-list-title">برنامه‌های در دسترس:</div>
+
+    <!-- Programs Grid / List -->
+    <div id="programs-list-container" class="programs-grid">
+        <div style="text-align:center; padding:30px; color:var(--text-secondary); font-size:0.9rem;">
+            در حال بارگذاری لیست برنامه‌ها...
+        </div>
+    </div>
+</div>

@@ -3,9 +3,97 @@
  * Pure Architectural Logic, Tactile Tiles, Weight Tracker, Haptics & Service Worker
  */
 
+// --- PROGRAMS REGISTRY ---
+const PROGRAMS_CATALOG = [
+    {
+        id: "arnold_hybrid",
+        name: "Arnold Hybrid Pro - Shoulder & Back Specialization",
+        name_fa: "آرنولد هایبرید پرو — تمرکز تخصصی سرشانه، زیربغل و ساعد",
+        version: "5.1 (Option 3)",
+        author: "Master Coach",
+        tagline: "اولویت بالا روی عضلات لت، سرشانه ۳ بعدی و ساعد، بدون اسکات و سازگار با شانه چپ",
+        description: "طراحی شده به صورت اختصاصی با اولویت حداکثری بر پهنای زیربغل (Lats)، گردی ۳D سرشانه و ضخامت ساعدها. کاملاً بدون اسکات آزاد و با زوایای بیومکانیکی امن برای مفصل شانه چپ.",
+        target: "وزن ۸۳ کیلوگرم، ۳۸ کیلو عضلات اسکلتی، بدون اسکات، ایمن برای شانه چپ",
+        daysCount: 5,
+        tags: ["بدون اسکات", "ایمن برای شانه چپ", "تمرکز روی لت و سرشانه", "سوپرست ساعد", "۵ روز در هفته"],
+        icon: "⚡",
+        file: "arnold_hybrid.json",
+        daysSummary: [
+            { day: "day1", title: "روز ۱: سینه و زیربغل (حجم آنتاگونیست)" },
+            { day: "day2", title: "روز ۲: سرشانه، بازو و ساعد سنگین (کوبیدن نقاط ضعف)" },
+            { day: "day3", title: "روز ۳: پاها (بدون اسکات) و عضلات شکم" },
+            { day: "day4", title: "روز ۴: بالاتنه (تمرکز ویژه لت و سرشانه)" },
+            { day: "day5", title: "روز ۵: پا (سبک)، ساعدها و بازو" }
+        ]
+    },
+    {
+        id: "pro_bodypart_split",
+        name: "Pro 5-Day Body Part Split (Weak-Point Boosted)",
+        name_fa: "اسپلیت تفکیکی ۵ روزه حرفه‌ای — تقویت مضاعف نقاط ضعف",
+        version: "5.2 (Option 4)",
+        author: "Master Coach",
+        tagline: "اسپلیت کلاسیک یک عضله در روز با فرکانس مضاعف برای دلتوئید، لت و ساعد",
+        description: "تمرکز خالص روی هر گروه عضلانی در روزهای مجزا (Chest, Back, Legs, Shoulders, Arms) به همراه لمس دوباره و فرکانس مضاعف در طول هفته برای سرشانه جانبی، زیربغل و ساعد. کاملاً ایمن برای شانه و بدون اسکات.",
+        target: "تفکیک کامل عضلانی، حجم حداکثری موضعی، بدون اسکات، ایمن برای شانه",
+        daysCount: 5,
+        tags: ["اسپلیت کلاسیک", "فرکانس مضاعف نقاط ضعف", "بدون اسکات", "ایمن برای شانه", "۵ روز در هفته"],
+        icon: "🦅",
+        file: "pro_bodypart_split.json",
+        daysSummary: [
+            { day: "day1", title: "روز ۱: سینه + لمس سرشانه جانبی و شکم" },
+            { day: "day2", title: "روز ۲: زیربغل (پهنا و ضخامت) + ساعد" },
+            { day: "day3", title: "روز ۳: پاها (حجم کامل و بدون اسکات)" },
+            { day: "day4", title: "روز ۴: سرشانه ۳ بعدی، کول و شکم" },
+            { day: "day5", title: "روز ۵: بازو، ساعد + پمپاژ مجدد زیربغل" }
+        ]
+    },
+    {
+        id: "workouts",
+        name: "Pro Biomechanical Hypertrophy (UL/PPL)",
+        name_fa: "هایپرتروفی بیومکانیکال ۵ روزه (ترکیب Upper/Lower و Push/Pull/Legs)",
+        version: "5.0",
+        author: "Master Coach",
+        tagline: "برنامه علمی بر پایه بیومکانیک، هایپرتروفی در حالت کشش و کنترل RIR",
+        description: "برنامه علمی ۵ روزه بر اساس توالی بهینه حرکات، هایپرتروفی با میانجی کشش عضلانی (Stretch-mediated hypertrophy) و کنترل دقیق فشار با سیستم RIR.",
+        target: "حجم عضلانی متوازن، هایپرتروفی مبتنی بر شواهد علمی",
+        daysCount: 5,
+        tags: ["بیومکانیکال", "علمی", "Upper/Lower + PPL", "کنترل RIR", "۵ روز در هفته"],
+        icon: "🔬",
+        file: "workouts.json",
+        daysSummary: [
+            { day: "day1", title: "روز ۱: بالاتنه (حجم و تراکم)" },
+            { day: "day2", title: "روز ۲: پایین‌تنه (چهارسر و میان‌تنه)" },
+            { day: "day3", title: "روز ۳: هل دادنی (سینه، دلتوئید و پشت‌بازو)" },
+            { day: "day4", title: "روز ۴: کشیدنی (پشت، دلتوئید خلفی و جلوبازو)" },
+            { day: "day5", title: "روز ۵: پایین‌تنه و میان‌تنه (همسترینگ و سرینی)" }
+        ]
+    },
+    {
+        id: "sabaei_academy",
+        name: "Alireza Sabaei Academy - Handwrtten Program (Corrected)",
+        name_fa: "برنامه آکادمی علیرضا سباعی (دست‌نویس مربی)",
+        version: "1.1",
+        author: "Alireza Sabaei",
+        tagline: "برنامه دست‌نویس باشگاهی با تمرکز سه‌روزه تفکیکی، شکم، سینه، پا، پشت بازو و جلوبازو",
+        description: "استخراج و تصحیح‌شده از برگه برنامه دست‌نویس مربی علیرضا سباعی. تقسیم‌بندی ۳ روزه با حجم بالا و سوپرست‌های کاربردی برای بالاتنه، پایین‌تنه و میان‌تنه.",
+        target: "تمرین سنتی ۳ جلسه در هفته، تفکیک کامل با سوپرست‌های دستگاه و دمبل",
+        daysCount: 3,
+        tags: ["برنامه دست‌نویس مربی", "۳ روز در هفته", "سوپرست‌های کاربردی", "شکم و پهلو", "آکادمی سباعی"],
+        icon: "📝",
+        file: "sabaei_academy.json",
+        daysSummary: [
+            { day: "day1", title: "جلسه اول: شکم، سینه و سرشانه (۱۴ حرکت)" },
+            { day: "day2", title: "جلسه دوم: پا، پشت بازو و ساق (۱۱ حرکت)" },
+            { day: "day3", title: "جلسه سوم: پهلو، زیربغل و جلوبازو (۱۳ حرکت)" }
+        ]
+    }
+];
+
 // --- 1. GLOBAL STATE ---
 const state = {
     workouts: null,
+    programInfo: null,
+    currentProgramId: localStorage.getItem('selected_program') || 'arnold_hybrid',
     currentView: 'workout',
     currentParam: 'day1',
     apiKey: localStorage.getItem('gemini_api_key') || "",
@@ -87,22 +175,38 @@ function createRestWidgetDOM() {
     document.body.appendChild(widget);
 }
 
-// Dynamically load workouts based on User's Assigned Program or Default
-async function loadDatabase() {
+// Dynamically load workouts based on Selected Program, User Assigned Program, or Fallback
+async function loadDatabase(targetProgramId = null) {
     try {
-        const programName = state.currentUser?.assignedProgram || 'workouts';
+        const programName = targetProgramId || 
+                            state.currentProgramId || 
+                            localStorage.getItem('selected_program') || 
+                            state.currentUser?.assignedProgram || 
+                            'arnold_hybrid';
+        
         let res = await fetch(`./data/${programName}.json`);
-        if (!res.ok && programName !== 'workouts') {
+        if (!res.ok && programName !== 'arnold_hybrid') {
+            res = await fetch('./data/arnold_hybrid.json');
+        }
+        if (!res.ok) {
             res = await fetch('./data/workouts.json');
         }
+        
         if (res.ok) {
             const data = await res.json();
             state.workouts = data.days;
-            console.log(`✅ Loaded Program: ${programName}.json`);
+            state.programInfo = data.program_info || {};
+            state.currentProgramId = programName;
+            localStorage.setItem('selected_program', programName);
+            if (state.currentUser) {
+                state.currentUser.assignedProgram = programName;
+                localStorage.setItem('user_auth', JSON.stringify(state.currentUser));
+            }
+            console.log(`✅ Loaded Program: ${programName}.json (${data.program_info?.name || ''})`);
             app.renderWorkoutNav();
             return true;
         } else {
-            console.error("برنامه تمرینی اختصاصی این کاربر یافت نشد.");
+            console.error("برنامه تمرینی یافت نشد.");
         }
     } catch (error) {
         console.error("Database load error, trying fallback:", error);
@@ -111,6 +215,8 @@ async function loadDatabase() {
             if (fallbackRes.ok) {
                 const data = await fallbackRes.json();
                 state.workouts = data.days;
+                state.programInfo = data.program_info || {};
+                state.currentProgramId = 'workouts';
                 app.renderWorkoutNav();
                 return true;
             }
@@ -237,6 +343,9 @@ const app = {
             if (viewName === 'workout') {
                 if (!state.workouts) await loadDatabase();
                 app.setupWorkoutView(param);
+            } else if (viewName === 'programs') {
+                if (!state.workouts) await loadDatabase();
+                app.setupProgramsView();
             } else if (viewName === 'profile') {
                 app.setupProfileView();
             } else if (viewName === 'assessment') {
@@ -368,11 +477,21 @@ const app = {
 
     // --- 5. PROGRESSIVE OVERLOAD WEIGHT TRACKING ---
     saveWeight: (exerciseCode, value) => {
-        state.loggedWeights[exerciseCode] = value;
+        const prog = state.currentProgramId || 'arnold_hybrid';
+        const day = state.currentParam || 'day1';
+        const fullKey = `${prog}_${day}_${exerciseCode}`;
+        state.loggedWeights[fullKey] = value;
+        state.loggedWeights[exerciseCode] = value; // fallback
         localStorage.setItem('workout_weights', JSON.stringify(state.loggedWeights));
     },
 
     getSavedWeight: (exerciseCode) => {
+        const prog = state.currentProgramId || 'arnold_hybrid';
+        const day = state.currentParam || 'day1';
+        const fullKey = `${prog}_${day}_${exerciseCode}`;
+        if (state.loggedWeights[fullKey] !== undefined) {
+            return state.loggedWeights[fullKey];
+        }
         return state.loggedWeights[exerciseCode] || '';
     },
 
@@ -385,15 +504,42 @@ const app = {
         const dayData = state.workouts[activeDayId];
         if (!dayData) return;
 
+        const currentProgEl = document.getElementById('workout-current-program-name');
+        if (currentProgEl) {
+            const pInfo = state.programInfo;
+            currentProgEl.innerText = pInfo ? `${pInfo.name} (${pInfo.version || ''})` : 'برنامه تمرینی';
+        }
+
         const titleEl = document.getElementById('workout-day-title');
         if (titleEl) titleEl.innerText = dayData.title;
 
+        const parts = dayData.parts || [
+            {
+                title: 'حرکات تمرینی جلسه',
+                exercises: dayData.exercises || []
+            }
+        ];
+
         let html = '';
-        dayData.parts.forEach(part => {
+        parts.forEach(part => {
             html += `<div class="part-header">${escapeHtml(part.title)}</div><div class="exercise-list">`;
             part.exercises.forEach(ex => {
                 const isTime = ex.time !== undefined;
-                const targetVal = isTime ? `${ex.time}s` : ex.reps;
+                let targetVal = ex.reps || '';
+                let timeSeconds = 0;
+                if (isTime) {
+                    const timeStr = String(ex.time).trim();
+                    if (/min|دقیقه/i.test(timeStr)) {
+                        timeSeconds = (parseInt(timeStr, 10) || 1) * 60;
+                        targetVal = timeStr;
+                    } else if (/s$|sec|ثانیه/i.test(timeStr)) {
+                        timeSeconds = parseInt(timeStr, 10) || 30;
+                        targetVal = timeStr;
+                    } else {
+                        timeSeconds = parseInt(timeStr, 10) || 30;
+                        targetVal = `${timeSeconds}s`;
+                    }
+                }
                 
                 // Tactical tactile set tiles (1, 2, 3, 4)
                 let tilesHtml = '<div class="set-tiles-row">';
@@ -410,8 +556,8 @@ const app = {
                     data-code="${escapeHtml(ex.code)}" 
                     data-sets="${ex.sets}" 
                     data-completed="0" 
-                    data-rest="${ex.rest || 90}" 
-                    ${isTime ? `data-time="${ex.time}"` : ''} 
+                    data-rest="${ex.rest !== undefined ? ex.rest : 60}" 
+                    ${isTime ? `data-time="${timeSeconds}"` : ''} 
                     onclick="app.handleClick(this)">
                     
                     <div class="module-header">
@@ -445,12 +591,23 @@ const app = {
                     </div>
 
                     ${ex.note ? `<p class="module-note-text">${escapeHtml(ex.note)}</p>` : ''}
-                    ${isTime ? `<div class="timer-overlay">${ex.time}<span>توقف</span></div>` : ''}
+                    ${isTime ? `<div class="timer-overlay">${timeSeconds}<span>توقف</span></div>` : ''}
                 </article>`;
             });
             html += `</div>`;
         });
         
+        if (dayData.post_workout) {
+            html += `
+            <div class="post-workout-note" style="margin-top:20px; padding:14px 18px; border-radius:var(--radius-md); background:var(--bg-card); border:1px solid var(--border-hairline); display:flex; align-items:center; gap:10px;">
+                <span style="font-size:1.2rem;">ℹ️</span>
+                <div>
+                    <strong style="color:var(--text-primary); font-size:0.88rem; display:block;">توضیحات پایان تمرین:</strong>
+                    <span style="color:var(--text-secondary); font-size:0.84rem;">${escapeHtml(dayData.post_workout)}</span>
+                </div>
+            </div>`;
+        }
+
         container.innerHTML = html;
 
         // Activate the first exercise module
@@ -506,6 +663,15 @@ const app = {
         }
 
         if (profileContainer) profileContainer.style.display = 'block';
+
+        const progNameEl = document.getElementById('profile-active-program-name');
+        const progDescEl = document.getElementById('profile-active-program-desc');
+        if (progNameEl) {
+            progNameEl.innerText = state.programInfo ? `${state.programInfo.name} (${state.programInfo.version || ''})` : '—';
+        }
+        if (progDescEl) {
+            progDescEl.innerText = state.programInfo ? (state.programInfo.description || '') : '—';
+        }
 
         if (profileContainer && !document.getElementById('logout-btn')) {
             const logoutBtn = document.createElement('button');
@@ -796,6 +962,130 @@ const app = {
             signupForm.style.display = 'block';
             signupTab.classList.add('active');
             loginTab.classList.remove('active');
+        }
+    },
+
+    loginAsGuest: async () => {
+        const guestUser = {
+            fullName: "علی",
+            phone: "مهمان",
+            assignedProgram: localStorage.getItem('selected_program') || 'arnold_hybrid'
+        };
+        state.currentUser = guestUser;
+        localStorage.setItem('user_auth', JSON.stringify(guestUser));
+        await loadDatabase();
+        app.navigateTo('programs');
+    },
+
+    setupProgramsView: async () => {
+        const bannerTitle = document.getElementById('active-program-banner-name');
+        const bannerDesc = document.getElementById('active-program-banner-desc');
+        const listContainer = document.getElementById('programs-list-container');
+        if (!listContainer) return;
+
+        let catalog = PROGRAMS_CATALOG;
+        try {
+            const res = await fetch('./data/programs.json');
+            if (res.ok) {
+                catalog = await res.json();
+            }
+        } catch (e) {
+            console.warn('Using embedded catalog');
+        }
+
+        const activeId = state.currentProgramId || localStorage.getItem('selected_program') || 'arnold_hybrid';
+        const activeProg = catalog.find(p => p.id === activeId) || catalog[0];
+
+        if (bannerTitle) {
+            bannerTitle.innerText = activeProg ? `${activeProg.name_fa || activeProg.name} (${activeProg.version})` : (state.programInfo?.name || '—');
+        }
+        if (bannerDesc) {
+            bannerDesc.innerText = activeProg ? (activeProg.tagline || activeProg.description) : (state.programInfo?.description || '—');
+        }
+
+        let html = '';
+        catalog.forEach(prog => {
+            const isActive = prog.id === activeId;
+            const tagsHtml = (prog.tags || []).map(t => `<span class="program-tag">${escapeHtml(t)}</span>`).join('');
+            
+            let daysHtml = '';
+            if (prog.daysSummary && prog.daysSummary.length > 0) {
+                daysHtml = `
+                <div class="program-days-accordion">
+                    <button type="button" class="program-days-toggle" onclick="app.toggleDaysAccordion('${prog.id}')">
+                        <span>🗓️ پیش‌نمایش روزهای تمرینی (${prog.daysSummary.length} روز)</span>
+                        <span id="accordion-arrow-${prog.id}">▼</span>
+                    </button>
+                    <div class="program-days-list" id="accordion-days-${prog.id}">
+                        ${prog.daysSummary.map(d => `
+                            <div class="program-day-item">
+                                <span class="program-day-item-dot"></span>
+                                <span>${escapeHtml(d.title)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            html += `
+            <article class="program-card ${isActive ? 'is-active' : ''}" id="prog-card-${prog.id}">
+                <div class="program-card-header">
+                    <div class="program-card-title-box">
+                        <span class="program-card-icon">${prog.icon || '🏋️'}</span>
+                        <div class="program-titles">
+                            <h2 class="program-title-fa">${escapeHtml(prog.name_fa || prog.name)}</h2>
+                            <span class="program-title-en">${escapeHtml(prog.name)}</span>
+                        </div>
+                    </div>
+                    <span class="program-status-pill ${isActive ? 'active' : 'inactive'}">
+                        ${isActive ? '✓ برنامه در حال اجرا' : `نسخه ${escapeHtml(prog.version)}`}
+                    </span>
+                </div>
+
+                <p class="program-card-desc">${escapeHtml(prog.description)}</p>
+
+                <div class="program-tags-row">
+                    ${tagsHtml}
+                </div>
+
+                ${daysHtml}
+
+                <div class="program-card-actions">
+                    <div>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">طراح: ${escapeHtml(prog.author || 'Master Coach')}</span>
+                    </div>
+                    <div>
+                        ${isActive 
+                            ? `<button type="button" class="btn-active-prog" onclick="app.navigateTo('workout')">✓ برنامه فعال شما (ورود به تمرین)</button>`
+                            : `<button type="button" class="btn-select-prog" onclick="app.switchProgram('${prog.id}')">⚡ انتخاب و فعال‌سازی این برنامه</button>`
+                        }
+                    </div>
+                </div>
+            </article>`;
+        });
+
+        listContainer.innerHTML = html;
+    },
+
+    toggleDaysAccordion: (progId) => {
+        const list = document.getElementById(`accordion-days-${progId}`);
+        const arrow = document.getElementById(`accordion-arrow-${progId}`);
+        if (list) {
+            const isOpen = list.classList.toggle('open');
+            if (arrow) arrow.innerText = isOpen ? '▲' : '▼';
+        }
+    },
+
+    switchProgram: async (programId) => {
+        const success = await loadDatabase(programId);
+        if (success) {
+            playAudioCue('go');
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            
+            const firstDay = (state.workouts && Object.keys(state.workouts)[0]) || 'day1';
+            app.navigateTo('workout', firstDay);
+        } else {
+            alert('خطا در بارگذاری برنامه تمرینی.');
         }
     }
 };
