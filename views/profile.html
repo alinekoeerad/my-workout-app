@@ -22,6 +22,117 @@
             </div>
         </div>
         
+        <!-- Section 1: Workout Streak & Activity Heatmap -->
+        <div class="profile-dashboard-card streak-card-wrapper">
+            <div class="streak-header-bar">
+                <div class="streak-title-box">
+                    <span class="streak-badge-fire">🔥</span>
+                    <div>
+                        <h3 class="streak-main-title">زنجیره و تقویم فعالیت ورزشی</h3>
+                        <span class="streak-sub-title">تداوم و پیوستگی در تمرینات کلید اصلی هایپرتروفی است</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-quick-log-today" id="btnLogTodayToggle" onclick="app.toggleTodayWorkout()">
+                    <span id="logTodayIcon">✓</span>
+                    <span id="logTodayText">ثبت تمرین امروز</span>
+                </button>
+            </div>
+
+            <!-- Streak 4-Metric Tiles -->
+            <div class="streak-metrics-grid">
+                <div class="streak-metric-tile">
+                    <span class="streak-metric-label">زنجیره فعلی</span>
+                    <div class="streak-metric-val"><span id="streakCurrentCount">0</span> <span class="streak-unit">روز</span></div>
+                    <span class="streak-metric-foot">پیوسته و فعال</span>
+                </div>
+                <div class="streak-metric-tile">
+                    <span class="streak-metric-label">بهترین زنجیره</span>
+                    <div class="streak-metric-val"><span id="streakMaxCount">0</span> <span class="streak-unit">روز</span></div>
+                    <span class="streak-metric-foot">رکورد تاریخی شما</span>
+                </div>
+                <div class="streak-metric-tile">
+                    <span class="streak-metric-label">مجموع جلسات</span>
+                    <div class="streak-metric-val"><span id="streakTotalCount">0</span> <span class="streak-unit">جلسه</span></div>
+                    <span class="streak-metric-foot">ثبت شده در سیستم</span>
+                </div>
+                <div class="streak-metric-tile">
+                    <span class="streak-metric-label">نرخ پایبندی ماه</span>
+                    <div class="streak-metric-val"><span id="streakRatePercent">0%</span></div>
+                    <span class="streak-metric-foot" id="streakRateFoot">عالی و متعهد</span>
+                </div>
+            </div>
+
+            <!-- 12-Week Interactive Heatmap -->
+            <div class="heatmap-outer-scroll">
+                <div class="heatmap-header-months" id="heatmapMonthsRow"></div>
+                <div class="heatmap-body-wrapper">
+                    <div class="heatmap-day-labels">
+                        <span>ش</span>
+                        <span>د</span>
+                        <span>چ</span>
+                        <span>ج</span>
+                    </div>
+                    <div class="heatmap-grid" id="streakHeatmapGrid"></div>
+                </div>
+            </div>
+
+            <!-- Heatmap Legend & Tooltip info -->
+            <div class="heatmap-footer-row">
+                <div class="heatmap-info-text" id="heatmapSelectedInfo">برای جزئیات روی هر روز کلیک یا لمس کنید.</div>
+                <div class="heatmap-legend">
+                    <span class="legend-label">کمتر</span>
+                    <span class="legend-cell lvl-0"></span>
+                    <span class="legend-cell lvl-1"></span>
+                    <span class="legend-cell lvl-2"></span>
+                    <span class="legend-cell lvl-3"></span>
+                    <span class="legend-label">بیشتر</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Volume & 1RM Progression Chart -->
+        <div class="profile-dashboard-card chart-card-wrapper">
+            <div class="chart-header-bar">
+                <div class="chart-title-box">
+                    <span class="chart-badge-icon">📈</span>
+                    <div>
+                        <h3 class="chart-main-title">نمودار صعودی رکوردهای قدرت و حجم تمرین</h3>
+                        <span class="chart-sub-title">تحلیل اضافه بار پیشرونده بر اساس 1RM تخمینی و تناژ کل</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metric Tab Buttons -->
+            <div class="chart-tabs-bar" id="chartTabsBar">
+                <button type="button" class="chart-tab-btn active" data-metric="bench" onclick="app.setChartMetric('bench')">پرس سینه (Bench)</button>
+                <button type="button" class="chart-tab-btn" data-metric="squat" onclick="app.setChartMetric('squat')">اسکات / پرس پا</button>
+                <button type="button" class="chart-tab-btn" data-metric="deadlift" onclick="app.setChartMetric('deadlift')">ددلیفت / زیربغل</button>
+                <button type="button" class="chart-tab-btn" data-metric="volume" onclick="app.setChartMetric('volume')">حجم کل تمرین (Volume)</button>
+            </div>
+
+            <!-- Canvas Wrapper -->
+            <div class="canvas-responsive-container">
+                <canvas id="progressChart"></canvas>
+                <div class="chart-custom-tooltip" id="chartTooltip"></div>
+            </div>
+
+            <!-- Chart Insight Summary Tiles -->
+            <div class="chart-insights-row">
+                <div class="chart-insight-tile">
+                    <span class="chart-insight-label">بالاترین رکورد ثبت‌شده:</span>
+                    <strong class="chart-insight-val" id="chartPeakVal">—</strong>
+                </div>
+                <div class="chart-insight-tile">
+                    <span class="chart-insight-label">تخمین 1RM کنونی:</span>
+                    <strong class="chart-insight-val" id="chartCurrent1RM">—</strong>
+                </div>
+                <div class="chart-insight-tile">
+                    <span class="chart-insight-label">پیشنهاد اضافه بار بعدی:</span>
+                    <strong class="chart-insight-val" id="chartOverloadNext" style="color:var(--accent);">—</strong>
+                </div>
+            </div>
+        </div>
+
         <div class="grid-container">
             
             <div class="ex-card" style="cursor:default; transform:none; filter:none; opacity:1;">

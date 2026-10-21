@@ -28,6 +28,10 @@
             </div>
             
             <div class="header-controls">
+                <button type="button" class="streak-pill-btn" onclick="app.navigateTo('profile')" title="مشاهده زنجیره تمرینی و آمار" id="headerStreakBtn">
+                    <span class="streak-fire">🔥</span>
+                    <span id="headerStreakCount">0</span>
+                </button>
                 <button type="button" class="control-btn" id="themeIcon" onclick="app.toggleTheme()" aria-label="تغییر تم" title="تم">☀️</button>
                 <button type="button" class="control-btn" onclick="app.toggleSettings()" aria-label="تنظیمات" title="تنظیمات">⚙️</button>
             </div>
@@ -76,6 +80,43 @@
             تمام حرکات و ست‌های این روز با موفقیت انجام و ثبت شدند.
         </p>
         <button type="button" onclick="app.closeCelebration()" class="save-btn">اتمام و ثبت روز</button>
+    </div>
+
+    <!-- Smart Swap Modal (دستگاه اشغاله / جایگزین فوری) -->
+    <div class="swap-modal" id="smartSwapModal" role="dialog" aria-modal="true" aria-labelledby="swapTitle">
+        <div class="modal-top-bar">
+            <div>
+                <span class="swap-kicker">جایگزین فوری و بیومکانیکال</span>
+                <h3 id="swapTitle" style="font-size:1.08rem; margin:2px 0 0 0;">دستگاه اشغاله؟ جایگزین کن 🔄</h3>
+            </div>
+            <button type="button" class="modal-close-x" onclick="app.closeAllModals()" aria-label="بستن">×</button>
+        </div>
+        
+        <div class="swap-current-box" id="swapCurrentBox">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">حرکت فعلی در برنامه:</span>
+            <div id="swapCurrentName" style="font-weight:800; font-size:0.98rem; color:var(--text-primary); margin-top:2px;">—</div>
+            <div id="swapCurrentEn" style="font-size:0.78rem; color:var(--text-muted); font-family:var(--font-mono); direction:ltr; text-align:right;">—</div>
+        </div>
+
+        <div style="margin: 10px 0 6px 0; font-size: 0.78rem; color: var(--text-secondary); font-weight:700;">
+            یک حرکت جایگزین با الگوی حرکتی مشابه انتخاب کنید:
+        </div>
+
+        <div class="swap-options-container" id="swapOptionsContainer">
+            <!-- Dynamically populated alternative options -->
+        </div>
+
+        <div class="swap-revert-wrapper" id="swapRevertWrapper" style="display:none; margin-top:10px;">
+            <button type="button" class="btn-swap-revert" id="swapRevertBtn">
+                ↺ بازگشت به حرکت اصلی برنامه
+            </button>
+        </div>
+
+        <div class="swap-ai-cta">
+            <button type="button" class="swap-ai-btn" id="swapAiCustomBtn">
+                <span>✦</span> درخواست پیشنهاد ویژه از مربی هوشمند (Gemini)
+            </button>
+        </div>
     </div>
 
     <!-- AI Coach Drawer Widget -->
