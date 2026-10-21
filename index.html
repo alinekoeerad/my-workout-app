@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Coach - سیستم هوشمند مدیریت تمرین</title>
-    <meta name="description" content="برنامه مدیریت هوشمند تمرینات ورزشی و بدنسازی با مربی هوش مصنوعی">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SMART COACH — سیستم مدیریت تمرین</title>
+    <meta name="description" content="سیستم مینیمال و پیشرفته مدیریت تمرینات بدنسازی با مربی هوش مصنوعی">
     
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -12,67 +12,95 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Smart Coach">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#09090b">
     
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 </head>
 <body>
 
-    <nav id="main-nav" class="sticky-nav">
-        <div class="nav-title" onclick="app.navigateTo('workout')" style="cursor: pointer;">Smart Coach</div>
-        
-        <div class="nav-actions">
-            <div class="days-group" id="daysGroup">
-                <button type="button" class="nav-btn" id="nav-btn-assessment" onclick="app.navigateTo('assessment')">📋 ارزیابی</button>
-                <button type="button" class="nav-btn" id="nav-btn-profile" onclick="app.navigateTo('profile')">👤 پروفایل</button>
-                <div id="dynamic-workout-days" class="dynamic-days-container"></div>
+    <!-- Minimalist Architectural Header -->
+    <header class="site-header" id="main-nav">
+        <div class="header-top-row">
+            <div class="brand-mark" onclick="app.navigateTo('workout')">
+                <span class="brand-dot"></span>
+                SMART COACH
             </div>
-
-            <div class="nav-island">
-                <button type="button" class="icon-btn theme-btn" id="themeIcon" onclick="app.toggleTheme()" aria-label="تغییر تم" title="تغییر تم">🌙</button>
-                <button type="button" class="icon-btn settings-btn" onclick="app.toggleSettings()" aria-label="تنظیمات هوش مصنوعی" title="تنظیمات">⚙️</button>
+            
+            <div class="header-controls">
+                <button type="button" class="control-btn" id="themeIcon" onclick="app.toggleTheme()" aria-label="تغییر تم" title="تم">☀️</button>
+                <button type="button" class="control-btn" onclick="app.toggleSettings()" aria-label="تنظیمات" title="تنظیمات">⚙️</button>
             </div>
         </div>
-    </nav>
 
-    <main id="app-container" class="container">
-        <div style="text-align:center; margin-top:50px; color:var(--text-secondary);">
-            <span style="font-size: 2rem;">⏳</span><br>
-            در حال آماده‌سازی سیستم...
+        <!-- Segmented Horizontal Day & View Switcher -->
+        <div class="nav-scroll-wrapper">
+            <nav class="segmented-nav" id="daysGroup">
+                <button type="button" class="nav-tab" id="nav-btn-assessment" onclick="app.navigateTo('assessment')">ارزیابی</button>
+                <button type="button" class="nav-tab" id="nav-btn-profile" onclick="app.navigateTo('profile')">پروفایل</button>
+                <div id="dynamic-workout-days" class="dynamic-days-container" style="display:inline-flex; gap:4px;"></div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Application Container -->
+    <main id="app-container" class="main-wrapper">
+        <div style="text-align:center; margin-top:60px; color:var(--text-secondary); font-size: 0.9rem;">
+            در حال بارگذاری سیستم...
         </div>
     </main>
 
+    <!-- Modal Backdrop -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="app.closeAllModals()"></div>
+
+    <!-- Minimal Settings Modal -->
     <div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-        <h3 id="settingsTitle">تنظیمات هوش مصنوعی (Gemini)</h3>
-        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 8px;">
-            کلید API جمینای خود را وارد کنید تا مشاوره حرکات و بیومکانیک فعال شود:
+        <h3 id="settingsTitle" style="font-size:1.1rem; margin:0 0 6px 0;">تنظیمات هوش مصنوعی</h3>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0 0 14px 0;">
+            کلید API اختصاصی خود را از Google AI Studio وارد کنید:
         </p>
-        <input type="password" id="apiKeyInput" placeholder="AI Studio API Key" autocomplete="off" dir="ltr">
+        <input type="password" id="apiKeyInput" placeholder="Gemini API Key" autocomplete="off" dir="ltr">
         
-        <button type="button" onclick="app.saveApiKey()" class="save-btn">💾 ذخیره کلید</button>
+        <button type="button" onclick="app.saveApiKey()" class="save-btn">ذخیره کلید</button>
         <button type="button" onclick="app.toggleSettings()" class="close-btn">بستن</button>
     </div>
 
+    <!-- Celebration Modal -->
+    <div class="celebration-modal" id="celebrationModal" role="dialog" aria-modal="true">
+        <div style="font-size: 2.8rem; margin-bottom: 8px;">✓</div>
+        <h2 style="margin: 0 0 6px 0; font-size: 1.25rem;">جلسه تمرینی تکمیل شد</h2>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+            تمام حرکات و ست‌های این روز با موفقیت انجام و ثبت شدند.
+        </p>
+        <button type="button" onclick="app.closeCelebration()" class="save-btn">اتمام و ثبت روز</button>
+    </div>
+
+    <!-- AI Coach Drawer Widget -->
     <div class="chat-widget">
         <div class="chat-window" id="chatWindow" role="dialog" aria-modal="true">
             <div class="chat-header">
-                <span>🤖 مربی هوشمند</span>
-                <span style="cursor:pointer; font-size:1.4rem;" onclick="app.toggleChat()">×</span>
+                <span>مربی هوشمند</span>
+                <span style="cursor:pointer; font-size:1.2rem; color:var(--text-secondary);" onclick="app.toggleChat()">×</span>
             </div>
             
             <div class="chat-body" id="chatBody"></div>
             
+            <!-- Quick Suggestion Chips -->
+            <div class="ai-chips-row">
+                <button type="button" class="ai-chip" onclick="app.sendQuickPrompt('فرم صحیح و کنترل وزنه در این حرکت؟')">فرم صحیح</button>
+                <button type="button" class="ai-chip" onclick="app.sendQuickPrompt('حرکت جایگزین با دمبل برای این تمرین؟')">جایگزین با دمبل</button>
+                <button type="button" class="ai-chip" onclick="app.sendQuickPrompt('نحوه تنفس و ریتم انقباض؟')">تنفس و تمرکز</button>
+                <button type="button" class="ai-chip" onclick="app.sendQuickPrompt('پیشنهاد تغذیه بعد تمرین؟')">تغذیه ریکاوری</button>
+            </div>
+
             <div class="chat-input-area">
-                <input type="text" id="chatInput" class="chat-input" placeholder="سوال ورزشی خود را بپرسید..." onkeypress="if(event.key==='Enter') app.sendMessage()">
+                <input type="text" id="chatInput" class="chat-input" placeholder="سوال خود را بنویسید..." onkeypress="if(event.key==='Enter') app.sendMessage()">
                 <button type="button" onclick="app.sendMessage()" class="send-btn" aria-label="ارسال">↵</button>
             </div>
         </div>
         
-        <button type="button" class="chat-btn" onclick="app.toggleChat()" aria-label="گفتگو با مربی هوشمند">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+        <button type="button" class="chat-btn" onclick="app.toggleChat()" aria-label="گفتگو با مربی">
+            <span style="font-size: 1.2rem;">✦</span>
         </button>
     </div>
 

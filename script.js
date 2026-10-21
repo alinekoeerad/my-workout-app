@@ -1,6 +1,6 @@
 /**
- * Smart Workout Application - V7.5 (PWA & Offline Gym Ready)
- * Core Logic, Dynamic Router, Service Worker Registration, Auth & State Management
+ * SMART COACH - V8.5 (Bespoke Minimalist Athletic Engine)
+ * Pure Architectural Logic, Tactile Tiles, Weight Tracker, Haptics & Service Worker
  */
 
 // --- 1. GLOBAL STATE ---
@@ -14,6 +14,7 @@ const state = {
     isTimerRunning: false,
     restTimer: null,
     restTimeRemaining: 0,
+    loggedWeights: JSON.parse(localStorage.getItem('workout_weights') || '{}'),
     
     // Cloud API & Auth System
     gasUrl: "https://script.google.com/macros/s/AKfycbwsBVIb8nIiGvVEp4pRh1_HWDwSNOd5ae-fYzmkWqi64X7iaEVjzuRi3o1G_0lT3jZFSg/exec",
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     createRestWidgetDOM();
     registerServiceWorker();
 
-    // Enable Web Audio on first user interaction (gym touch gesture)
+    // Enable Web Audio on first user interaction
     const unlockAudio = () => {
         initAudio();
         window.removeEventListener('click', unlockAudio);
@@ -63,21 +64,23 @@ function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
-                .then((reg) => console.log('✅ ServiceWorker Active for Gym Offline use:', reg.scope))
-                .catch((err) => console.warn('⚠️ ServiceWorker registration note:', err));
+                .then((reg) => console.log('✅ ServiceWorker Active:', reg.scope))
+                .catch((err) => console.warn('⚠️ ServiceWorker note:', err));
         });
     }
 }
 
+// Create Swiss Stopwatch Rest Widget
 function createRestWidgetDOM() {
     if (document.getElementById('restWidget')) return;
     const widget = document.createElement('div');
     widget.id = 'restWidget';
     widget.className = 'rest-widget';
     widget.innerHTML = `
-        <div style="text-align:center;">
-            <div style="font-size:0.8rem; color:#ccc; letter-spacing:1px;">زمان استراحت</div>
-            <div id="restTimeDisplay" class="rest-time-display">00:00</div>
+        <div class="rest-time-display" id="restTimeDisplay">00:00</div>
+        <div class="rest-btn-group">
+            <button type="button" class="rest-adj-btn" onclick="app.adjustRestTime(-15)" title="کاهش ۱۵ ثانیه">-15s</button>
+            <button type="button" class="rest-adj-btn" onclick="app.adjustRestTime(30)" title="افزایش ۳۰ ثانیه">+30s</button>
         </div>
         <button type="button" class="rest-skip-btn" onclick="app.skipRest()">رد کردن ⏭</button>
     `;
@@ -95,7 +98,7 @@ async function loadDatabase() {
         if (res.ok) {
             const data = await res.json();
             state.workouts = data.days;
-            console.log(`✅ Loaded Program: ${programName}.json (${Object.keys(state.workouts).length} Days)`);
+            console.log(`✅ Loaded Program: ${programName}.json`);
             app.renderWorkoutNav();
             return true;
         } else {
@@ -116,7 +119,7 @@ async function loadDatabase() {
     return false;
 }
 
-// Helper: Escape HTML to prevent XSS
+// Helper: Escape HTML
 function escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -129,7 +132,6 @@ function escapeHtml(str) {
 
 // --- 3. APP ROUTER & CORE LOGIC ---
 const app = {
-    // Navigate with browser history support (Back/Forward buttons in gym)
     navigateTo: (viewName, param = null) => {
         if (state.isTimerRunning) {
             alert('لطفاً ابتدا تایمر فعال حرکت را متوقف کنید!');
@@ -143,7 +145,6 @@ const app = {
         }
     },
 
-    // Handle hash change
     handleRoute: async () => {
         const rawHash = window.location.hash.replace(/^#/, '').trim();
         if (!rawHash) {
@@ -160,7 +161,6 @@ const app = {
         const view = parts[0];
         let param = parts[1] || null;
 
-        // Security check
         if (!state.currentUser && view !== 'login') {
             window.location.hash = '#login';
             return;
@@ -177,7 +177,6 @@ const app = {
         await app.loadView(view, param);
     },
 
-    // Dynamically render navigation buttons based on current program's days
     renderWorkoutNav: () => {
         const container = document.getElementById('dynamic-workout-days');
         if (!container || !state.workouts) return;
@@ -186,16 +185,15 @@ const app = {
         const dayKeys = Object.keys(state.workouts);
         dayKeys.forEach((key, index) => {
             const day = state.workouts[key];
-            const label = `Day ${index + 1}`;
-            html += `<button type="button" class="nav-btn nav-day-btn" id="nav-btn-${key}" onclick="app.navigateTo('workout', '${key}')" title="${escapeHtml(day.title || label)}">${label}</button>`;
+            const label = `روز ${index + 1}`;
+            html += `<button type="button" class="nav-tab" id="nav-btn-${key}" onclick="app.navigateTo('workout', '${key}')" title="${escapeHtml(day.title || label)}">${label}</button>`;
         });
         container.innerHTML = html;
         app.updateActiveNav();
     },
 
-    // Update active highlight on nav buttons
     updateActiveNav: () => {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
         if (state.currentView === 'workout' && state.currentParam) {
             const activeDayBtn = document.getElementById(`nav-btn-${state.currentParam}`);
             if (activeDayBtn) activeDayBtn.classList.add('active');
@@ -208,8 +206,8 @@ const app = {
     loadView: async (viewName, param = null) => {
         if (state.isTimerRunning) return alert('لطفاً ابتدا تایمر فعال حرکت را متوقف کنید!');
         app.skipRest();
+        app.closeAllModals();
         
-        // Security Check
         if (!state.currentUser && viewName !== 'login') {
             return app.navigateTo('login');
         }
@@ -220,13 +218,12 @@ const app = {
         state.currentView = viewName;
         state.currentParam = param;
         
-        // Show/Hide Navbar
         const nav = document.getElementById('main-nav');
-        if (nav) nav.style.display = (viewName === 'login') ? 'none' : 'flex';
+        if (nav) nav.style.display = (viewName === 'login') ? 'none' : 'block';
 
         const container = document.getElementById('app-container');
-        container.innerHTML = `<div style="text-align:center; margin-top:50px; color:var(--text-secondary);">
-            <span style="font-size: 2rem;">⏳</span><br>در حال بارگذاری...
+        container.innerHTML = `<div style="text-align:center; margin-top:50px; color:var(--text-secondary); font-size:0.88rem;">
+            در حال بارگذاری...
         </div>`;
 
         try {
@@ -250,7 +247,7 @@ const app = {
 
         } catch (error) {
             console.error(error);
-            container.innerHTML = `<h3 style="color:#e74c3c; text-align:center; margin-top:50px;">
+            container.innerHTML = `<h3 style="color:#ef4444; text-align:center; margin-top:50px; font-size:0.95rem;">
                 خطا در بارگذاری صفحه. لطفاً اتصال اینترنت را بررسی کنید.
             </h3>`;
         }
@@ -261,7 +258,7 @@ const app = {
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         const origText = btn.innerText;
-        btn.innerText = "⏳ در حال ثبت‌نام...";
+        btn.innerText = "در حال ثبت‌نام...";
         btn.disabled = true;
 
         const formData = new FormData(e.target);
@@ -294,7 +291,7 @@ const app = {
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
         const origText = btn.innerText;
-        btn.innerText = "⏳ در حال ورود...";
+        btn.innerText = "در حال ورود...";
         btn.disabled = true;
 
         const formData = new FormData(e.target);
@@ -335,12 +332,12 @@ const app = {
         e.preventDefault();
         const formData = new FormData(e.target);
         const answers = Object.fromEntries(formData.entries());
-        localStorage.setItem('user_assessment', JSON.stringify(answers)); // Save locally
+        localStorage.setItem('user_assessment', JSON.stringify(answers));
         
         const btn = document.getElementById('assessment-submit-btn');
         const origText = btn ? btn.innerText : '';
         if (btn) {
-            btn.innerText = "⏳ در حال ارسال به سرور مربی...";
+            btn.innerText = "در حال ذخیره...";
             btn.disabled = true;
         }
 
@@ -355,10 +352,10 @@ const app = {
                 })
             });
             if (btn) {
-                btn.innerText = "✅ در دیتابیس ثبت شد!";
+                btn.innerText = "✓ در سرور ثبت شد";
                 btn.style.background = "var(--success)";
             }
-            setTimeout(() => app.navigateTo('profile'), 1200);
+            setTimeout(() => app.navigateTo('profile'), 1000);
         } catch(err) {
             alert("اطلاعات در دستگاه ذخیره شد اما به دلیل اینترنت به سرور ابری ارسال نشد.");
             if (btn) {
@@ -369,12 +366,21 @@ const app = {
         }
     },
 
-    // --- 5. VIEWS SETUP ---
+    // --- 5. PROGRESSIVE OVERLOAD WEIGHT TRACKING ---
+    saveWeight: (exerciseCode, value) => {
+        state.loggedWeights[exerciseCode] = value;
+        localStorage.setItem('workout_weights', JSON.stringify(state.loggedWeights));
+    },
+
+    getSavedWeight: (exerciseCode) => {
+        return state.loggedWeights[exerciseCode] || '';
+    },
+
+    // --- 6. VIEWS SETUP ---
     setupWorkoutView: (dayId) => {
         const container = document.getElementById('workout-dynamic-content');
         if (!container || !state.workouts) return; 
         
-        // If no dayId provided, pick the first day
         const activeDayId = dayId || Object.keys(state.workouts)[0] || 'day1';
         const dayData = state.workouts[activeDayId];
         if (!dayData) return;
@@ -384,57 +390,76 @@ const app = {
 
         let html = '';
         dayData.parts.forEach(part => {
-            html += `<div class="section-title">${escapeHtml(part.title)}</div><div class="grid-container">`;
+            html += `<div class="part-header">${escapeHtml(part.title)}</div><div class="exercise-list">`;
             part.exercises.forEach(ex => {
                 const isTime = ex.time !== undefined;
                 const targetVal = isTime ? `${ex.time}s` : ex.reps;
-                const targetIcon = isTime ? '⏱️' : '🔁'; 
                 
-                // Build dots for set progression
-                let dotsHtml = '<div class="progress-dots">';
-                for(let i=0; i<ex.sets; i++) dotsHtml += '<div class="dot"></div>';
-                dotsHtml += '</div>';
+                // Tactical tactile set tiles (1, 2, 3, 4)
+                let tilesHtml = '<div class="set-tiles-row">';
+                for (let i = 0; i < ex.sets; i++) {
+                    tilesHtml += `<div class="set-tile" data-set="${i+1}">${i+1}</div>`;
+                }
+                tilesHtml += '</div>';
 
+                const savedWeight = app.getSavedWeight(ex.code);
                 const safeQuery = encodeURIComponent(ex.ai_query || ex.name_en || '');
 
                 html += `
-                <div class="ex-card locked" 
+                <article class="exercise-module locked" 
                     data-code="${escapeHtml(ex.code)}" 
                     data-sets="${ex.sets}" 
                     data-completed="0" 
                     data-rest="${ex.rest || 90}" 
                     ${isTime ? `data-time="${ex.time}"` : ''} 
                     onclick="app.handleClick(this)">
-                    ${dotsHtml}
-                    <div class="ex-code">${escapeHtml(ex.code)}</div>
-                    <span class="ex-name-en">${escapeHtml(ex.name_en)}</span>
-                    <span class="ex-name-fa">${escapeHtml(ex.name_fa)}</span>
-                    <div class="ex-stats">
-                        <div class="stat-item"><span class="stat-icon">🔢</span><span class="stat-val">${ex.sets} ست</span></div>
-                        <div class="stat-item"><span class="stat-icon">${targetIcon}</span><span class="stat-val">${targetVal}</span></div>
-                    </div>
-                    <div class="ex-note">
-                        ${escapeHtml(ex.note)} 
-                        <div class="ai-row">
-                            <button type="button" class="ai-hint-btn" onclick="app.askAI(event, decodeURIComponent('${safeQuery}'))" title="مشاوره هوشمند این حرکت">✨ مربی</button>
+                    
+                    <div class="module-header">
+                        <div class="module-title-group">
+                            <span class="module-code">${escapeHtml(ex.code)}</span>
+                            <div class="module-names">
+                                <h3 class="module-name-fa">${escapeHtml(ex.name_fa)}</h3>
+                                <span class="module-name-en">${escapeHtml(ex.name_en)}</span>
+                            </div>
+                        </div>
+                        <div class="module-badges">
+                            <span class="metric-badge">${ex.sets} ست</span>
+                            <span class="metric-badge">${targetVal}</span>
                         </div>
                     </div>
+
+                    ${tilesHtml}
+
+                    <div class="module-controls" onclick="event.stopPropagation()">
+                        <div class="weight-stepper">
+                            <span style="font-size:0.75rem;">وزنه:</span>
+                            <input type="number" class="weight-input-field" placeholder="—" value="${savedWeight}" 
+                                oninput="app.saveWeight('${escapeHtml(ex.code)}', this.value)" 
+                                onkeydown="event.stopPropagation()">
+                            <span class="weight-unit">kg</span>
+                        </div>
+
+                        <button type="button" class="btn-ai-consult" onclick="app.askAI(event, decodeURIComponent('${safeQuery}'))">
+                            <span>✦</span> مشاوره
+                        </button>
+                    </div>
+
+                    ${ex.note ? `<p class="module-note-text">${escapeHtml(ex.note)}</p>` : ''}
                     ${isTime ? `<div class="timer-overlay">${ex.time}<span>توقف</span></div>` : ''}
-                </div>`;
+                </article>`;
             });
             html += `</div>`;
         });
         
         container.innerHTML = html;
 
-        // Activate the very first card in the list immediately after rendering
-        const allCards = container.querySelectorAll('.ex-card');
+        // Activate the first exercise module
+        const allCards = container.querySelectorAll('.exercise-module');
         if (allCards.length > 0) {
             activateCard(allCards[0], false);
         }
     },
 
-    // Setup Profile View with Cloud Sync (Pull)
     setupProfileView: async () => {
         let savedData = JSON.parse(localStorage.getItem('user_assessment') || 'null');
         const emptyState = document.getElementById('profile-empty-state');
@@ -443,10 +468,9 @@ const app = {
         if (emptyState) emptyState.style.display = 'none';
         if (profileContainer) profileContainer.style.display = 'none';
 
-        // If no local data found, try pulling from cloud
         if (!savedData || Object.keys(savedData).length === 0) {
             if (emptyState) {
-                emptyState.innerHTML = `<h3 style="color:var(--accent); text-align:center; padding-top:40px;">⏳ در حال همگام‌سازی با سرور ابری...</h3>`;
+                emptyState.innerHTML = `<h3 style="color:var(--text-secondary); text-align:center; padding-top:30px; font-size:0.95rem;">در حال همگام‌سازی با سرور...</h3>`;
                 emptyState.style.display = 'block';
             }
 
@@ -462,9 +486,9 @@ const app = {
                 } else {
                     if (emptyState) {
                         emptyState.innerHTML = `
-                            <h2 style="color:var(--accent);">پروفایل شما هنوز تکمیل نشده!</h2>
-                            <p style="color:var(--text-secondary);">برای مشاهده اطلاعات بدنی و برنامه‌ریزی هوشمند، فرم ارزیابی را پر کنید.</p>
-                            <button type="button" onclick="app.navigateTo('assessment')" class="btn-primary">📋 رفتن به فرم ارزیابی</button>
+                            <h2 style="font-size:1.15rem; margin-bottom:8px;">پروفایل هنوز تکمیل نشده</h2>
+                            <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:18px;">برای مشاهده اطلاعات بدنی و رکوردهای قدرت، ابتدا فرم ارزیابی را پر کنید.</p>
+                            <button type="button" onclick="app.navigateTo('assessment')" class="btn-primary">رفتن به فرم ارزیابی</button>
                         `;
                     }
                     return;
@@ -473,8 +497,8 @@ const app = {
                 console.error("Cloud Sync Error:", err);
                 if (emptyState) {
                     emptyState.innerHTML = `
-                        <h3 style="color:#e74c3c; text-align:center;">داده‌ای در گوشی ذخیره نشده و اتصال به سرور برقرار نشد.</h3>
-                        <button type="button" onclick="app.navigateTo('assessment')" class="btn-primary">📋 تکمیل فرم ارزیابی</button>
+                        <p style="color:#ef4444; font-size:0.85rem;">ارتباط با سرور برقرار نشد.</p>
+                        <button type="button" onclick="app.navigateTo('assessment')" class="btn-primary">تکمیل فرم ارزیابی</button>
                     `;
                 }
                 return;
@@ -483,21 +507,20 @@ const app = {
 
         if (profileContainer) profileContainer.style.display = 'block';
 
-        // Inject Logout Button dynamically if it doesn't exist
         if (profileContainer && !document.getElementById('logout-btn')) {
             const logoutBtn = document.createElement('button');
             logoutBtn.type = 'button';
             logoutBtn.id = 'logout-btn';
             logoutBtn.className = 'btn-logout';
-            logoutBtn.innerHTML = '🚪 خروج از حساب کاربری';
+            logoutBtn.innerHTML = 'خروج از حساب کاربری';
             logoutBtn.onclick = app.logout;
             profileContainer.appendChild(logoutBtn);
         }
 
         const dict = {
-            "surplus": "کالری مازاد (حجم)", "maintenance": "تثبیت وزن", "deficit": "کالری نقصان (کات)",
-            "chest": "سینه", "back": "پشت / زیربغل", "legs": "پاها", "arms": "دست‌ها", "shoulders": "سرشانه", "calves": "ساق", "none": "هیچکدام",
-            "palm": "لمس کف دست", "fingers": "لمس نوک انگشتان", "ankle": "مچ پا", "shin": "وسط ساق"
+            "surplus": "حجم (مازاد)", "maintenance": "تثبیت", "deficit": "کات (نقصان)",
+            "chest": "سینه", "back": "پشت", "legs": "پاها", "arms": "دست‌ها", "shoulders": "سرشانه", "calves": "ساق", "none": "هیچکدام",
+            "palm": "کف دست", "fingers": "انگشتان", "ankle": "مچ پا", "shin": "وسط ساق"
         };
         const t = (val) => dict[val] || val || '-';
 
@@ -509,9 +532,9 @@ const app = {
             'val-squat': `${savedData.record_squat || 0} kg`,
             'val-deadlift': `${savedData.record_deadlift || 0} kg`,
             'val-bench': `${savedData.record_bench || 0} kg`,
-            'val-pullups': `${savedData.max_pullups || 0} تکرار`,
-            'val-pushups': `${savedData.max_pushups || 0} تکرار`,
-            'val-plank': `${savedData.max_plank_time || 0} ثانیه`,
+            'val-pullups': `${savedData.max_pullups || 0}`,
+            'val-pushups': `${savedData.max_pushups || 0}`,
+            'val-plank': `${savedData.max_plank_time || 0}s`,
             'val-sleep': `${savedData.avg_sleep || '-'} ساعت`,
             'val-stubborn': t(savedData.stubborn_muscle),
             'val-hamstring': t(savedData.hamstring_toe_touch),
@@ -535,7 +558,7 @@ const app = {
         });
     },
 
-    // --- 6. GLOBAL CONTROLS & AI ---
+    // --- 7. REST TIMER & AUDIO ---
     skipRest: () => {
         clearInterval(state.restTimer);
         state.restTimer = null;
@@ -544,10 +567,33 @@ const app = {
         if(w) w.classList.remove('show');
     },
 
+    adjustRestTime: (seconds) => {
+        state.restTimeRemaining = Math.max(5, state.restTimeRemaining + seconds);
+        const display = document.getElementById('restTimeDisplay');
+        if (display) display.innerText = formatTime(state.restTimeRemaining);
+        const widget = document.getElementById('restWidget');
+        if (widget) {
+            widget.style.transform = 'translateX(-50%) scale(1.05)';
+            setTimeout(() => widget.style.transform = 'translateX(-50%) scale(1)', 120);
+        }
+    },
+
+    // --- 8. MODALS & BACKDROP ---
+    closeAllModals: () => {
+        const sm = document.getElementById('settingsModal');
+        const cm = document.getElementById('celebrationModal');
+        const mb = document.getElementById('modalBackdrop');
+        if (sm) sm.classList.remove('open');
+        if (cm) cm.classList.remove('open');
+        if (mb) mb.classList.remove('open');
+    },
+
     toggleSettings: () => {
         const modal = document.getElementById('settingsModal');
-        modal.classList.toggle('open');
-        if (modal.classList.contains('open')) {
+        const backdrop = document.getElementById('modalBackdrop');
+        const isOpen = modal.classList.toggle('open');
+        if (backdrop) backdrop.classList.toggle('open', isOpen);
+        if (isOpen) {
             const input = document.getElementById('apiKeyInput');
             if (input) input.value = state.apiKey || '';
         }
@@ -559,7 +605,7 @@ const app = {
             localStorage.setItem('gemini_api_key', key);
             state.apiKey = key;
             app.toggleSettings();
-            alert('کلید هوش مصنوعی با موفقیت ذخیره شد!');
+            alert('کلید هوش مصنوعی با موفقیت ذخیره شد.');
         } else {
             localStorage.removeItem('gemini_api_key');
             state.apiKey = "";
@@ -567,6 +613,20 @@ const app = {
         }
     },
 
+    triggerCelebration: () => {
+        playAudioCue('go');
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        const cm = document.getElementById('celebrationModal');
+        const mb = document.getElementById('modalBackdrop');
+        if (cm) cm.classList.add('open');
+        if (mb) mb.classList.add('open');
+    },
+
+    closeCelebration: () => {
+        app.closeAllModals();
+    },
+
+    // --- 9. THEME CONTROLLER ---
     toggleTheme: () => {
         const html = document.documentElement;
         const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -578,7 +638,7 @@ const app = {
 
     updateMetaColor: (theme) => {
         const meta = document.querySelector('meta[name="theme-color"]');
-        if(meta) meta.setAttribute('content', theme === 'dark' ? '#0f2027' : '#2c3e50');
+        if(meta) meta.setAttribute('content', theme === 'dark' ? '#09090b' : '#f8fafc');
     },
 
     updateThemeIcon: (theme) => {
@@ -587,14 +647,21 @@ const app = {
     },
 
     initTheme: () => {
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         app.updateMetaColor(savedTheme);
         app.updateThemeIcon(savedTheme);
     },
 
+    // --- 10. AI ASSISTANT & QUICK CHIPS ---
     toggleChat: () => document.getElementById('chatWindow').classList.toggle('open'),
     
+    sendQuickPrompt: (promptText) => {
+        const input = document.getElementById('chatInput');
+        if (input) input.value = promptText;
+        app.sendMessage(promptText);
+    },
+
     askAI: (e, query) => { 
         if (e) e.stopPropagation(); 
         const chatWin = document.getElementById('chatWindow');
@@ -615,7 +682,6 @@ const app = {
 
         const body = document.getElementById('chatBody');
         
-        // Safely append user message (Zero XSS)
         const userMsgDiv = document.createElement('div');
         userMsgDiv.className = 'msg user';
         userMsgDiv.dir = 'auto';
@@ -630,19 +696,17 @@ const app = {
         aiMsgDiv.className = 'msg ai';
         aiMsgDiv.id = id;
         aiMsgDiv.dir = 'auto';
-        aiMsgDiv.innerHTML = `<span style="color:var(--text-secondary);font-size:0.85rem;">⏳ مربی در حال تحلیل...</span>`;
+        aiMsgDiv.innerHTML = `<span style="color:var(--text-muted);font-size:0.8rem;">در حال نگارش پاسخ...</span>`;
         body.appendChild(aiMsgDiv);
         setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
 
         const p = JSON.parse(localStorage.getItem('user_assessment') || '{}');
         const profileContext = `
-        اطلاعات کاربر: سن ${p.age||'?'} سال | وزن ${p.weight||'?'} کیلوگرم | سابقه آسیب: ${p.injury_history || 'ندارد'}
-        رکوردهای وزنه: اسکات ${p.record_squat||0} | ددلیفت ${p.record_deadlift||0} | پرس سینه ${p.record_bench||0} | بارفیکس ${p.max_pullups||0}
-        سطح برنامه: برنامه تمرینی اختصاصی بدنسازی
+        کاربر: سن ${p.age||'?'} سال | وزن ${p.weight||'?'} کیلوگرم | سابقه آسیب: ${p.injury_history || 'ندارد'}
+        رکوردها: اسکات ${p.record_squat||0} | ددلیفت ${p.record_deadlift||0} | پرس سینه ${p.record_bench||0}
         `;
 
         try {
-            // Standard and officially supported Gemini 1.5 Flash endpoint
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.apiKey}`;
             const res = await fetch(url, {
                 method: 'POST',
@@ -650,7 +714,7 @@ const app = {
                 body: JSON.stringify({ 
                     contents: [{ 
                         parts: [{ 
-                            text: `نقش: مربی حرفه‌ای بدنسازی و بیومکانیک. کوتاه، علمی و به زبان فارسی پاسخ بده.\n${profileContext}\nسوال کاربر: ${text}` 
+                            text: `نقش: مربی فوق‌حرفه‌ای و مشاور بیومکانیک. کوتاه، دقیق، فنی و به زبان فارسی پاسخ بده.\n${profileContext}\nسوال: ${text}` 
                         }] 
                     }] 
                 })
@@ -658,13 +722,11 @@ const app = {
             const d = await res.json();
             
             if (d.error) {
-                document.getElementById(id).innerHTML = `<strong style="color:#e74c3c;">خطای API: ${escapeHtml(d.error.message)}</strong>`;
+                document.getElementById(id).innerHTML = `<strong style="color:#ef4444;">خطای API: ${escapeHtml(d.error.message)}</strong>`;
                 return;
             }
 
             let rawText = d.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد.";
-            
-            // Format markdown safely: bold, italic, line breaks
             let escaped = escapeHtml(rawText);
             let formattedText = escaped
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -674,18 +736,17 @@ const app = {
             document.getElementById(id).innerHTML = formattedText;
             setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
         } catch(e) { 
-            document.getElementById(id).innerHTML = "<strong style='color:#e74c3c;'>خطای ارتباط شبکه با هوش مصنوعی.</strong>"; 
+            document.getElementById(id).innerHTML = "<strong style='color:#ef4444;'>خطای شبکه در ارتباط با هوش مصنوعی.</strong>"; 
         }
     },
 
-    // --- 7. EXERCISE LOGIC ---
+    // --- 11. EXERCISE PROGRESSION ---
     handleClick: (card) => {
-        // Prevent accidental clicks while rest timer is active
         if (state.restTimer) {
             const widget = document.getElementById('restWidget');
             if (widget) {
-                widget.style.transform = 'translateX(-50%) scale(1.08)';
-                setTimeout(() => widget.style.transform = 'translateX(-50%) scale(1)', 200);
+                widget.style.transform = 'translateX(-50%) scale(1.06)';
+                setTimeout(() => widget.style.transform = 'translateX(-50%) scale(1)', 150);
             }
             return;
         }
@@ -705,13 +766,18 @@ const app = {
         
         if (completed < sets) {
             card.dataset.completed = ++completed;
-            const dots = card.querySelectorAll('.dot');
-            if (dots[completed - 1]) dots[completed - 1].classList.add('active');
+            const tiles = card.querySelectorAll('.set-tile');
+            if (tiles[completed - 1]) {
+                tiles[completed - 1].classList.remove('active-next');
+                tiles[completed - 1].classList.add('done');
+            }
+            if (tiles[completed]) {
+                tiles[completed].classList.add('active-next');
+            }
             handleSetCompletion(card);
         }
     },
 
-    // Toggle between Login and Signup forms in the UI
     toggleAuth: (type) => {
         const loginForm = document.getElementById('form-login');
         const signupForm = document.getElementById('form-signup');
@@ -756,7 +822,7 @@ function findNextUnfinishedInGroup(groupCards, startIndex) {
 }
 
 function handleSetCompletion(currentCard) {
-    const allCards = Array.from(document.querySelectorAll('.ex-card'));
+    const allCards = Array.from(document.querySelectorAll('.exercise-module'));
     const currentCode = currentCard.dataset.code;
     const currentGroupId = getGroupId(currentCode);
     
@@ -796,6 +862,14 @@ function handleSetCompletion(currentCard) {
         }
     }
 
+    // Check if entire workout is completed
+    const allCompleted = allCards.every(c => c.classList.contains('completed'));
+    if (allCompleted && allCards.length > 0) {
+        app.skipRest();
+        setTimeout(() => app.triggerCelebration(), 500);
+        return;
+    }
+
     // Smart Rest Control
     if (isSupersetTransition) {
         app.skipRest(); 
@@ -808,6 +882,13 @@ function handleSetCompletion(currentCard) {
 function activateCard(card, isSuperset = false) {
     card.classList.remove('locked', 'superset-next', 'active-move');
     card.classList.add(isSuperset ? 'superset-next' : 'active-move');
+    
+    // Highlight next set tile
+    const completed = parseInt(card.dataset.completed, 10) || 0;
+    const tiles = card.querySelectorAll('.set-tile');
+    tiles.forEach(t => t.classList.remove('active-next'));
+    if (tiles[completed]) tiles[completed].classList.add('active-next');
+
     if (isSuperset) playAudioCue('superset');
     card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
@@ -815,12 +896,16 @@ function activateCard(card, isSuperset = false) {
 function deactivateCard(card) { 
     card.classList.remove('active-move', 'superset-next'); 
     card.classList.add('locked'); 
+    card.querySelectorAll('.set-tile').forEach(t => t.classList.remove('active-next'));
 }
 
 function markCardAsDone(card) { 
     card.classList.remove('active-move', 'superset-next', 'locked'); 
     card.classList.add('completed'); 
-    card.querySelectorAll('.dot').forEach(d => d.classList.add('done')); 
+    card.querySelectorAll('.set-tile').forEach(t => {
+        t.classList.remove('active-next');
+        t.classList.add('done');
+    }); 
 }
 
 // --- TIMERS & AUDIO ---
@@ -849,8 +934,8 @@ function stopTimer(card, finished) {
         let c = parseInt(card.dataset.completed, 10);
         if (c < parseInt(card.dataset.sets, 10)) { 
             card.dataset.completed = ++c; 
-            const dots = card.querySelectorAll('.dot');
-            if (dots[c-1]) dots[c-1].classList.add('active'); 
+            const tiles = card.querySelectorAll('.set-tile');
+            if (tiles[c-1]) tiles[c-1].classList.add('done'); 
             handleSetCompletion(card); 
         }
     }
@@ -910,22 +995,22 @@ function playAudioCue(type) {
         if (type === 'tick') { 
             o.type = 'sine'; 
             o.frequency.setValueAtTime(600, now); 
-            g.gain.setValueAtTime(0.12, now); 
+            g.gain.setValueAtTime(0.1, now); 
             o.start(now); 
-            o.stop(now + 0.1); 
+            o.stop(now + 0.08); 
         } else if (type === 'go') { 
             o.type = 'square'; 
             o.frequency.setValueAtTime(880, now); 
-            g.gain.setValueAtTime(0.18, now); 
+            g.gain.setValueAtTime(0.15, now); 
             o.start(now); 
-            o.stop(now + 0.4); 
+            o.stop(now + 0.35); 
         } else if (type === 'superset') { 
             o.type = 'triangle'; 
             o.frequency.setValueAtTime(400, now); 
             o.frequency.setValueAtTime(650, now + 0.1); 
-            g.gain.setValueAtTime(0.15, now); 
+            g.gain.setValueAtTime(0.12, now); 
             o.start(now); 
-            o.stop(now + 0.25); 
+            o.stop(now + 0.2); 
         }
     } catch (err) {
         console.warn('Audio cue play note:', err);
