@@ -79,7 +79,7 @@ body {
     background-color: var(--bg-base);
     color: var(--text-primary);
     margin: 0;
-    padding-top: calc(85px + env(safe-area-inset-top, 0px));
+    padding-top: calc(115px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     line-height: 1.5;
     min-height: 100vh;
@@ -203,7 +203,7 @@ body {
 /* --- Main Layout --- */
 .main-wrapper {
     max-width: 860px;
-    margin: 10px auto 40px auto;
+    margin: 16px auto 40px auto;
     padding: 0 16px;
 }
 
@@ -923,6 +923,7 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
 
 /* Mobile Adjustments */
 @media screen and (max-width: 500px) {
+    body { padding-top: calc(112px + env(safe-area-inset-top, 0px)); }
     .site-header { padding: max(8px, env(safe-area-inset-top, 8px)) 14px 8px 14px; }
     .brand-mark { font-size: 0.78rem; }
     .nav-tab { padding: 5px 10px; font-size: 0.78rem; }
