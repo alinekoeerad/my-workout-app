@@ -1694,7 +1694,13 @@ const app = {
         if (nearest && minDist < 35) {
             tip.style.display = 'block';
             tip.style.left = `${nearest.x}px`;
-            tip.style.top = `${nearest.y - 12}px`;
+            if (nearest.y < 46) {
+                tip.style.top = `${nearest.y + 14}px`;
+                tip.style.transform = 'translate(-50%, 0)';
+            } else {
+                tip.style.top = `${nearest.y - 12}px`;
+                tip.style.transform = 'translate(-50%, -100%)';
+            }
             const unit = metric === 'volume' ? 'kg تناژ کل' : 'kg';
             tip.innerHTML = `<strong>${nearest.data.label}</strong><br>${nearest.data.value} ${unit}`;
         } else {

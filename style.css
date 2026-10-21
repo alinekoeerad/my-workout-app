@@ -79,7 +79,7 @@ body {
     background-color: var(--bg-base);
     color: var(--text-primary);
     margin: 0;
-    padding-top: calc(115px + env(safe-area-inset-top, 0px));
+    padding-top: calc(130px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     line-height: 1.5;
     min-height: 100vh;
@@ -203,7 +203,7 @@ body {
 /* --- Main Layout --- */
 .main-wrapper {
     max-width: 860px;
-    margin: 16px auto 40px auto;
+    margin: 20px auto 40px auto;
     padding: 0 16px;
 }
 
@@ -316,14 +316,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
     margin-bottom: 14px;
 }
 
 .module-title-group {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .module-code {
@@ -353,6 +355,7 @@ body {
 .module-names {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 .module-name-fa {
     font-size: 1.05rem;
@@ -360,6 +363,8 @@ body {
     color: var(--text-primary);
     margin: 0;
     line-height: 1.4;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 .module-name-en {
     font-size: 0.82rem;
@@ -368,6 +373,8 @@ body {
     direction: ltr;
     text-align: right;
     letter-spacing: -0.1px;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Metric Badges (Top Right) */
@@ -434,10 +441,34 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    padding-top: 12px;
     border-top: 1px solid var(--border-hairline);
     gap: 10px;
     flex-wrap: wrap;
+}
+
+@media (max-width: 540px) {
+    .module-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .controls-weight-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    .controls-action-block {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+    .btn-smart-swap, .btn-ai-consult {
+        width: 100% !important;
+        justify-content: center !important;
+    }
 }
 
 .weight-stepper {
@@ -930,9 +961,10 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
 
 /* Mobile Adjustments */
 @media screen and (max-width: 500px) {
-    body { padding-top: calc(112px + env(safe-area-inset-top, 0px)); }
+    body { padding-top: calc(128px + env(safe-area-inset-top, 0px)); }
     .site-header { padding: max(8px, env(safe-area-inset-top, 8px)) 14px 8px 14px; }
-    .brand-mark { font-size: 0.78rem; }
+    .brand-mark { font-size: 0.78rem; flex-shrink: 0; }
+    .header-controls { flex-shrink: 0; }
     .nav-tab { padding: 5px 10px; font-size: 0.78rem; }
     .exercise-module { padding: 14px 16px; }
     .module-name-fa { font-size: 0.98rem; }
@@ -988,7 +1020,13 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 320px;
+    max-width: 220px;
+    flex: 0 1 auto;
+}
+@media (max-width: 480px) {
+    .program-badge-text {
+        max-width: 130px;
+    }
 }
 
 .program-badge-change {
@@ -1343,19 +1381,21 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     background: var(--bg-card);
     border: 1px solid var(--border-hairline);
     border-radius: var(--radius-md);
-    padding: 8px 14px;
+    padding: 10px 14px;
     margin-bottom: 20px;
     font-size: 0.78rem;
+    line-height: 1.5;
 }
 .advisor-status-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     color: var(--text-secondary);
+    flex-shrink: 0;
 }
 .advisor-indicator {
     width: 8px;
@@ -1366,6 +1406,8 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
 }
 .advisor-rule-tip {
     color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
 }
 
 .controls-weight-block {
@@ -1778,36 +1820,40 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
 /* 12-Week Heatmap Grid */
 .heatmap-outer-scroll {
     overflow-x: auto;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
 }
 .heatmap-body-wrapper {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
-    min-width: 580px;
+    width: max-content;
+    max-width: 100%;
 }
 .heatmap-day-labels {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 122px;
+    height: 136px;
     font-size: 0.72rem;
     color: var(--text-muted);
     font-weight: 700;
     padding: 2px 0;
+    user-select: none;
 }
 .heatmap-grid {
     display: grid;
-    grid-template-rows: repeat(7, 14px);
+    grid-template-rows: repeat(7, 16px);
     grid-auto-flow: column;
-    grid-auto-columns: 14px;
+    grid-auto-columns: 16px;
     gap: 4px;
+    direction: ltr;
 }
 .heatmap-cell {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
@@ -1872,11 +1918,14 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
    =================================================================== */
 .chart-tabs-bar {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     margin-bottom: 16px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
+.chart-tabs-bar::-webkit-scrollbar { display: none; }
 .chart-tab-btn {
     background: var(--bg-subtle);
     border: 1px solid var(--border-hairline);
@@ -1888,6 +1937,7 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
     font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
+    flex-shrink: 0;
     transition: all 0.2s;
 }
 .chart-tab-btn:hover {
@@ -1908,13 +1958,14 @@ textarea.glass-input { min-height: 80px; resize: vertical; }
     background: var(--bg-subtle);
     border: 1px solid var(--border-hairline);
     border-radius: var(--radius-md);
-    overflow: hidden;
+    overflow: visible;
 }
 #progressChart {
     width: 100%;
     height: 100%;
     display: block;
     cursor: crosshair;
+    border-radius: var(--radius-md);
 }
 .chart-custom-tooltip {
     position: absolute;

@@ -3,7 +3,7 @@
  * Enables 100% offline functionality on GitHub Pages and smartphones
  */
 
-const CACHE_NAME = 'smart-coach-v3.2';
+const CACHE_NAME = 'smart-coach-v3.3';
 const STATIC_ASSETS = [
     './',
     './index.html',
