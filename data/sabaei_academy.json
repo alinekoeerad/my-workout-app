@@ -1,63 +1,337 @@
 {
   "program_info": {
-    "name": "Alireza Sabaei Academy - Handwrtten Program (Corrected)",
+    "name": "Alireza abaei Academy - Handwrtten Program (Corrected)",
     "version": "1.1",
-    "author": "Alireza Sabaei",
+    "author": "Alireza abaei",
     "description": "Extracted and corrected from handwritten coach sheets provided by Ali."
   },
   "days": {
     "day1": {
       "title": "جلسه اول: شکم، سینه و سرشانه",
       "exercises": [
-        { "code": "1", "name_en": "Battle Rope", "name_fa": "بتل روپ", "sets": 4, "reps": "25 sec", "rest": 60, "note": "شروع تمرین" },
-        { "code": "2", "name_en": "Push-ups", "name_fa": "شنا سوئدی", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "3", "name_en": "Burpees", "name_fa": "برپی", "sets": 4, "reps": "12", "rest": 60 },
-        { "code": "4", "name_en": "Plank", "name_fa": "شکم پلانک", "sets": 4, "reps": "20", "rest": 60 },
-        { "code": "5", "name_en": "Sliding Plank", "name_fa": "پلانک کشویی", "sets": 4, "reps": "20", "rest": 60 },
-        { "code": "6", "name_en": "V-Ups", "name_fa": "شکم ویآپ", "sets": 4, "reps": "20", "rest": 60 },
-        { "code": "7", "name_en": "Hanging Leg Raise + Rail", "name_fa": "زیرشکم ریلی + خلبانی (سوپرست)", "sets": 4, "reps": "25", "rest": 60 },
-        { "code": "8", "name_en": "Pec Deck + DB Fly", "name_fa": "پروانه دستگاه + قفسه سینه دمبل (سوپرست)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "9", "name_en": "Incline Machine Press + Pull-up", "name_fa": "پرس بالا سینه دستگاه + بارفیکس (سوپرست)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "10", "name_en": "Machine Chest Press + Parallel/Bench", "name_fa": "پرس سینه دستگاه + قفسه دمبل موازی (سوپرست)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "11", "name_en": "DB Lateral Raise", "name_fa": "نشر از جانب دمبل", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "12", "name_en": "Barbell Front Raise", "name_fa": "نشر از جلو هالتر", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "13", "name_en": "DB Bent-Over Fly + Reverse Pec Deck", "name_fa": "نشر خم دمبل + پروانه معکوس دستگاه (سوپرست)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "14", "name_en": "Shrugs", "name_fa": "شراگز", "sets": 4, "reps": "15", "rest": 60, "note": "اصلاح شد." }
+        {
+          "code": "1",
+          "name_en": "Battle Rope",
+          "name_fa": "بتل روپ",
+          "sets": 4,
+          "reps": "25 sec",
+          "rest": 60,
+          "note": "شروع تمرین"
+        },
+        {
+          "code": "2",
+          "name_en": "Push-ups",
+          "name_fa": "شنا سوئدی",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "3",
+          "name_en": "Burpees",
+          "name_fa": "برپی",
+          "sets": 4,
+          "reps": "12",
+          "rest": 60
+        },
+        {
+          "code": "4",
+          "name_en": "Plank",
+          "name_fa": "شکم پلانک",
+          "sets": 4,
+          "reps": "20",
+          "rest": 60
+        },
+        {
+          "code": "5",
+          "name_en": "Sliding Plank",
+          "name_fa": "پلانک کشویی",
+          "sets": 4,
+          "reps": "20",
+          "rest": 60
+        },
+        {
+          "code": "6",
+          "name_en": "V-Ups",
+          "name_fa": "شکم ویآپ",
+          "sets": 4,
+          "reps": "20",
+          "rest": 60
+        },
+        {
+          "code": "7",
+          "name_en": "Hanging Leg Raise + Rail",
+          "name_fa": "زیرشکم ریلی + خلبانی (سوپرست)",
+          "sets": 4,
+          "reps": "25",
+          "rest": 60
+        },
+        {
+          "code": "8",
+          "name_en": "Pec Deck + DB Fly",
+          "name_fa": "پروانه دستگاه + قفسه سینه دمبل (سوپرست)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "9",
+          "name_en": "Incline Machine Press + Pull-up",
+          "name_fa": "پرس بالا سینه دستگاه + بارفیکس (سوپرست)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "10",
+          "name_en": "Machine Chest Press + Parallel/Bench",
+          "name_fa": "پرس سینه دستگاه + قفسه دمبل موازی (سوپرست)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "11",
+          "name_en": "DB Lateral Raise",
+          "name_fa": "نشر از جانب دمبل",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "12",
+          "name_en": "Barbell Front Raise",
+          "name_fa": "نشر از جلو هالتر",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "13",
+          "name_en": "DB Bent-Over Fly + Reverse Pec Deck",
+          "name_fa": "نشر خم دمبل + پروانه معکوس دستگاه (سوپرست)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "14",
+          "name_en": "Shrugs",
+          "name_fa": "شراگز",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60,
+          "note": "اصلاح شد."
+        }
       ]
     },
     "day2": {
       "title": "جلسه دوم: پا، پشت بازو و ساق",
       "exercises": [
-        { "code": "1", "name_en": "Bike & Elliptical Trainers", "name_fa": "دوچرخه + الپتیکال", "sets": 1, "time": "10 min", "rest": 0, "note": "گرم کردن" },
-        { "code": "2", "name_en": "Leg Extension + Leg Curl", "name_fa": "جلوران ماشین + پشت ران ماشین (سوپرست)", "sets": 4, "reps": "18", "rest": 60 },
-        { "code": "3", "name_en": "Leg Press", "name_fa": "پرس پا ماشین", "sets": 4, "reps": "18", "rest": 60 },
-        { "code": "4", "name_en": "Close-Stance Hack Squat", "name_fa": "هاک پا ماشین پا جمع", "sets": 4, "reps": "18", "rest": 60 },
-        { "code": "5", "name_en": "DB Squat + Adductor", "name_fa": "اسکات پا دمبل + خیاطه به داخل (سوپرست)", "sets": 4, "reps": "18", "rest": 60 },
-        { "code": "6", "name_en": "Hip Adduction Machine", "name_fa": "خیاطه داخل ماشین", "sets": 4, "reps": "18", "rest": 60 },
-        { "code": "7", "name_en": "Reverse Grip Cable Pushdown", "name_fa": "پشت بازو سیمکش مچ برعکس", "sets": 4, "reps": "15-18", "rest": 60 },
-        { "code": "8", "name_en": "Close-Grip Press Pushdown + DB", "name_fa": "پشت بازو پرس سینهای + دمبل دو دستی", "sets": 4, "reps": "15-18", "rest": 60, "note": "اصلاح شد." },
-        { "code": "9", "name_en": "Bench Dips + Parallel", "name_fa": "پشت بازو دیپ نیمکت + پارالل", "sets": 4, "reps": "15-18", "rest": 60 },
-        { "code": "10", "name_en": "EZ-Bar Overhead Extension", "name_fa": "پشت بازو هالتر EZ ایستاده", "sets": 4, "reps": "15-18", "rest": 60 },
-        { "code": "11", "name_en": "Calf Raise", "name_fa": "ساق پا", "sets": 4, "reps": "18", "rest": 60 }
+        {
+          "code": "1",
+          "name_en": "Bike & Elliptical Trainers",
+          "name_fa": "دوچرخه + الپتیکال",
+          "sets": 1,
+          "time": "10 min",
+          "rest": 0,
+          "note": "گرم کردن"
+        },
+        {
+          "code": "2",
+          "name_en": "Leg Extension + Leg Curl",
+          "name_fa": "جلوران ماشین + پشت ران ماشین (سوپرست)",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        },
+        {
+          "code": "3",
+          "name_en": "Leg Press",
+          "name_fa": "پرس پا ماشین",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        },
+        {
+          "code": "4",
+          "name_en": "Close-Stance Hack Squat",
+          "name_fa": "هاک پا ماشین پا جمع",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        },
+        {
+          "code": "5",
+          "name_en": "DB Squat + Adductor",
+          "name_fa": "اسکات پا دمبل + خیاطه به داخل (سوپرست)",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        },
+        {
+          "code": "6",
+          "name_en": "Hip Adduction Machine",
+          "name_fa": "خیاطه داخل ماشین",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        },
+        {
+          "code": "7",
+          "name_en": "Reverse Grip Cable Pushdown",
+          "name_fa": "پشت بازو سیمکش مچ برعکس",
+          "sets": 4,
+          "reps": "15-18",
+          "rest": 60
+        },
+        {
+          "code": "8",
+          "name_en": "Close-Grip Press Pushdown + DB",
+          "name_fa": "پشت بازو پرس سینهای + دمبل دو دستی",
+          "sets": 4,
+          "reps": "15-18",
+          "rest": 60,
+          "note": "اصلاح شد."
+        },
+        {
+          "code": "9",
+          "name_en": "Bench Dips + Parallel",
+          "name_fa": "پشت بازو دیپ نیمکت + پارالل",
+          "sets": 4,
+          "reps": "15-18",
+          "rest": 60
+        },
+        {
+          "code": "10",
+          "name_en": "EZ-Bar Overhead Extension",
+          "name_fa": "پشت بازو هالتر EZ ایستاده",
+          "sets": 4,
+          "reps": "15-18",
+          "rest": 60
+        },
+        {
+          "code": "11",
+          "name_en": "Calf Raise",
+          "name_fa": "ساق پا",
+          "sets": 4,
+          "reps": "18",
+          "rest": 60
+        }
       ],
       "post_workout": "هوازی هم ندارد آخر تمرین"
     },
     "day3": {
       "title": "جلسه سوم: پهلو، زیربغل و جلوبازو",
       "exercises": [
-        { "code": "1", "name_en": "Stability Ball Oblique Twist", "name_fa": "پهلو توپ", "sets": 4, "reps": "20-25", "rest": 60, "note": "اصلاح شد." },
-        { "code": "2", "name_en": "Cable Oblique Woodchopper", "name_fa": "پهلو سیمکش", "sets": 4, "reps": "20-25", "rest": 60 },
-        { "code": "3", "name_en": "Side Plank", "name_fa": "پهلو پلانک", "sets": 4, "time": "45 sec", "rest": 60 },
-        { "code": "4", "name_en": "Wooden Dowel Twist", "name_fa": "پهلو چوب", "sets": 4, "reps": "20-25", "rest": 60, "note": "اصلاح شد." },
-        { "code": "5", "name_en": "Back Extension Machine", "name_fa": "فیله کمر دستگاه", "sets": 4, "reps": "15", "rest": 60, "note": "اصلاح شد." },
-        { "code": "6", "name_en": "Rowing Machine", "name_fa": "زیربغل دستگاه (روئینگ)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "7", "name_en": "DB Row + H-Machine", "name_fa": "قایقی دمبل + دستگاه H", "sets": 4, "reps": "15", "rest": 60, "note": "اصلاح شد." },
-        { "code": "8", "name_en": "Lat Pulldown + Face Pull", "name_fa": "زیربغل سیمکش + فیسپول (سوپرست)", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "9", "name_en": "Machine Pullover", "name_fa": "پلاور دستگاه", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "10", "name_en": "Cable Preacher Curl", "name_fa": "جلوبازو لاری سیمکش", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "11", "name_en": "EZ-Bar Preacher Curl", "name_fa": "جلوبازو لاری هالتر EZ", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "12", "name_en": "Incline DB Curl", "name_fa": "جلوبازو دمبل میز شیبدار", "sets": 4, "reps": "15", "rest": 60 },
-        { "code": "13", "name_en": "Hammer Curl", "name_fa": "جلوبازو دمبل جفت چکشی", "sets": 4, "reps": "15", "rest": 60 }
+        {
+          "code": "1",
+          "name_en": "Stability Ball Oblique Twist",
+          "name_fa": "پهلو توپ",
+          "sets": 4,
+          "reps": "20-25",
+          "rest": 60,
+          "note": "اصلاح شد."
+        },
+        {
+          "code": "2",
+          "name_en": "Cable Oblique Woodchopper",
+          "name_fa": "پهلو سیمکش",
+          "sets": 4,
+          "reps": "20-25",
+          "rest": 60
+        },
+        {
+          "code": "3",
+          "name_en": "Side Plank",
+          "name_fa": "پهلو پلانک",
+          "sets": 4,
+          "time": "45 sec",
+          "rest": 60
+        },
+        {
+          "code": "4",
+          "name_en": "Wooden Dowel Twist",
+          "name_fa": "پهلو چوب",
+          "sets": 4,
+          "reps": "20-25",
+          "rest": 60,
+          "note": "اصلاح شد."
+        },
+        {
+          "code": "5",
+          "name_en": "Back Extension Machine",
+          "name_fa": "فیله کمر دستگاه",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60,
+          "note": "اصلاح شد."
+        },
+        {
+          "code": "6",
+          "name_en": "Rowing Machine",
+          "name_fa": "زیربغل دستگاه (روئینگ)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "7",
+          "name_en": "DB Row + H-Machine",
+          "name_fa": "قایقی دمبل + دستگاه H",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60,
+          "note": "اصلاح شد."
+        },
+        {
+          "code": "8",
+          "name_en": "Lat Pulldown + Face Pull",
+          "name_fa": "زیربغل سیمکش + فیسپول (سوپرست)",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "9",
+          "name_en": "Machine Pullover",
+          "name_fa": "پلاور دستگاه",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "10",
+          "name_en": "Cable Preacher Curl",
+          "name_fa": "جلوبازو لاری سیمکش",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "11",
+          "name_en": "EZ-Bar Preacher Curl",
+          "name_fa": "جلوبازو لاری هالتر EZ",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "12",
+          "name_en": "Incline DB Curl",
+          "name_fa": "جلوبازو دمبل میز شیبدار",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        },
+        {
+          "code": "13",
+          "name_en": "Hammer Curl",
+          "name_fa": "جلوبازو دمبل جفت چکشی",
+          "sets": 4,
+          "reps": "15",
+          "rest": 60
+        }
       ]
     }
   }

@@ -621,8 +621,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.addEventListener('click', unlockAudio);
     window.addEventListener('touchstart', unlockAudio);
 
-    // Load workout database if user is logged in
+    // Load workout database and sync cloud data if user is logged in
     if (state.currentUser) {
+        await app.pullUserDataFromCloud();
         await loadDatabase();
     }
 
@@ -917,6 +918,7 @@ const app = {
             if (result.status === "success") {
                 state.currentUser = result.user;
                 localStorage.setItem('user_auth', JSON.stringify(result.user));
+                await app.pullUserDataFromCloud();
                 await loadDatabase();
                 app.navigateTo('workout');
             } else {
@@ -974,6 +976,89 @@ const app = {
         }
     },
 
+    // --- CLOUD SYNC ENGINE (همگام‌سازی ابری وزنه‌ها، حرکات جایگزین، تاریخچه و برنامه) ---
+    _syncTimeout: null,
+    queueCloudSync: () => {
+        if (app._syncTimeout) clearTimeout(app._syncTimeout);
+        app._syncTimeout = setTimeout(() => {
+            app.syncUserDataToCloud();
+        }, 1500);
+    },
+
+    syncUserDataToCloud: async () => {
+        if (!state.currentUser || !state.currentUser.phone) return;
+        try {
+            const payload = {
+                action: "syncUserData",
+                phone: state.currentUser.phone,
+                data: {
+                    weights: state.loggedWeights,
+                    swappedExercises: state.swappedExercises,
+                    workoutHistory: app.getWorkoutHistory(),
+                    selectedProgram: state.currentProgramId || localStorage.getItem('selected_program') || 'arnold_hybrid'
+                }
+            };
+            fetch(state.gasUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).then(res => {
+                if (res && res.status === 'success') {
+                    console.log('☁️ داده‌های تمرینی با موفقیت در گوگل شیت همگام‌سازی شدند.');
+                }
+            }).catch(e => {
+                console.warn('☁️ اتصال اینترنت قطع است؛ همگام‌سازی ابری در انتظار است.', e);
+            });
+        } catch (e) {
+            console.warn('Sync failed:', e);
+        }
+    },
+
+    pullUserDataFromCloud: async () => {
+        if (!state.currentUser || !state.currentUser.phone) return;
+        try {
+            const res = await fetch(`${state.gasUrl}?action=getUserData&phone=${state.currentUser.phone}`);
+            const result = await res.json();
+            if (result.status === "success" && result.data) {
+                const cloudData = result.data;
+                console.log("☁️ دریافت داده‌های کاربر از گوگل شیت:", cloudData);
+                
+                // Merge or restore weights
+                if (cloudData.weights && typeof cloudData.weights === 'object') {
+                    state.loggedWeights = { ...cloudData.weights, ...state.loggedWeights };
+                    localStorage.setItem('workout_weights', JSON.stringify(state.loggedWeights));
+                }
+                
+                // Merge or restore swapped exercises
+                if (cloudData.swappedExercises && typeof cloudData.swappedExercises === 'object') {
+                    state.swappedExercises = { ...cloudData.swappedExercises, ...state.swappedExercises };
+                    localStorage.setItem('swapped_exercises', JSON.stringify(state.swappedExercises));
+                }
+
+                // Restore workout history / streak
+                if (cloudData.workoutHistory && Array.isArray(cloudData.workoutHistory) && cloudData.workoutHistory.length > 0) {
+                    const localHistory = JSON.parse(localStorage.getItem('workout_history') || '[]');
+                    const combined = [...cloudData.workoutHistory];
+                    localHistory.forEach(lh => {
+                        if (!combined.some(ch => ch.date === lh.date)) combined.push(lh);
+                    });
+                    localStorage.setItem('workout_history', JSON.stringify(combined));
+                    state.workoutHistory = combined;
+                }
+
+                // Restore selected program
+                if (cloudData.selectedProgram) {
+                    state.currentProgramId = cloudData.selectedProgram;
+                    localStorage.setItem('selected_program', cloudData.selectedProgram);
+                }
+
+                app.updateHeaderStreak();
+            }
+        } catch (err) {
+            console.warn("⚠️ نتوانست اطلاعات کاربر را از گوگل شیت دریافت کند (آفلاین یا خطا):", err);
+        }
+    },
+
     // --- 5. PROGRESSIVE OVERLOAD ADVISOR & WEIGHT TRACKING ---
     saveWeight: (exerciseCode, value) => {
         const prog = state.currentProgramId || 'arnold_hybrid';
@@ -1000,6 +1085,7 @@ const app = {
                 }
             }
         }
+        app.queueCloudSync();
     },
 
     getSavedWeight: (exerciseCode) => {
@@ -1183,6 +1269,7 @@ const app = {
         app.closeAllModals();
         playAudioCue('go');
         if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+        app.syncUserDataToCloud();
 
         app.setupWorkoutView(state.currentParam);
     },
@@ -1207,6 +1294,7 @@ const app = {
             }
             delete state.swappedExercises[swapKey];
             localStorage.setItem('swapped_exercises', JSON.stringify(state.swappedExercises));
+            app.syncUserDataToCloud();
         }
 
         app.closeAllModals();
@@ -1294,6 +1382,7 @@ const app = {
         }
         localStorage.setItem('workout_history', JSON.stringify(history));
         app.updateHeaderStreak();
+        app.syncUserDataToCloud();
         if (state.currentView === 'profile') {
             app.renderHeatmap();
         }
@@ -1317,6 +1406,7 @@ const app = {
         localStorage.setItem('workout_history', JSON.stringify(history));
         playAudioCue('go');
         app.updateHeaderStreak();
+        app.syncUserDataToCloud();
         app.setupProfileView();
     },
 
@@ -2469,6 +2559,7 @@ const app = {
         if (success) {
             playAudioCue('go');
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            app.syncUserDataToCloud();
             
             const firstDay = (state.workouts && Object.keys(state.workouts)[0]) || 'day1';
             app.navigateTo('workout', firstDay);
