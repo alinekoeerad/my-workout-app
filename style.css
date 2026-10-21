@@ -4,6 +4,7 @@
 :root {
     /* --- Light Theme Glass Variables --- */
     --primary: #2c3e50;
+    --primary-rgb: 44, 62, 80;
     --accent: #e67e22;
     --success: #27ae60;
     
@@ -26,6 +27,7 @@
 /* --- Dark Theme Glass Variables --- */
 [data-theme="dark"] {
     --primary: #ecf0f1;
+    --primary-rgb: 236, 240, 241;
     --accent: #e67e22;
     --success: #2ecc71;
     
@@ -97,16 +99,38 @@ body {
     display: flex; justify-content: flex-end; align-items: center; gap: 10px;
 }
 
-.days-group { display: flex; gap: 5px; }
+.days-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+.days-group::-webkit-scrollbar { display: none; }
+
+.dynamic-days-container {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
 
 .nav-btn {
-    background: rgba(var(--primary), 0.1); 
+    border: none;
+    font-family: inherit;
+    background: rgba(var(--primary-rgb), 0.1); 
     color: var(--text); 
     text-decoration: none;
     padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; 
     cursor: pointer; transition: 0.2s; font-weight: 600;
+    white-space: nowrap;
 }
 .nav-btn:hover { background: var(--accent); color: white; }
+.nav-btn.active {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
+}
 
 /* --- Nav Island Buttons --- */
 .nav-island {
@@ -117,6 +141,8 @@ body {
 [data-theme="dark"] .nav-island { background: rgba(255,255,255,0.1); }
 
 .icon-btn {
+    border: none;
+    background: transparent;
     cursor: pointer; font-size: 1.2rem; width: 35px; height: 35px;
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
     transition: transform 0.2s, background 0.2s; user-select: none;
@@ -385,8 +411,6 @@ body {
     transition: transform 0.2s; display: flex; justify-content: center; align-items: center;
 }
 .chat-btn:hover { transform: scale(1.05); }
-
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 @keyframes zoomIn { from { opacity: 0; transform: translate(-50%, -45%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

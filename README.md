@@ -7,22 +7,22 @@ Project **Smart Coach** is an advanced web application (V7.0) for workout manage
 * **Modern UI Design:** Uses a Glassmorphism interface with full support for toggling between Dark Mode and Light Mode.
 
 
-* **AI Integration:** Features a smart chat assistant developed using the `gemini-2.5-flash` API model, which provides precise, personalized fitness advice based on the user's physical data.
+* **AI Integration:** Features a smart chat assistant developed using the `gemini-1.5-flash` API model, which provides precise, personalized fitness advice based on the user's physical data.
 
 
 * **Cloud Data Management (Cloud Sync):** Utilizes Google Apps Script (GAS) as a cloud backend for user authentication (login and signup) and profile synchronization.
 
 
-* **Workout Management System:** Dynamically loads workout programs (such as Hybrid PPL - Ali's Pro Edition) alongside advanced logic for circuit training, supersets, and automatic set counting.
+* **Workout Management System:** Dynamically loads workout programs alongside dynamic navigation and advanced logic for circuit training, supersets, and automatic set counting.
 
 
-* **Smart Timer:** Includes a rest timer widget equipped with audio cues when rest is over, as well as dedicated timers for time-based exercises.
+* **Smart Timer:** Includes a rest timer widget equipped with audio cues and vibration feedback when rest is over, as well as dedicated timers for time-based exercises.
 
 
 * **Profile & Physical Assessment:** Features an assessment form to record basic stats, absolute strength records (Squat, Deadlift, Bench Press), joint mobility tests, and lifestyle habits (diet status and sleep average).
 
 
-* **PWA Support:** Can be installed as a standalone app on smartphones using the `manifest.json` configuration file.
+* **PWA & 100% Offline Support:** Powered by `sw.js` (Service Worker) and `manifest.json`. Once loaded, it runs completely offline in gyms with poor reception. Can be installed directly on smartphones via GitHub Pages (`https://alinekoeerad.github.io/my-workout-app/`).
 
 
 

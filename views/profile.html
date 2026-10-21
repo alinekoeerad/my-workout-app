@@ -3,7 +3,7 @@
     <div id="profile-empty-state" class="auth-container" style="display: none;">
         <h2 style="color:var(--accent);">پروفایل شما هنوز تکمیل نشده!</h2>
         <p style="color:var(--text-secondary);">برای مشاهده اطلاعات بدنی و رکوردهایتان، ابتدا فرم ارزیابی را پر کنید.</p>
-        <button onclick="app.loadView('assessment')" class="btn-primary">📋 رفتن به فرم ارزیابی</button>
+        <button onclick="app.navigateTo('assessment')" class="btn-primary">📋 رفتن به فرم ارزیابی</button>
     </div>
 
     <div id="profile-content">
@@ -49,7 +49,7 @@
 
         </div>
         
-        <button onclick="app.loadView('assessment')" class="btn-primary">
+        <button onclick="app.navigateTo('assessment')" class="btn-primary">
             ✏️ ویرایش و آپدیت رکوردها
         </button>
     </div>

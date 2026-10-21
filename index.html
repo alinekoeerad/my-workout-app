@@ -2,72 +2,77 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Workout - Pro Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Coach - سیستم هوشمند مدیریت تمرین</title>
+    <meta name="description" content="برنامه مدیریت هوشمند تمرینات ورزشی و بدنسازی با مربی هوش مصنوعی">
     
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Smart Coach">
     <meta name="theme-color" content="#2c3e50">
     
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 </head>
 <body>
 
     <nav id="main-nav" class="sticky-nav">
-        <div class="nav-title">Smart Coach</div>
+        <div class="nav-title" onclick="app.navigateTo('workout')" style="cursor: pointer;">Smart Coach</div>
         
         <div class="nav-actions">
-            <div class="days-group">
-                <div class="nav-btn" style="background: var(--accent); color: white;" onclick="app.loadView('assessment')">📋 ارزیابی</div>
-                <div class="nav-btn" onclick="app.loadView('profile')">👤 پروفایل من</div>
-                <div class="nav-btn" onclick="app.loadView('workout', 'day1')">Day 1</div>
-                <div class="nav-btn" onclick="app.loadView('workout', 'day2')">Day 2</div>
-                <div class="nav-btn" onclick="app.loadView('workout', 'day3')">Day 3</div>
+            <div class="days-group" id="daysGroup">
+                <button type="button" class="nav-btn" id="nav-btn-assessment" onclick="app.navigateTo('assessment')">📋 ارزیابی</button>
+                <button type="button" class="nav-btn" id="nav-btn-profile" onclick="app.navigateTo('profile')">👤 پروفایل</button>
+                <div id="dynamic-workout-days" class="dynamic-days-container"></div>
             </div>
 
             <div class="nav-island">
-                <div class="icon-btn theme-btn" id="themeIcon" onclick="app.toggleTheme()">🌙</div>
-                <div class="icon-btn settings-btn" onclick="app.toggleSettings()">⚙️</div>
+                <button type="button" class="icon-btn theme-btn" id="themeIcon" onclick="app.toggleTheme()" aria-label="تغییر تم" title="تغییر تم">🌙</button>
+                <button type="button" class="icon-btn settings-btn" onclick="app.toggleSettings()" aria-label="تنظیمات هوش مصنوعی" title="تنظیمات">⚙️</button>
             </div>
         </div>
     </nav>
 
-    <div id="app-container" class="container">
+    <main id="app-container" class="container">
         <div style="text-align:center; margin-top:50px; color:var(--text-secondary);">
             <span style="font-size: 2rem;">⏳</span><br>
-            در حال بارگذاری سیستم...
+            در حال آماده‌سازی سیستم...
         </div>
-    </div>
+    </main>
 
-    <div class="settings-modal" id="settingsModal">
-        <h3>تنظیمات هوش مصنوعی</h3>
-        <input type="password" id="apiKeyInput" placeholder="API Key">
+    <div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <h3 id="settingsTitle">تنظیمات هوش مصنوعی (Gemini)</h3>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 8px;">
+            کلید API جمینای خود را وارد کنید تا مشاوره حرکات و بیومکانیک فعال شود:
+        </p>
+        <input type="password" id="apiKeyInput" placeholder="AI Studio API Key" autocomplete="off" dir="ltr">
         
-        <button onclick="app.saveApiKey()" class="save-btn">ذخیره</button>
-        <button onclick="app.toggleSettings()" class="close-btn">بستن</button>
+        <button type="button" onclick="app.saveApiKey()" class="save-btn">💾 ذخیره کلید</button>
+        <button type="button" onclick="app.toggleSettings()" class="close-btn">بستن</button>
     </div>
 
     <div class="chat-widget">
-        <div class="chat-window" id="chatWindow">
+        <div class="chat-window" id="chatWindow" role="dialog" aria-modal="true">
             <div class="chat-header">
-                مربی هوشمند
-                <span style="cursor:pointer;" onclick="app.toggleChat()">×</span>
+                <span>🤖 مربی هوشمند</span>
+                <span style="cursor:pointer; font-size:1.4rem;" onclick="app.toggleChat()">×</span>
             </div>
             
             <div class="chat-body" id="chatBody"></div>
             
             <div class="chat-input-area">
-                <input type="text" id="chatInput" class="chat-input" placeholder="سوال..." onkeypress="if(event.key==='Enter') app.sendMessage()">
-                <button onclick="app.sendMessage()" class="send-btn">→</button>
+                <input type="text" id="chatInput" class="chat-input" placeholder="سوال ورزشی خود را بپرسید..." onkeypress="if(event.key==='Enter') app.sendMessage()">
+                <button type="button" onclick="app.sendMessage()" class="send-btn" aria-label="ارسال">↵</button>
             </div>
         </div>
         
-        <button class="chat-btn" onclick="app.toggleChat()">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+        <button type="button" class="chat-btn" onclick="app.toggleChat()" aria-label="گفتگو با مربی هوشمند">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
         </button>
     </div>
 
