@@ -762,21 +762,110 @@ const app = {
         if (isOpen) {
             const input = document.getElementById('apiKeyInput');
             if (input) input.value = state.apiKey || '';
+            const statusEl = document.getElementById('aiModelStatus');
+            if (statusEl) {
+                const currentModel = localStorage.getItem('gemini_working_model');
+                if (currentModel && state.apiKey) {
+                    statusEl.innerText = `● Active Model: ${currentModel.replace(/^models\//, '')}`;
+                    statusEl.style.display = 'block';
+                } else {
+                    statusEl.style.display = 'none';
+                }
+            }
         }
     },
     
-    saveApiKey: () => {
+    saveApiKey: async () => {
         const key = document.getElementById('apiKeyInput').value.trim();
-        if(key) {
+        const btn = document.getElementById('saveApiKeyBtn');
+        const statusEl = document.getElementById('aiModelStatus');
+
+        if (key) {
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = 'در حال بررسی اتصال به Google AI...';
+            }
+            if (statusEl) {
+                statusEl.innerText = 'Testing connection...';
+                statusEl.style.display = 'block';
+            }
+
             localStorage.setItem('gemini_api_key', key);
             state.apiKey = key;
-            app.toggleSettings();
-            alert('کلید هوش مصنوعی با موفقیت ذخیره شد.');
+            localStorage.removeItem('gemini_working_model');
+
+            const detected = await app.detectBestGeminiModel(key);
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = 'ذخیره و بررسی اتصال';
+            }
+
+            if (detected) {
+                app.toggleSettings();
+                alert(`اتصال هوش مصنوعی با موفقیت برقرار شد! ✨\nمدل فعال: ${detected.replace(/^models\//, '')}`);
+            } else {
+                app.toggleSettings();
+                alert('کلید ذخیره شد.');
+            }
         } else {
             localStorage.removeItem('gemini_api_key');
+            localStorage.removeItem('gemini_working_model');
             state.apiKey = "";
+            if (statusEl) statusEl.style.display = 'none';
             app.toggleSettings();
+            alert('کلید هوش مصنوعی پاک شد.');
         }
+    },
+
+    detectBestGeminiModel: async (apiKey) => {
+        if (!apiKey) return null;
+        try {
+            const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+            const res = await fetch(listUrl);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.models && Array.isArray(data.models)) {
+                    const contentModels = data.models.filter(m => 
+                        Array.isArray(m.supportedGenerationMethods) && 
+                        m.supportedGenerationMethods.includes('generateContent')
+                    );
+                    
+                    if (contentModels.length > 0) {
+                        const preferred = [
+                            /gemini-2\.5-flash/i,
+                            /gemini-2\.0-flash/i,
+                            /gemini-1\.5-flash-latest/i,
+                            /gemini-flash-latest/i,
+                            /gemini-1\.5-flash/i,
+                            /flash/i,
+                            /gemini-2\.5-pro/i,
+                            /gemini-1\.5-pro/i,
+                            /gemini-pro/i
+                        ];
+                        
+                        for (const regex of preferred) {
+                            const found = contentModels.find(m => regex.test(m.name));
+                            if (found) {
+                                localStorage.setItem('gemini_working_model', found.name);
+                                console.log(`✅ Auto-detected working Gemini model: ${found.name}`);
+                                return found.name;
+                            }
+                        }
+                        
+                        const chosen = contentModels[0].name;
+                        localStorage.setItem('gemini_working_model', chosen);
+                        return chosen;
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Could not query ListModels:', e);
+        }
+
+        const fallback = 'models/gemini-2.5-flash';
+        localStorage.setItem('gemini_working_model', fallback);
+        return fallback;
     },
 
     triggerCelebration: () => {
@@ -872,37 +961,85 @@ const app = {
         رکوردها: اسکات ${p.record_squat||0} | ددلیفت ${p.record_deadlift||0} | پرس سینه ${p.record_bench||0}
         `;
 
-        try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.apiKey}`;
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    contents: [{ 
-                        parts: [{ 
-                            text: `نقش: مربی فوق‌حرفه‌ای و مشاور بیومکانیک. کوتاه، دقیق، فنی و به زبان فارسی پاسخ بده.\n${profileContext}\nسوال: ${text}` 
+        // Auto detect / get working model
+        let currentModel = localStorage.getItem('gemini_working_model');
+        if (!currentModel || currentModel.endsWith('gemini-1.5-flash')) {
+            localStorage.removeItem('gemini_working_model');
+            currentModel = await app.detectBestGeminiModel(state.apiKey);
+        }
+
+        const modelsToTry = [
+            currentModel,
+            'models/gemini-2.5-flash',
+            'models/gemini-2.0-flash',
+            'models/gemini-1.5-flash-latest',
+            'models/gemini-flash-latest',
+            'models/gemini-pro'
+        ];
+        const uniqueModels = [...new Set(modelsToTry.filter(Boolean))];
+
+        let success = false;
+        let lastErrorMsg = '';
+
+        for (const candidate of uniqueModels) {
+            const cleanModel = candidate.startsWith('models/') ? candidate : `models/${candidate}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/${cleanModel}:generateContent?key=${state.apiKey}`;
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ 
+                        contents: [{ 
+                            parts: [{ 
+                                text: `نقش: مربی فوق‌حرفه‌ای و مشاور بیومکانیک. کوتاه، دقیق، فنی و به زبان فارسی پاسخ بده.\n${profileContext}\nسوال: ${text}` 
+                            }] 
                         }] 
-                    }] 
-                })
-            });
-            const d = await res.json();
-            
-            if (d.error) {
-                document.getElementById(id).innerHTML = `<strong style="color:#ef4444;">خطای API: ${escapeHtml(d.error.message)}</strong>`;
-                return;
+                    })
+                });
+
+                const d = await res.json();
+                
+                if (d.error) {
+                    lastErrorMsg = d.error.message || 'Unknown error';
+                    // If model is not found or unsupported on v1beta, try next model in cascade
+                    if (d.error.code === 404 || /not found|not supported|is not supported/i.test(d.error.message)) {
+                        console.warn(`Model ${cleanModel} not supported, trying next...`);
+                        continue;
+                    } else {
+                        // Other error such as invalid API key
+                        document.getElementById(id).innerHTML = `<strong style="color:#ef4444;">خطای API: ${escapeHtml(d.error.message)}</strong>`;
+                        return;
+                    }
+                }
+
+                let rawText = d.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد.";
+                let escaped = escapeHtml(rawText);
+                let formattedText = escaped
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\n/g, '<br>');
+
+                document.getElementById(id).innerHTML = formattedText;
+                setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
+
+                localStorage.setItem('gemini_working_model', cleanModel);
+                success = true;
+                break;
+            } catch(e) { 
+                lastErrorMsg = e.message || 'خطای شبکه در ارتباط با هوش مصنوعی.'; 
             }
+        }
 
-            let rawText = d.candidates?.[0]?.content?.parts?.[0]?.text || "پاسخی دریافت نشد.";
-            let escaped = escapeHtml(rawText);
-            let formattedText = escaped
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n/g, '<br>');
-
-            document.getElementById(id).innerHTML = formattedText;
-            setTimeout(() => body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }), 50);
-        } catch(e) { 
-            document.getElementById(id).innerHTML = "<strong style='color:#ef4444;'>خطای شبکه در ارتباط با هوش مصنوعی.</strong>"; 
+        if (!success) {
+            document.getElementById(id).innerHTML = `
+                <div style="color:#ef4444; font-size:0.85rem; line-height:1.6;">
+                    <strong>خطا در برقراری ارتباط با مدل هوش مصنوعی:</strong><br>
+                    ${escapeHtml(lastErrorMsg)}<br>
+                    <span style="color:var(--text-secondary); font-size:0.78rem;">
+                        لطفاً در منوی تنظیمات (⚙️) دکمه «ذخیره و بررسی اتصال» را بزنید تا مدل‌های فعال کلید شما مجدداً بررسی شوند.
+                    </span>
+                </div>`;
         }
     },
 

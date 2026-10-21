@@ -62,7 +62,9 @@
         </p>
         <input type="password" id="apiKeyInput" placeholder="Gemini API Key" autocomplete="off" dir="ltr">
         
-        <button type="button" onclick="app.saveApiKey()" class="save-btn">ذخیره کلید</button>
+        <div id="aiModelStatus" style="font-size: 0.76rem; color: var(--accent); margin: -6px 0 14px 0; font-family: var(--font-mono); direction: ltr; text-align: left; display: none;"></div>
+        
+        <button type="button" id="saveApiKeyBtn" onclick="app.saveApiKey()" class="save-btn">ذخیره و بررسی اتصال</button>
         <button type="button" onclick="app.toggleSettings()" class="close-btn">بستن</button>
     </div>
 
